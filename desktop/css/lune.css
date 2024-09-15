@@ -1,0 +1,33 @@
+.widget_potager_l1{
+	width : 100%;
+	display:flex;
+	position: relative;
+	justify-content: center;
+}
+
+.widget_potager_l1_c1
+{
+		display : flex;
+		flex-direction : column;
+		width: 75%;
+
+}
+
+.detail_lune{
+	font-style: normal;
+	color:rgba(189, 189, 189, 0.9);
+	font-size: 100%;
+	overflow: hidden;
+	height: 20px;
+}
+
+
+
+
+.image_lune{
+	width : 70px;
+	height : 70px;
+	margin-left: 8px;
+	margin-top: 10px;
+	margin-right: 10px;
+}

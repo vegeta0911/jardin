@@ -1,0 +1,30 @@
+.widget_arrosage_l1{
+	width : 100%;
+	display:flex;
+	position: relative;
+	justify-content: center;
+}
+
+.image_arrosage{
+    width : 70px;
+    height : 70px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+
+.div_c1{
+    width : 110px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.div_c2{
+    width : 190px;
+    margin-left: 10px;
+}
+.div_c3{
+    width : 150px;
+    margin-left: 10px;
+}
