@@ -1,4 +1,4 @@
-# Documentation du Plugin Potager
+# Documentation du Plugin Jardin & Potager
 
   
 
