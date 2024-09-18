@@ -22,7 +22,7 @@ Et pensez à **sauvegarder** !
 
 ## Ajouter des semences / potagers
 
-Cliquez sur le ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/plus.jpg) pour ajouter de nouvelles semences et/ou potager
+Cliquez sur le ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/plus.jpg) pour ajouter de nouvelles semences et/ou potager
 
 Il est impératif ‘d’activer’ les ‘semences’/’potager’ pour qu’ils soient fonctionnels !
 
