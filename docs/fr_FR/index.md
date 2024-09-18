@@ -2,14 +2,14 @@
 
   
 
-## 1 - Activer le plugin
+## Activer le plugin
 
 Comme n’importe quel plugin JEEDOM, il est nécessaire d’activer le plugin pour qu’il fonctionne
 
   
   
 
-## 2 - Configuration du plugin
+## Configuration du plugin
 
 Pensez à **activer** le plugin suite à son installation.
 
@@ -20,7 +20,7 @@ Si vous désirez profitez des fonctionnalités de notification, pensez à rensei
 Et pensez à **sauvegarder** !
   ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/parametres.jpg)
 
-## 3 - Ajouter des semences / potagers
+## Ajouter des semences / potagers
 
 Cliquez sur le ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/plus.jpg) pour ajouter de nouvelles semences et/ou potager
 
