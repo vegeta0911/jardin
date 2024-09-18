@@ -18,7 +18,7 @@ Si vous désirez profitez des fonctionnalités de notification, pensez à rensei
 - Mail
 - SMS
 Et pensez à **sauvegarder** !
-  ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/parametres.jpg)
+  ![enter image description here](https://github.com/vegeta0911/jardin/blob/beta/docs/img/parametres.jpg)
 
 ## Ajouter des semences / potagers
 
