@@ -1,11 +1,14 @@
-<?php require_once('configuration_potager.php'); ?>
-<?php echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/association.js"></script>'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/planning.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/detail_semence.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/menu_top.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressource/css/potager/menu_top.css">'?>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<?php
+<?php 
+  require_once('configuration_potager.php'); 
+
+  echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/association.js"></script>';
+  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/planning.css">';
+  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/detail_semence.css">';
+  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/menu_top.css">';
+  //echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressource/css/potager/menu_top.css">'
+ 
+//<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
 $current_theme=jeedom::getThemeConfig()['current_desktop_theme'];
 $dark_mode=false;
 $add_img_dm='';
@@ -69,20 +72,51 @@ usort($eqLogics, array('potager','cmp'));
 <div id="conteneur_planning">
 
 
-<div id="menu_top_potager">
-<?php
-echo '<i id=\'add_item\' class="menu_top_potager_bouton  fas fa-plus-circle"></i>';
-echo '<a class="menu_top_potager_bouton " href="' . $base_url . '/index.php?v=d&m=potager&p=potager"><i class="fas fa-th-large"></i><div class="hide_if_mobile">&nbsp;&nbsp;Gestion</div></a>';
-echo '<a class="menu_top_potager_bouton menu_top_potager_bouton_select" href="#" ><i class="fas fa-calendar-alt"></i><div class="hide_if_mobile">&nbsp;&nbsp;Planning</div></a>';
-echo '<a class="menu_top_potager_bouton " href="' . $base_url . '/index.php?v=d&m=potager&p=panel"><i class="far fa-map"></i><div class="hide_if_mobile">&nbsp;&nbsp;Potager</div></a>';
-echo '<i id=\'gotoconf\' class="hide_standalone_mode menu_top_potager_bouton  fas fa-wrench"></i>';
-?>
-
+<div class="eqLogicThumbnailContainer" id="menu_top_potager">
+        
+        <div class="eqLogicThumbnailContainer" id="menu_top_potager">
+        <div class="cursor eqLogicAction logoPrimary" id="add_item">
+           <i class="fas fa-plus-circle"></i>
+           
+           <br>
+		   <div class="hide_if_mobile">
+             <span>{{Ajouter}}</span>
+           </div>
+        </div>
+  
+        <div class="cursor eqLogicAction logoSecondary">
+        <a href=<?php echo $base_url.'/index.php?v=d&m=potager&p=potager';?> class="info">
+           <i class="fas fa-tasks" style="font-size:270%;"></i>
+            <br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Gestion}}</span>
+            </div> 
+        </a>
+    </div>
+	<div class="cursor eqLogicAction logoSecondary">
+		<a class="info" href='#'>
+		    <i class="icon kiko-calendar" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Planning}}</span>
+            </div>
+        </a> 
+    </div>
+	<div class="cursor eqLogicAction logoSecondary ">
+		<a class="info" href=<?php echo $base_url . "/index.php?v=d&m=potager&p=panel";?>>
+		    <i class="icon nature-plant30" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Potager}}</span>
+            </div>
+        </a> 
+    </div>
+</div>
+          
 <script>
-$('#gotoconf').off('click').on('click', function () {
-   $('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
-   $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
-});
 $('#add_item').off('click').on('click', function () {
     setCookie('add_item', 'oui',1);
     window.open(base_url + "/index.php?v=d&m=potager&p=potager","_self")
@@ -90,12 +124,16 @@ $('#add_item').off('click').on('click', function () {
 //    $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
 });
 </script>
-
-
-</div>
+  
 <div id="g_date"><div id="b_date_moins">-</div><div id="g_date_d">...</div><div id="b_date_plus">+</div></div>
+  <br>
+    <br>
+      <br>
+       <br>
+        <br>
+         <br>
 <div id="filtre_potager_planning">
-    <div class="label_filtre">Filtrer l'affichage </div>
+    <div class="label_filtre">Filtrer l&apos;affichage </div>
     <select id="filtre_potager" class="un_filtre" style="width:150px">
         <option value="">{{Tout afficher}}</option>
         <option value="seme_only">{{Afficher uniquement les semences semées}}</option>
