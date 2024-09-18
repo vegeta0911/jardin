@@ -34,18 +34,18 @@ Vous creez soit des :
 - potager
 
 Cela se précise via le champ type.
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/type.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/type.jpg)
   Vous pourrez ensuite attribuer/positionner vos semences dans vos potager via le bouton 'Gérer mes potagers'
-  ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/gerer_b.jpg)
+  ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/gerer_b.jpg)
 
 
 ***visuel de vos semences***
 Par défaut , vos semences sont des 'graines'
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/semence.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/semence.jpg)
 Mais si vous les déclarez comme semées, elles vont devenir des graines en godet
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/graine_g.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/graine_g.jpg)
 Et au bout de 10j , magie , elles vont germer
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/graine_gs.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/graine_gs.jpg)
 
 **Astuce pour le nom de semences en double/triple/etc**
 Jeedom interdit d'avoir plusieurs équipements du même nom dans le meme objet parent !
@@ -63,7 +63,7 @@ Le plugin ignorera tout ce qui trouve à partir du '@' !
 ## 4 - Planning des semences
 La vue planning permet de visualiser rapidement vos semences, lorsqu’il faut les semer, les mettre en terre etc. Un certain nombre d’icone sont affichées à côté de vos semences pour facilement identifier : son type (légume/plante/etc) , la quantité semé / si vous avez épuisé vos semences / …
 
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/planning.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/planning.jpg)
   
   
 ***Actions rapides***
@@ -74,7 +74,7 @@ Il est possible d’effectuer un clic droit sur une semence pour rapidement la d
 *et ainsi afficher une pastille de couleur à la date associer*
 
 *NB : en maintenant la touche CTRL lorsque vous sélectionné une option du menu clic-droit (ex :marqué comme semé) , vous serez en mesure de définir manuellement la date , et non d’avoir la date du jour imposée.*
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/menu_rapide.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/menu_rapide.jpg)
   
   *NB : Si vous désirez annuler une mise en terre/un semis/... il suffit de repasser par ce menu, il vous proposera d'annuler*
   
@@ -84,7 +84,7 @@ Un bouton **imprimer** permet de générer une page à imprimer optimiser pour �
   
 
 ## 5 - Le plan du potager
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/gerer_b.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/gerer_b.jpg)
 Dessinez vos potagers !
 
 Commencez par choisir la bonne dimension de vos potager, pour ce faire , en bas à droite de chaque potager , cliquez et maintenez le clic sur le petit carré pour le redimensionner.
