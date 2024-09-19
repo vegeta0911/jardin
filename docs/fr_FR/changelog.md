@@ -6,7 +6,7 @@
 
  19/092024
  ===
- correction de bug pour le passage en debian 12
+ - correction de bug pour le passage en debian 12
  
  02/04/2021
  ===
