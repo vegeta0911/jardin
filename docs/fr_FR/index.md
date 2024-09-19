@@ -102,20 +102,20 @@ Cliquez en MAINTENANT la touche CTR sur un élément quelconque déplacez le ! T
 
 **Redimensionner un élément**
 Pour redimensionner vos éléments , utilisez le petit carré bleu en bas a droite 
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/coin_redim.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/coin_redim.jpg)
 
 **Effectuer une rotation à un élément**
 Amenez le curseur légèrement en dessous du carré violet, le curseur va se transformer en 'croix' , et un pop up vous invitera a cliquer ( et maintenir le clic) pour effectuer une rotation de l'élément !
- ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/coin_redim2.jpg)
+ ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/coin_redim2.jpg)
   
   **supprimer un élément**
   Effectuez un clic-droit pour faire apparaitre un menu qui vous proposera de supprimer l'élément désiré (semence/arbre/etc...)
-  ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/Beta/docs/img/menu_semence.jpg)
+  ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/menu_semence.jpg)
 
 
 **Permaculture - Associer les espèces entres-elles !**
 lorsque vous allez déplacer une semence dans votre potager afin de la positionner, si cette dernière est détectée automatiquement et qu'une association est possible, un halo rouge ou vert vous invitera a la rapprocher d'une autre semence ou à l'éloigner ...
-![sdfsdf](https://github.com/frixo3190/potager_jeedom/blob/Beta/docs/img/association.jpg?raw=true)
+![sdfsdf](https://github.com/vegeta0911/jardin/raw/beta/docs/img/association.jpg?raw=true)
 *Dans l'exemple ci-dessus, on a sélectionné la Tomate, le programme nous invite a rapprocher la tomate du Basilic , et a l'éloigner du Concombre !*
 
 **Détail d'une semence & détection automatique**
@@ -128,23 +128,23 @@ Si l'espèce en question est détecté par le programme, cela sera précisé et 
 - *La semence sélectionnée est invitée a être associé avec les especes yyyyy, car elle va être bénéfique pour les espèces yyyy (halo vert plutot clair)*
 
 
-![enter image description here](https://github.com/frixo3190/potager_jeedom/blob/Beta/docs/img/detail.jpg?raw=true)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/detail.jpg?raw=true)
 
 **Afficher un quadrillage sur votre potager**
 Effectuez un clic-droit sur le potager (pas sur un élément) pour faire afficher le menu du potager
-![enter image description here](https://github.com/frixo3190/potager_jeedom/blob/Beta/docs/img/menu_potager.jpg?raw=true)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/menu_potager.jpg?raw=true)
 Sélectionnez '**Afficher le quadrillage'** 
-![enter image description here](https://github.com/frixo3190/potager_jeedom/blob/Beta/docs/img/quadrillage.jpg?raw=true)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/quadrillage.jpg?raw=true)
 
 
 
 **Générer un schéma du potager imprimable**
 Le bouton **imprimer** vous génèrera un plan !
 
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/potager.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/potager.jpg)
 
 ***example de schéma généré du plan***
-![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/potager2.jpg)
+![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/potager2.jpg)
 
 Changelog
 ===
