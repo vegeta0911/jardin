@@ -1,16 +1,16 @@
-# Documentation du Plugin Jardin & Potager
+Documentation du Plugin Jardin & Potager
 
   
 
-## Activer le plugin
-
+Activer le plugin
+===
 Comme n’importe quel plugin JEEDOM, il est nécessaire d’activer le plugin pour qu’il fonctionne
 
   
   
 
-## Configuration du plugin
-
+Configuration du plugin
+===
 Pensez à **activer** le plugin suite à son installation.
 
 Si vous désirez profitez des fonctionnalités de notification, pensez à renseigner dans le champ prévu a cet effet dans les paramètres un moyen de notification : 
@@ -20,8 +20,8 @@ Si vous désirez profitez des fonctionnalités de notification, pensez à rensei
 Et pensez à **sauvegarder** !
   ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/parametres.jpg)
 
-## Ajouter des semences / potagers
-
+Ajouter des semences / potagers
+===
 Cliquez sur le ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/plus.jpg) pour ajouter de nouvelles semences et/ou potager
 
 Il est impératif ‘d’activer’ les ‘semences’/’potager’ pour qu’ils soient fonctionnels !
@@ -60,7 +60,8 @@ Afin de pouvoir créer plusieurs tomates (d'espèce différentes) , une astuce a
 Le plugin ignorera tout ce qui trouve à partir du '@' !
 
 
-## 4 - Planning des semences
+Planning des semences
+===
 La vue planning permet de visualiser rapidement vos semences, lorsqu’il faut les semer, les mettre en terre etc. Un certain nombre d’icone sont affichées à côté de vos semences pour facilement identifier : son type (légume/plante/etc) , la quantité semé / si vous avez épuisé vos semences / …
 
 ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/planning.jpg)
@@ -83,7 +84,8 @@ Un bouton **imprimer** permet de générer une page à imprimer optimiser pour �
 
   
 
-## 5 - Le plan du potager
+Le plan du potager
+===
 ![enter image description here](https://github.com/vegeta0911/jardin/raw/beta/docs/img/gerer_b.jpg)
 Dessinez vos potagers !
 
@@ -143,3 +145,7 @@ Le bouton **imprimer** vous génèrera un plan !
 
 ***example de schéma généré du plan***
 ![enter image description here](https://raw.githubusercontent.com/frixo3190/potager_jeedom/stable/docs/img/potager2.jpg)
+
+Changelog
+===
+[Voir la page dédiée](changelog.md)
