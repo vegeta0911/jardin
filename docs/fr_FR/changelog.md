@@ -4,12 +4,12 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
- 19/092024
- ===
+19/092024
+===
  - correction de bug pour le passage en debian 12
  
- 02/04/2021
- ===
+02/04/2021
+===
 - Ajout sélection multiple dans le menu
 - Ajout alignement et espacement de la selection
 - Ajout option paillage semence
