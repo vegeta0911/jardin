@@ -392,7 +392,7 @@ function addCmdToTable(_cmd) {
 
 if(version_potager_mig != '4' && conf_mode_potager!='standalone'){
   bootbox.alert({
-    message: "<h2>Bienvenue sur Potager !</h2> <br/><br/>Je me permets de soliciter <u>votre aide</u> !<br/><br/> Accepteriez vous de laisser un avis sur le Marquet de JEEDOM <a href='https://market.jeedom.com/index.php?v=d&p=market_display&id=4130'><u>CLIQUEZ ICI POUR LE FAIRE</u></a> ? <br/><br/>Et de plus : je cherche à <b>faire connaître</b> l'application POTAGER , et qui mieux que <b>VOUS</b> pour en faire la promotion ! Je compte sur vous pour en parler autour de vous !<br/><br/><i>Ce message ne s'affichera plus , soyez tranquille</i>",
+    message: "<h2>Bienvenue sur Jardin & Potager !</h2> <br/><br/>Je me permets de soliciter <u>votre aide</u> !<br/><br/> Accepteriez vous de laisser un avis sur le Marquet de JEEDOM <a href='https://market.jeedom.com/index.php?v=d&p=market_display&id=4530'><u>CLIQUEZ ICI POUR LE FAIRE</u></a> ? <br/><br/>Et de plus : je cherche à <b>faire connaître</b> l'application POTAGER , et qui mieux que <b>VOUS</b> pour en faire la promotion ! Je compte sur vous pour en parler autour de vous !<br/><br/><i>Ce message ne s'affichera plus , soyez tranquille</i>",
   })
   $.ajax({
     type: 'POST',
