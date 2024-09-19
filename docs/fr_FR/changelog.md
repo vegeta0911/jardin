@@ -15,6 +15,6 @@
 - Ajout option paillage semence
 - Correction bugs divers
 
-# 15/02/2021
+15/02/2021
 ===
 - Création du plugin
