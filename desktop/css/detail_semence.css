@@ -1,0 +1,190 @@
+
+.pop_up_detail_semence{
+    position: absolute;
+    background-color: white;
+    width: 300px;
+    min-height: 100px;
+    max-height: 50vh;
+    top: calc(100% + 11px);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    z-index: 9;
+    overflow: hidden;
+}
+
+.pop_up_detail_semence_detail{
+    width: 99%;
+    overflow-y:scroll;
+    overflow-x: hidden;
+    white-space: break-spaces;
+}
+
+.triangle_haut{
+    display: inline-block;
+    height: 0;
+    width: 0;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+    border-left: 10px solid transparent;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+}
+
+.titre_detail_semence{
+    width: 100%;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 5px;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.variete_detail_semence{
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 80%;
+}
+.autre_detail_semence{
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+    font-size: 80%;
+}
+
+.match_detail_semence{
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    overflow-wrap: normal;
+    overflow-x: hidden;
+}
+
+.detail_detail_semence{
+    width: 100%;
+    padding: 5px;
+}
+
+.semis_detail_semence{
+    display:  flex;
+    width: 100%;
+    padding : 5px;
+}
+
+.mois_semis_d{
+    height: 20px;
+    width: calc(100%/12);
+    text-align: center;
+    position: relative;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.mois_semis_semis{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    background-color: rgba(104,181,68,0.3);
+    height: calc(100%/3);
+}
+
+.mois_semis_semis_terre{
+    position: absolute;
+    top: calc(100%/3);
+    width: 100%;
+    background-color: rgba(234,213,35,0.3);
+    height: calc(100%/3);
+}
+
+.mois_semis_recolte{
+    position: absolute;
+    top: calc(100%/3*2);
+    width: 100%;
+    background-color: rgba(234,98,35,0.3);
+    height: calc(100%/3);
+}
+
+.asso_detail_semence,.incomp_detail_semence{
+    padding: 5px;
+    margin-bottom: 5px;
+    white-space: normal;
+}
+
+.pd_liste_semis{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+.pd_un_semis{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+    padding: 8px;
+}
+
+.pd_un_semis_nom{
+}
+
+.pd_un_semis_detail{
+}
+
+
+.ensemble_ia_haut_pop_up{
+    display: flex;
+    align-items: center;
+}
+
+.ensemble_ia_haut_pop_up_img{
+    height: 45px;
+    min-width: 45px;
+    margin: 5px;
+}
+
+.ensemble_ia_haut_pop_up_droite{
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    margin-right: 5px;
+    padding-bottom: 7px;
+}
+
+.ensemble_ia_haut_pop_up_nom{
+    text-overflow: ellipsis;
+    font-size: 150%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin-left: 5px;;
+}
+
+.ensemble_ia_haut_pop_up_widgets{
+    display: flex;
+    width: 100%;
+}
+
+.ensemble_ia_haut_pop_up_un_widget{
+    height: 25px;
+    min-width: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border:solid 2px rgb(151, 175, 153);
+    box-shadow: 2px 2px 6px #aaa;
+    border-radius: 50px;
+}
+
+.bouton_detail_fiche_popup{
+    position: absolute;
+    right: 4px;
+    top : 4px;
+    cursor: pointer;
+}
