@@ -961,7 +961,7 @@ $('#bouton_print').on('click',function(){print_liste()});
 
     var mywindow = window.open( "#Print potager", "new div",strWindowFeatures );
     mywindow.document.write( "<!DOCTYPE html><html><head><title></title>" );
-    mywindow.document.write( "<link rel=\"stylesheet\" href=\"" + base_url + "plugins/potager/desktop/css/planning_print.css\" type=\"text/css\"/><style type=\"text/css\" media=\"print\">*{-webkit-print-color-adjust: exact !important; /*Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}</style>" );
+    mywindow.document.write( "<link rel=\"stylesheet\" href=\"" + base_url + "plugins/jardin/desktop/css/planning_print.css\" type=\"text/css\"/><style type=\"text/css\" media=\"print\">*{-webkit-print-color-adjust: exact !important; /*Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}</style>" );
     mywindow.document.write( "</head><body><h1>" + $('#g_date_d').text() + " - Planning de mes semences</h1><br/>" );
     mywindow.document.write(content);
     mywindow.document.write( "</body></html>" );
