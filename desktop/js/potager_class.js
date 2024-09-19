@@ -746,7 +746,7 @@ var potager_obj=class potager_obj {
                 var icon_item=$('<img/>', {
                     "class": 'menu_obj_item_icon',
                 }).appendTo(item_q);
-                icon_item.attr('src',base_url +  '/plugins/potager/data/img/equipement.png')
+                icon_item.attr('src',base_url +  '/plugins/jardin/data/img/equipement.png')
     
                 var text_item=$('<div/>', {
                     "class": 'menu_obj_item_text',
@@ -766,7 +766,7 @@ var potager_obj=class potager_obj {
                     var icon_item=$('<img/>', {
                         "class": 'menu_obj_item_icon',
                     }).appendTo(item_q);
-                    icon_item.attr('src',base_url +  '/plugins/potager/data/img/cmd.png')
+                    icon_item.attr('src',base_url +  '/plugins/jardin/data/img/cmd.png')
         
                     var text_item=$('<div/>', {
                         "class": 'menu_obj_item_text',
@@ -788,7 +788,7 @@ var potager_obj=class potager_obj {
             var icon_item=$('<img/>', {
                 "class": 'menu_obj_item_icon',
             }).appendTo(item_q);
-            icon_item.attr('src',base_url + '/plugins/potager/data/img/arbre.png')
+            icon_item.attr('src',base_url + '/plugins/jardin/data/img/arbre.png')
 
             var text_item=$('<div/>', {
                 "class": 'menu_obj_item_text',
@@ -811,7 +811,7 @@ var potager_obj=class potager_obj {
             var icon_item=$('<img/>', {
                 "class": 'menu_obj_item_icon',
             }).appendTo(item_q);
-            icon_item.attr('src',base_url +  '/plugins/potager/data/img/semence.png')
+            icon_item.attr('src',base_url +  '/plugins/jardin/data/img/semence.png')
 
             var text_item=$('<div/>', {
                 "class": 'menu_obj_item_text',
@@ -887,7 +887,7 @@ var potager_obj=class potager_obj {
             var icon_item=$('<img/>', {
                 "class": 'menu_obj_item_icon',
             }).appendTo(item_q);
-            icon_item.attr('src',base_url +  '/plugins/potager/data/img/add.png')
+            icon_item.attr('src',base_url +  '/plugins/jardin/data/img/add.png')
 
             var text_item=$('<div/>', {
                 "class": 'menu_obj_item_text',
@@ -929,7 +929,7 @@ var potager_obj=class potager_obj {
             var icon_item=$('<img/>', {
                 "class": 'menu_obj_item_icon',
             }).appendTo(item_q);
-            icon_item.attr('src',base_url +  '/plugins/potager/data/img/quadrillage.png')
+            icon_item.attr('src',base_url +  '/plugins/jardin/data/img/quadrillage.png')
 
             var text_item=$('<div/>', {
                 "class": 'menu_obj_item_text',
@@ -958,7 +958,7 @@ var potager_obj=class potager_obj {
             var icon_item=$('<img/>', {
                 "class": 'menu_obj_item_icon',
             }).appendTo(item_q);
-            icon_item.attr('src',base_url +  '/plugins/potager/data/img/herbe.png')
+            icon_item.attr('src',base_url +  '/plugins/jardin/data/img/herbe.png')
 
             var text_item=$('<div/>', {
                 "class": 'menu_obj_item_text',
