@@ -9,18 +9,16 @@
 	"require" : "4.4",
 	"category" : "nature",
 	"display": "panel",
-    "pluginVersion": "0.1",
-    "os" : {
+        "pluginVersion": "0.1",
+        "os" : {
 		"min" : 11,
 		"max" : 12.99
-    },
+        },
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
 	"changelog" : "https://vegeta0911.github.io/jardin/fr_FR/changelog",
 	"documentation" : "https://vegeta0911.github.io/jardin/fr_FR",
-	_link : "forum" : "https://community.jeedom.com/t/plugin-potager/56482/140"
-
 	"language" : ["fr_FR"],
 	"compatibility" : ["miniplus","smart","rpi","docker","diy","v4"]
 }
