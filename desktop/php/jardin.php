@@ -57,7 +57,7 @@ sendVarToJs('base_url', $base_url);
 $plugin = plugin::byId('jardin');
 sendVarToJs('id_plugin', $plugin->getId());
 sendVarToJS('eqType', $plugin->getId());
-$version_potager_mig=config::byKey('version_potager_mig', 'jardin');
+$version_potager_mig=config::byKey('version_potager_mig', 'potager');
 sendVarToJS('version_potager_mig', $version_potager_mig);
 $eqLogics = eqLogic::byType($plugin->getId());
 usort($eqLogics, array('jardin','cmp')); 
