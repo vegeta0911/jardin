@@ -46,7 +46,7 @@ class jardin extends eqLogic {
 
    // Moon
    public static function whatMoon() {
-      $moon = new Solaris\MoonPhase2();
+      $moon = new Solaris\MoonPhase3();
       $age = round($moon->age(),1); // age de la lune en jour
       $phase = round($moon->phase(),2); //0 et 1 nouvelle lune, 0,5 pleine lune
       $illumination = round($moon->illumination(),2);
