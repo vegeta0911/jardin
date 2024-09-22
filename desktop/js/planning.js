@@ -613,7 +613,7 @@ function menu_clic_droit(element,id_semence,event){
     var l_fiche=$('<div class="menu_potager_ligne" >Accéder à la fiche de la semence</div>').appendTo('#menu_potager');
     l_fiche.on( "click",  function(e) {
         $('#menu_potager').remove();
-        window.open(base_url + '/index.php?v=d&m=potager&p=potager&id=' +id_semence ,'_blank');
+        window.open(base_url + '/index.php?v=d&m=jardin&p=jardin&id=' +id_semence ,'_blank');
     })
 
     var ind_semis_new=element.parent().find('.un_semis').length;
@@ -707,7 +707,7 @@ $('.potager_ligne_principale').off("contextmenu").on("contextmenu",function(e){
     return false;
 });
 $('.potager_ligne_principale').on("dblclick",function(e){
-    window.open('/index.php?v=d&m=potager&p=potager&id=' +$(e.currentTarget).parent().attr('semence') ,'_self');
+    window.open('/index.php?v=d&m=jardin&p=jardin&id=' +$(e.currentTarget).parent().attr('semence') ,'_self');
 });
 
 
