@@ -70,11 +70,9 @@ usort($eqLogics, array('jardin','cmp'));
 ?>
 
 <div id="conteneur_planning">
-
-
-<div class="eqLogicThumbnailContainer" id="menu_top_potager">
+<div id="menu_top_potager">
         
-        <div class="eqLogicThumbnailContainer" id="menu_top_potager">
+        <div class="eqLogicThumbnailContainer">
         <div class="cursor eqLogicAction logoPrimary" id="add_item">
            <i class="fas fa-plus-circle"></i>
            
@@ -437,20 +435,10 @@ $('#add_item').off('click').on('click', function () {
     }
 
     echo '<div class="potager_ligne_fin"></div>';
-        
 
-?>
-
-</div>
-
-<?php
 include_file('desktop', 'lune', 'js', 'jardin');
 include_file('desktop', 'potager_commun', 'js', 'jardin');
 include_file('desktop', 'potager_class', 'js', 'jardin');
 include_file('desktop', 'association', 'js', 'jardin');
 include_file('desktop', 'planning', 'js', 'jardin');
 ?>
-
-<script>
-    
-</script>
