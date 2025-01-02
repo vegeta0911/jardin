@@ -1,7 +1,7 @@
 <div class="eqLogic eqLogic-widget allowResize  #eqType#" style="width: 450px;height: 120px;#style#"
     data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-eqType="#eqType#"
     data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#">
-    <link rel="stylesheet" href="plugins/potager/desktop/css/arrosage_template.css" />
+    <link rel="stylesheet" href="plugins/jardin/desktop/css/arrosage_template.css" />
     <div class="text-center widget-name">
         <span class="warning" title="#alert_name#">
             <i class='#alert_icon#'></i>
@@ -42,7 +42,7 @@
         function refresh#idArrosage#(){
             $.ajax({
                 type: 'POST',
-                url: 'plugins/potager/core/ajax/potager.ajax.php',
+                url: 'plugins/jardin/core/ajax/jardin.ajax.php',
                 data: {
                     action: 'get_data_arrosage',
                     id_eqlogic: #id#,
@@ -90,7 +90,7 @@
         function action_arrosage#idArrosage#(id_arrosage, action, timer = false) {
             $.ajax({
                 type: 'POST',
-                url: 'plugins/potager/core/ajax/potager.ajax.php',
+                url: 'plugins/jardin/core/ajax/jardin.ajax.php',
                 data: {
                     action: 'action_arrosage',
                     id: init(#id#),
@@ -114,7 +114,3 @@
 
     </script>
 </div>
-<style>
-
-
-</style>

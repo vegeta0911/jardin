@@ -298,7 +298,7 @@ debugB=null;
     
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
           action: 'action_arrosage',
           id: init(current_element.id),

@@ -25,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class potager extends eqLogic {
+class jardin extends eqLogic {
 
    public function refresh(){
       if($this->getIsEnable() == 0){
@@ -35,8 +35,8 @@ class potager extends eqLogic {
    }
 
    public function debug(){
-      log::add('potager', 'debug', '> debug');
-      potager::whatMoon();//->notifications_ns(true);
+      log::add('jardin', 'debug', '> debug');
+      jardin::whatMoon();//->notifications_ns(true);
       //potager::cronHourly();
       // $liste_arrosage=$this->getConfiguration('liste_arrosage');
       // //$this->lancer_timer_arrosage($liste_arrosage[0],1);
@@ -46,7 +46,7 @@ class potager extends eqLogic {
 
    // Moon
    public static function whatMoon() {
-      $moon = new Solaris\MoonPhase2();
+      $moon = new Solaris\MoonPhase3();
       $age = round($moon->age(),1); // age de la lune en jour
       $phase = round($moon->phase(),2); //0 et 1 nouvelle lune, 0,5 pleine lune
       $illumination = round($moon->illumination(),2);
@@ -55,12 +55,12 @@ class potager extends eqLogic {
 
       $etat = $moon->phase_name();
       
-      log::add('potager', 'debug', '----whatMoon----');
-      log::add('potager', 'debug', 'Phase Lune ' . $phase);
-      log::add('potager', 'debug', 'Age Lune ' . $age);
-      log::add('potager', 'debug', 'illumination ' . $illumination);
-      log::add('potager', 'debug', 'distance ' . $distance);
-      log::add('potager', 'debug', 'name ' . $etat);
+      log::add('jardin', 'debug', '----whatMoon----');
+      log::add('jardin', 'debug', 'Phase Lune ' . $phase);
+      log::add('jardin', 'debug', 'Age Lune ' . $age);
+      log::add('jardin', 'debug', 'illumination ' . $illumination);
+      log::add('jardin', 'debug', 'distance ' . $distance);
+      log::add('jardin', 'debug', 'name ' . $etat);
 
       $imgL=1;
       if($phase>=0.25 & $phase<0.4){
@@ -113,10 +113,10 @@ public function check_start_arrosage(){
    if($this->getIsEnable() == 0){
       return;
    }
-   log::add('potager', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . '');
+   log::add('jardin', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . '');
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
    if($liste_arrosage == ''){
-      log::add('potager', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . ' aucun arrosage pour cet équipement');
+      log::add('jardin', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . ' aucun arrosage pour cet équipement');
       return;
    }
 
@@ -131,48 +131,48 @@ public function check_start_one_arrosage($un_arrosage,$key){
       if(is_array($cond_debutT)){
          $cond_debutT=$cond_debutT['cmd'];
       }
-      log::add('potager', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' - condition  : '.$cond_debutT);
+      log::add('jardin', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' - condition  : '.$cond_debutT);
       $resultat = jeedom::evaluateExpression($cond_debutT);
-      log::add('potager', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' resultat : '  .$resultat);
+      log::add('jardin', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' resultat : '  .$resultat);
 
       if($resultat == 1){
-         log::add('potager', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' > Condition de start OK !');
+         log::add('jardin', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' > Condition de start OK !');
          $this-> start_arrosage($un_arrosage,$key);
          return true;
       }
    }
-   log::add('potager', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' > Condition de start KO !');
+   log::add('jardin', 'debug', '   > check_start_one_arrosage : ' . $this->getHumanName() . ' > Condition de start KO !');
    return false;
 }
 
 public function start_arrosage($un_arrosage,$key,$mode_force=false, $timer_manual = false){
-   log::add('potager', 'debug', '> start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
    if($this->getIsEnable() == 0){
       return;
    }
    
-   log::add('potager', 'debug', '> start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
    if($this->get_etat_arrosage($un_arrosage['id']) == 'on'||$this->get_etat_arrosage($un_arrosage['id']) == 'manual'){
-      log::add('potager', 'debug', '> start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' est déja "on" (par sécu on relance le On)');
+      log::add('jardin', 'debug', '> start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' est déja "on" (par sécu on relance le On)');
       //return;
    }
-   log::add('potager', 'info', '> DEMARRAGE DE L\'ARROSAGE : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'info', '> DEMARRAGE DE L\'ARROSAGE : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
    //on vérifie les annuleur de start
    if($mode_force==false){
-      log::add('potager', 'debug', '   > check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Vérification des "annulateurs" de démarrage de l arrosage...');
+      log::add('jardin', 'debug', '   > check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Vérification des "annulateurs" de démarrage de l arrosage...');
       $annulation=false;
       foreach($un_arrosage['liste_an_declencheur'] as $annulateur){
          $annulateurT=$annulateur;
          if(is_array($annulateurT)){
             $annulateurT=$annulateurT['cmd'];
          }
-         log::add('potager', 'debug', '    > start_arrosage - annuleur de start: ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - condition  : '.$annulateurT);
+         log::add('jardin', 'debug', '    > start_arrosage - annuleur de start: ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - condition  : '.$annulateurT);
          
          $resultat = jeedom::evaluateExpression($annulateurT);
          
-         log::add('potager', 'debug', '    > start_arrosage - annuleur de start : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' resultat : '  .$resultat);
+         log::add('jardin', 'debug', '    > start_arrosage - annuleur de start : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' resultat : '  .$resultat);
          if($resultat == 1){
-            log::add('potager', 'debug', '   ====> start_arrosage - annuleur de start: ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > Annulation START !');
+            log::add('jardin', 'debug', '   ====> start_arrosage - annuleur de start: ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > Annulation START !');
             $annulation=true;
          }
       }
@@ -183,9 +183,9 @@ public function start_arrosage($un_arrosage,$key,$mode_force=false, $timer_manua
    }
    
 
-   log::add('potager', 'debug', '   > check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Lancements des commandes de démarrage de l arrosage...');
+   log::add('jardin', 'debug', '   > check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Lancements des commandes de démarrage de l arrosage...');
    foreach($un_arrosage['liste_start'] as $action_on){
-      log::add('potager', 'debug', '      > start_arrosage - execution de la commande : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > ' . $action_on['cmd']);
+      log::add('jardin', 'debug', '      > start_arrosage - execution de la commande : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > ' . $action_on['cmd']);
       $this->execute_comande($action_on);
    }
 
@@ -194,7 +194,7 @@ public function start_arrosage($un_arrosage,$key,$mode_force=false, $timer_manua
    $this->setConfiguration('liste_arrosage',$liste_arrosage);
    $this->save();
 
-   log::add('potager', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Set etat arrosage ON - '  .$un_arrosage['id']);
+   log::add('jardin', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Set etat arrosage ON - '  .$un_arrosage['id']);
    $this->set_etat_arrosage($un_arrosage['id'], $timer_manual === false ? 'on' : 'manual',$un_arrosage['conso_arrosage'] );
 
 
@@ -215,10 +215,10 @@ public function check_stop_arrosage(){
    if($this->getIsEnable() == 0){
       return;
    }
-   log::add('potager', 'debug', '> check_stop_arrosage : ' . $this->getHumanName() . '');
+   log::add('jardin', 'debug', '> check_stop_arrosage : ' . $this->getHumanName() . '');
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
    if($liste_arrosage == ''){
-      log::add('potager', 'debug', '> check_stop_arrosage : ' . $this->getHumanName() . ' aucun arrosage pour cet équipement');
+      log::add('jardin', 'debug', '> check_stop_arrosage : ' . $this->getHumanName() . ' aucun arrosage pour cet équipement');
       return;
    }
 
@@ -230,7 +230,7 @@ public function check_stop_arrosage(){
 
 public function check_stop_one_arrosage($un_arrosage,$key){
    if($this->get_etat_arrosage($un_arrosage['id']) == 'on'||$this->get_etat_arrosage($un_arrosage['id']) == 'manual'){
-      log::add('potager', 'debug', '   > check_stop_arrosage : ' . $this->getHumanName() . ' - ' . $un_arrosage['nom'] . ' est en cours de fonctionnement');
+      log::add('jardin', 'debug', '   > check_stop_arrosage : ' . $this->getHumanName() . ' - ' . $un_arrosage['nom'] . ' est en cours de fonctionnement');
       foreach($un_arrosage['liste_cd_fin'] as $cond_fin){
          $cond_finT=$cond_fin;
          if(is_array($cond_finT)){
@@ -240,13 +240,13 @@ public function check_stop_one_arrosage($un_arrosage,$key){
          $resultat = jeedom::evaluateExpression($cond_finT);
          
          if($resultat == 1){
-            log::add('potager', 'debug', '   > check_stop_arrosage : ' . $this->getHumanName() . ' > Condition de stop OK !');
+            log::add('jardin', 'debug', '   > check_stop_arrosage : ' . $this->getHumanName() . ' > Condition de stop OK !');
             $this->stop_arrosage($un_arrosage,$key);
             return true;
          }
       }
    }
-   log::add('potager', 'debug', '   > check_stop_arrosage : ' . $this->getHumanName() . ' > Condition de stop KO !');
+   log::add('jardin', 'debug', '   > check_stop_arrosage : ' . $this->getHumanName() . ' > Condition de stop KO !');
    return false;
 
 }
@@ -263,7 +263,7 @@ public function get_etat_arrosage($id_arrosage){
    }
 
    //not found -> set to off
-   log::add('potager', 'debug', '   > get_etat_arrosage : ' . $id_arrosage . ' > not found, set to off !');
+   log::add('jardin', 'debug', '   > get_etat_arrosage : ' . $id_arrosage . ' > not found, set to off !');
    $this->set_etat_arrosage($id_arrosage,'off');
    return 'off'; //not found
 }
@@ -272,7 +272,7 @@ public function get_etat_arrosage($id_arrosage){
 
 public function set_etat_arrosage($id_arrosage,$etat='off', $conso=0){
    if($id_arrosage == ''){
-      log::add('potager', 'debug', '> set_etat_arrosage : ' . $this->getHumanName() . ' > id_arrosage empty !');
+      log::add('jardin', 'debug', '> set_etat_arrosage : ' . $this->getHumanName() . ' > id_arrosage empty !');
       return false; //id null
    }
    $liste_cf_arrosage=$this->getConfiguration('liste_cf_arrosage');
@@ -292,7 +292,7 @@ public function set_etat_arrosage($id_arrosage,$etat='off', $conso=0){
          $this->checkAndUpdateCmd('conso_arrosage_#' . $id_arrosage,$conso);
       
          $this->save();
-         log::add('potager', 'debug', '> set_etat_arrosage : ' . $this->getHumanName() . ' > id_arrosage found in conf ! '  .$id_arrosage . ' set to ' . $etat);
+         log::add('jardin', 'debug', '> set_etat_arrosage : ' . $this->getHumanName() . ' > id_arrosage found in conf ! '  .$id_arrosage . ' set to ' . $etat);
          return true;
       }
    }
@@ -309,7 +309,7 @@ public function set_etat_arrosage($id_arrosage,$etat='off', $conso=0){
    $this->setConfiguration('liste_cf_arrosage',$liste_cf_arrosage);
    $this->save();
 
-   log::add('potager', 'debug', '> set_etat_arrosage : ' . $this->getHumanName() . ' > id_arrosage not found in conf - added  ! '  .$id_arrosage . ' set to ' . $etat);
+   log::add('jardin', 'debug', '> set_etat_arrosage : ' . $this->getHumanName() . ' > id_arrosage not found in conf - added  ! '  .$id_arrosage . ' set to ' . $etat);
    return true; //not found
 }
 public function del_conf_arrosage($id_arrosage){
@@ -333,10 +333,10 @@ public function del_conf_arrosage($id_arrosage){
    return false; //not found
 }
 public function refresh_conf_arrosage(){
-   log::add('potager', 'debug', '> refresh_conf_arrosage');
+   log::add('jardin', 'debug', '> refresh_conf_arrosage');
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
-   $liste_cf_arrosage=array_values($this->getConfiguration('liste_cf_arrosage'));
-   //log::add('potager', 'debug', '> liste_cf_arrosage count ' . count($liste_cf_arrosage));
+   $liste_cf_arrosage= $this->getConfiguration('liste_cf_arrosage');
+  //log::add('potager', 'debug', '> liste_cf_arrosage count ' . $this->getConfiguration('liste_cf_arrosage'));
    //log::add('potager', 'debug', '> liste_arrosage count ' . count($liste_arrosage));
 
    foreach($liste_cf_arrosage as $key => $une_cf_arrosage){
@@ -390,7 +390,7 @@ public function unset_all_cron_start_all_arrosage(){
    }
 }
 public function unset_all_cron_start_one_arrosage($un_arrosage){
-   log::add('potager', 'debug', '> unset_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> unset_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
 
    $options=[];
    $options['potager_id']=$this->getId();
@@ -400,10 +400,10 @@ public function unset_all_cron_start_one_arrosage($un_arrosage){
    $i=0;
    do{
       $options['index_cron']=$i;
-      $cron = cron::byClassAndFunction('potager', 'cron_start_arrosage', $options);
+      $cron = cron::byClassAndFunction('jardin', 'cron_start_arrosage', $options);
       if (is_object($cron)) {
          $cron->remove(false);
-         log::add('potager', 'debug', '    > unset_all_cron_start_one_arrosage : remove cron index : ' . $i);
+         log::add('jardin', 'debug', '    > unset_all_cron_start_one_arrosage : remove cron index : ' . $i);
       }
       $i++;
    }while(is_object($cron));
@@ -412,27 +412,27 @@ public function unset_all_cron_start_one_arrosage($un_arrosage){
 
 
 public function set_all_cron_start_one_arrosage($un_arrosage){
-   log::add('potager', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
 
    foreach($un_arrosage['liste_programmation'] as $key=>$un_cron_start){
       $options=[];
       $options['potager_id']=$this->getId();
       $options['arrosage_id']=$un_arrosage['id'];
       $options['index_cron']=$key;
-      $cron = cron::byClassAndFunction('potager', 'cron_start_arrosage', $options);
+      $cron = cron::byClassAndFunction('jardin', 'cron_start_arrosage', $options);
       if (is_object($cron)) {
          $cron->remove(false);
       }
 
       $cron = new cron();
-      $cron->setClass('potager');
+      $cron->setClass('jardin');
       $cron->setFunction('cron_start_arrosage');
       $cron->setOption($options);
       //$_next = strtotime($_next);
       $cron->setSchedule($un_cron_start);
       //$cron->setOnce(1);
       $cron->save();
-      log::add('potager', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . '- cron index ' .  $key);
+      log::add('jardin', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . '- cron index ' .  $key);
    }
    
 }
@@ -472,13 +472,13 @@ public function stop_all_timer_all_arrosage(){
 public function execute_comande($action){
    $options = array();
    if(is_array($action)===false){
-      log::add('potager', 'debug', '      > exec_comande : mode compatibilité');
+      log::add('jardin', 'debug', '      > exec_comande : mode compatibilité');
       $action=array("cmd"=>$action , "options"=>null);
    }
    if (isset($action['options'])) {
       $options = $action['options'];
    }
-   log::add('potager', 'debug', '      > exec_comande : ' . $action['cmd']);
+   log::add('jardin', 'debug', '      > exec_comande : ' . $action['cmd']);
    scenarioExpression::createAndExec('action', $action['cmd'], $options);
 }
 
@@ -486,17 +486,17 @@ public function stop_arrosage($un_arrosage,$key){ //force utiliser pour forcer l
    if($this->getIsEnable() == 0){
       return;
    }
-   log::add('potager', 'debug', '> stop_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> stop_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
    $this->stop_timer_arrosage($un_arrosage);
    if($this->get_etat_arrosage($un_arrosage['id']) == 'off'){
-      log::add('potager', 'debug', '> stop_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' est déja "off"');
+      log::add('jardin', 'debug', '> stop_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' est déja "off"');
       //return;
    }
 
-   log::add('potager', 'info', '> ARRET DE L\'ARROSAGE : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
-   log::add('potager', 'debug', '> stop_arrosage - execution de la commande : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > Execution des commandes d arret de l arrosage ...');
+   log::add('jardin', 'info', '> ARRET DE L\'ARROSAGE : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> stop_arrosage - execution de la commande : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > Execution des commandes d arret de l arrosage ...');
    foreach($un_arrosage['liste_end'] as $action_off){
-      log::add('potager', 'debug', '   > stop_arrosage - execution de la commande : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > ' . $action_off['cmd']);
+      log::add('jardin', 'debug', '   > stop_arrosage - execution de la commande : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']. ' > ' . $action_off['cmd']);
       $this->execute_comande($action_off);
 
 
@@ -511,28 +511,28 @@ public function stop_arrosage($un_arrosage,$key){ //force utiliser pour forcer l
 }
 
 public function stop_timer_arrosage($un_arrosage){
-   log::add('potager', 'debug', '> stop_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
+   log::add('jardin', 'debug', '> stop_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
    $options=[];
    $options['potager_id']=$this->getId();
    $options['arrosage_id']=$un_arrosage['id'];
-   $cron = cron::byClassAndFunction('potager', 'timer_stop', $options);
+   $cron = cron::byClassAndFunction('jardin', 'timer_stop', $options);
    if (is_object($cron)) {
-      log::add('potager', 'debug', '    > stop_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' => Remove TIMER OK !');
+      log::add('jardin', 'debug', '    > stop_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' => Remove TIMER OK !');
       $cron->remove(false);
    }else{
-      log::add('potager', 'debug', '    > stop_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' => No timer found !');
+      log::add('jardin', 'debug', '    > stop_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' => No timer found !');
    }
 
 }
 
 public function lancer_timer_arrosage($un_arrosage,$duration=0){
-   log::add('potager', 'debug', '> lancer_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - duration : ' . $duration);
+   log::add('jardin', 'debug', '> lancer_timer_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - duration : ' . $duration);
    $_next=date('Y-m-d H:i:s', strtotime('+' . round($duration) . ' min ' . date('Y-m-d H:i:s')));
-
+    log::add('jardin', 'debug', '> option '.print_r($option,true));
    $options=[];
    $options['potager_id']=$this->getId();
    $options['arrosage_id']=$un_arrosage['id'];
-   $cron = cron::byClassAndFunction('potager', 'timer_stop', $options);
+   $cron = cron::byClassAndFunction('jardin', 'timer_stop', $options);
    if (is_object($cron)) {
       $cron->remove(false);
    }
@@ -540,7 +540,7 @@ public function lancer_timer_arrosage($un_arrosage,$duration=0){
       return;
    }
    $cron = new cron();
-   $cron->setClass('potager');
+   $cron->setClass('jardin');
    $cron->setFunction('timer_stop');
    $cron->setOption($options);
    $_next = strtotime($_next);
@@ -552,80 +552,80 @@ public function lancer_timer_arrosage($un_arrosage,$duration=0){
 
 public static function cron_start_arrosage($_option){
    //$el_potager = potager::byId($_option['potager_id']);
-   $el_potager=potager::get_potager_check_non_run($_option['potager_id'],true,'cron_start_arrosage');
+   $el_potager=jardin::get_potager_check_non_run($_option['potager_id'],true,'cron_start_arrosage');
    if (is_object($el_potager) && $el_potager->getIsEnable() == 1) {
-      log::add('potager', 'debug', '> cron_start_arrosage : ' . $el_potager->getHumanName());
+      log::add('jardin', 'debug', '> cron_start_arrosage : ' . $el_potager->getHumanName());
    }else{
-      log::add('potager', 'debug', '> cron_start_arrosage : potager not found or desactivate');
+      log::add('jardin', 'debug', '> cron_start_arrosage : potager not found or desactivate');
       return;
    }
 
-   log::add('potager', 'debug', '> Sécurité , on attend 5sec pour éviter les telescopages"');
+   log::add('jardin', 'debug', '> Sécurité , on attend 5sec pour éviter les telescopages"');
    sleep(5);
 
    $liste_arrosage=$el_potager->getConfiguration('liste_arrosage');
    foreach($liste_arrosage as $key => $un_arrosage){
       if($un_arrosage['id'] == $_option['arrosage_id']){
-         log::add('potager', 'debug', '> cron_start_arrosage : ' . $el_potager->getHumanName() . ' arrosage a démarrer via déclencheur trouvé (via CRON)! -> '  .$_option['arrosage_id']);
+         log::add('jardin', 'debug', '> cron_start_arrosage : ' . $el_potager->getHumanName() . ' arrosage a démarrer via déclencheur trouvé (via CRON)! -> '  .$_option['arrosage_id']);
          $el_potager->start_arrosage($un_arrosage,$key);
-         potager::set_potager_non_run($_option['potager_id']);
+         jardin::set_potager_non_run($_option['potager_id']);
          return;
       }
    }
-   potager::set_potager_non_run($_option['potager_id']); 
+   jardin::set_potager_non_run($_option['potager_id']); 
 }
 
 public static function listener_start($_option){
    //$el_potager = potager::byId($_option['potager_id']);
-   $el_potager=potager::get_potager_check_non_run($_option['potager_id'],true,'listener_start');
+   $el_potager=jardin::get_potager_check_non_run($_option['potager_id'],true,'listener_start');
    if (is_object($el_potager) && $el_potager->getIsEnable() == 1) {
-      log::add('potager', 'debug', '> listener_start : ' . $el_potager->getHumanName());
+      log::add('jardin', 'debug', '> listener_start : ' . $el_potager->getHumanName());
    }else{
-      log::add('potager', 'debug', '> listener_start : potager not found or desactivate');
+      log::add('jardin', 'debug', '> listener_start : potager not found or desactivate');
       return;
    }
    $liste_arrosage=$el_potager->getConfiguration('liste_arrosage');
    foreach($liste_arrosage as $key => $un_arrosage){
       if($un_arrosage['id'] == $_option['arrosage_id']){
-         log::add('potager', 'debug', '> listener_start : ' . $el_potager->getHumanName() . ' arrosage a démarrer via déclencheur trouvé !');
+         log::add('jardin', 'debug', '> listener_start : ' . $el_potager->getHumanName() . ' arrosage a démarrer via déclencheur trouvé !');
          $el_potager->check_start_one_arrosage($un_arrosage,$key);
-         potager::set_potager_non_run($_option['potager_id']);
+         jardin::set_potager_non_run($_option['potager_id']);
          return;
       }
    }
-   log::add('potager', 'debug', '> listener_start : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer non trouvé !');
-   potager::set_potager_non_run($_option['potager_id']);
+   log::add('jardin', 'debug', '> listener_start : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer non trouvé !');
+   jardin::set_potager_non_run($_option['potager_id']);
 }
 
 public static function listener_stop($_option){
    //$el_potager = potager::byId($_option['potager_id']);
-   $el_potager=potager::get_potager_check_non_run($_option['potager_id'],true,'listener_stop');
+   $el_potager=jardin::get_potager_check_non_run($_option['potager_id'],true,'listener_stop');
    if (is_object($el_potager) && $el_potager->getIsEnable() == 1) {
-      log::add('potager', 'debug', '> listener_stop : ' . $el_potager->getHumanName());
+      log::add('jardin', 'debug', '> listener_stop : ' . $el_potager->getHumanName());
    }else{
-      log::add('potager', 'debug', '> listener_stop : potager not found or desactivate');
+      log::add('jardin', 'debug', '> listener_stop : potager not found or desactivate');
       return;
    }
    $liste_arrosage=$el_potager->getConfiguration('liste_arrosage');
    foreach($liste_arrosage as $key => $un_arrosage){
       if($un_arrosage['id'] == $_option['arrosage_id']){
-         log::add('potager', 'debug', '> listener_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via declencheur trouvé !');
+         log::add('jardin', 'debug', '> listener_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via declencheur trouvé !');
          $el_potager->check_stop_one_arrosage($un_arrosage,$key);
-         potager::set_potager_non_run($_option['potager_id']);
+         jardin::set_potager_non_run($_option['potager_id']);
          return;
       }
    }
-   log::add('potager', 'debug', '> listener_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer non trouvé !');
-   potager::set_potager_non_run($_option['potager_id']);
+   log::add('jardin', 'debug', '> listener_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer non trouvé !');
+   jardin::set_potager_non_run($_option['potager_id']);
 }
 
 public static function get_potager_check_non_run($id,$set_run=true,$detail_run='generic run'){
-   log::add('potager', 'debug', '> get_potager_check_non_run : ' . $id);
-   $el_potager = potager::byId($id);
+   log::add('jardin', 'debug', '> get_potager_check_non_run : ' . $id);
+   $el_potager = jardin::byId($id);
    if (is_object($el_potager) && $el_potager->getIsEnable() == 1) {
-      log::add('potager', 'debug', '   > found : ' . $el_potager->getHumanName());
+      log::add('jardin', 'debug', '   > found : ' . $el_potager->getHumanName());
    }else{
-      log::add('potager', 'debug', '   > NOT found');
+      log::add('jardin', 'debug', '   > NOT found');
       return;
    }
    
@@ -634,12 +634,12 @@ public static function get_potager_check_non_run($id,$set_run=true,$detail_run='
    while($is_running != ''){
       $nbr_try++;
       if($nbr_try>=60){
-         log::add('potager', 'error', '   > Processus POTAGER arrosage bloqué : ' . $id . ' - ' . $is_running);
+         log::add('jardin', 'error', '   > Processus POTAGER arrosage bloqué : ' . $id . ' - ' . $is_running);
          return; //error
       }
-      log::add('potager', 'debug', '   > RUN en cours : ' . $is_running);
+      log::add('jardin', 'debug', '   > RUN en cours : ' . $is_running);
       sleep(2);
-      $el_potager = potager::byId($id);
+      $el_potager = jardin::byId($id);
       $is_running=$el_potager->getConfiguration('is_running');
    }
 
@@ -651,12 +651,12 @@ public static function get_potager_check_non_run($id,$set_run=true,$detail_run='
 }
 
 public static function set_potager_non_run($id){
-   log::add('potager', 'debug', '> set_potager_non_run : ' . $id);
-   $el_potager = potager::byId($id);
+   log::add('jardin', 'debug', '> set_potager_non_run : ' . $id);
+   $el_potager = jardin::byId($id);
    if (is_object($el_potager) && $el_potager->getIsEnable() == 1) {
       //do nothing
    }else{
-      log::add('potager', 'debug', '   > NOT found');
+      log::add('jardin', 'debug', '   > NOT found');
       return;
    }
    $el_potager->setConfiguration('is_running','');
@@ -665,38 +665,38 @@ public static function set_potager_non_run($id){
 
 public static function timer_stop($_option){
    //$el_potager = potager::byId($_option['potager_id']);
-   $el_potager=potager::get_potager_check_non_run($_option['potager_id'],true,'timer_stop');
+   $el_potager=jardin::get_potager_check_non_run($_option['potager_id'],true,'timer_stop');
    if (is_object($el_potager) && $el_potager->getIsEnable() == 1) {
-      log::add('potager', 'debug', '> timer_stop : ' . $el_potager->getHumanName());
+      log::add('jardin', 'debug', '> timer_stop : ' . $el_potager->getHumanName());
    }else{
-      log::add('potager', 'debug', '> timer_stop : potager not found or desactivate');
+      log::add('jardin', 'debug', '> timer_stop : potager not found or desactivate');
       return;
    }
 
    $liste_arrosage=$el_potager->getConfiguration('liste_arrosage');
    foreach($liste_arrosage as $key => $un_arrosage){
       if($un_arrosage['id'] == $_option['arrosage_id']){
-         log::add('potager', 'debug', '> timer_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer trouvé !');
+         log::add('jardin', 'debug', '> timer_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer trouvé !');
          $el_potager->stop_arrosage($un_arrosage,$key);
-         potager::set_potager_non_run($_option['potager_id']);
+         jardin::set_potager_non_run($_option['potager_id']);
          return;
       }
    }
-   log::add('potager', 'debug', '> timer_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer non trouvé !');
-   potager::set_potager_non_run($_option['potager_id']);
+   log::add('jardin', 'debug', '> timer_stop : ' . $el_potager->getHumanName() . ' arrosage a arreter via timer non trouvé !');
+   jardin::set_potager_non_run($_option['potager_id']);
 }
 
 public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : start (declencheur) - stop 
-   log::add('potager', 'debug', '   > set_listeners_one_arrosage ' . $action . ' - ' . $un_arrosage['id']);
+   log::add('jardin', 'debug', '   > set_listeners_one_arrosage ' . $action . ' - ' . $un_arrosage['id']);
    $options=[];
    $options['potager_id']=$this->getId();
    $options['arrosage_id']=$un_arrosage['id'];
 
-   $listener = listener::byClassAndFunction('potager', 'listener_' . $action, $options);
+   $listener = listener::byClassAndFunction('jardin', 'listener_' . $action, $options);
    if (!is_object($listener)) {
        $listener = new listener();
    }
-   $listener->setClass('potager');
+   $listener->setClass('jardin');
    $listener->setFunction('listener_' . $action);
    $listener->setOption($options);
    $listener->emptyEvent();
@@ -708,18 +708,18 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    if($action == 'stop'){
       $declencheurs=$un_arrosage['liste_cd_fin'];
    }
-   $ids_declencheur=potager::extract_equipement_jeedom_from_array($declencheurs);
+   $ids_declencheur=jardin::extract_equipement_jeedom_from_array($declencheurs);
    foreach($ids_declencheur as $one_id){
-      log::add('potager', 'debug', '      > ID LISTENER  ' . $one_id);
+      log::add('jardin', 'debug', '      > ID LISTENER  ' . $one_id);
       $listener->addEvent($one_id);
    }
    $listener->save();
    
    if(count($ids_declencheur) == 0){
       $listener->remove();
-      log::add('potager', 'debug', '       > set_listeners_one_arrosage finaly remove because no item inside !');
+      log::add('jardin', 'debug', '       > set_listeners_one_arrosage finaly remove because no item inside !');
    }else{
-      log::add('potager', 'debug', '       > set_listeners_one_arrosage ok !');
+      log::add('jardin', 'debug', '       > set_listeners_one_arrosage ok !');
    }
 }
    
@@ -729,16 +729,16 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    
 
    public function unset_listeners_one_arrosage($arrosage){
-      log::add('potager', 'debug', '   > unset_listeners_one_arrosage ' . $un_arrosage['id']);
+      log::add('jardin', 'debug', '   > unset_listeners_one_arrosage ' . $un_arrosage['id']);
       $options=[];
       $options['potager_id']=$this->getId();
       $options['arrosage_id']=$un_arrosage['id'];
-      $listener = listener::byClassAndFunction('potager', 'listener_start', $options);
+      $listener = listener::byClassAndFunction('jardin', 'listener_start', $options);
       if (is_object($listener)) {
          $listener->remove();
       }
 
-      $listener = listener::byClassAndFunction('potager', 'listener_stop' . $action, $options);
+      $listener = listener::byClassAndFunction('jardin', 'listener_stop' . $action, $options);
       if (is_object($listener)) {
          $listener->remove();
       }
@@ -746,7 +746,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
 
 
    public function set_all_listeners_all_arrosage(){
-      log::add('potager', 'debug', '> set_all_listeners_all_arrosage');
+      log::add('jardin', 'debug', '> set_all_listeners_all_arrosage');
       $liste_arrosage=$this->getConfiguration('liste_arrosage');
       foreach($liste_arrosage as $un_arrosage){
          $this->set_listeners_one_arrosage($un_arrosage,'start');
@@ -755,7 +755,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    }
 
    public function unset_all_listener_all_arrosage(){
-      log::add('potager', 'debug', '> unset_all_listener_all_arrosage');
+      log::add('jardin', 'debug', '> unset_all_listener_all_arrosage');
       $liste_arrosage=$this->getConfiguration('liste_arrosage');
       foreach($liste_arrosage as $un_arrosage){
          $this->unset_listeners_one_arrosage($un_arrosage);
@@ -763,7 +763,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    }
 
    public function refresh_all_listener_arrosage(){
-      log::add('potager', 'debug', '> refresh_all_listener_arrosage');
+      log::add('jardin', 'debug', '> refresh_all_listener_arrosage');
       $this->unset_all_listener_all_arrosage();
       $this->set_all_listeners_all_arrosage();
    }
@@ -771,7 +771,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    public static function extract_equipement_jeedom_from_array($array){
       $result=[];
       foreach($array as $un_el){
-         $one_result_array=potager::extract_equipement_jeedom_from_txt($un_el['cmd']);
+         $one_result_array=jardin::extract_equipement_jeedom_from_txt($un_el['cmd']);
          foreach($one_result_array as $one_result){
             $result[]=$one_result;
          }
@@ -781,18 +781,18 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    public static function extract_equipement_jeedom_from_txt($txt){
       $result=[];
       $position_d=0;
-      log::add('potager', 'debug', '> extract_equipement_jeedom_from_txt : ' . $txt);
+      log::add('jardin', 'debug', '> extract_equipement_jeedom_from_txt : ' . $txt);
       //return $result;
       do {
          $ps=strpos($txt,'#',$position_d);
-         log::add('potager', 'debug', '   > ps : ' . $ps);
+         log::add('jardin', 'debug', '   > ps : ' . $ps);
          if($ps !==false){
             $pe=strpos($txt,'#',($ps + 1));
             if($pe !==false){
                $position_d=$pe+1;
 
                $un_equipement_jeedom = substr ( $txt , $ps , ($pe-$ps + 1) ) ;
-               log::add('potager', 'debug', '   > id : ' . $un_equipement_jeedom);
+               log::add('jardin', 'debug', '   > id : ' . $un_equipement_jeedom);
                $result[]=$un_equipement_jeedom;
             }else{
                $position_d=$position_d+1;
@@ -804,7 +804,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
 
 
    public static function get_nbr_info_s($year=null){
-      $plugin = plugin::byId('potager');
+      $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
 
       $result=[];
@@ -823,16 +823,16 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
          $year=date('Y');
       }
       $get_nbr_wt=$this->get_nbr_wt($year);
-      log::add('potager', 'debug', '> e1 ' . $get_nbr_wt['d_semis']);
+      log::add('jardin', 'debug', '> e1 ' . $get_nbr_wt['d_semis']);
       $result=array("id"=>$this->getId(),"d_semis" => $get_nbr_wt['d_semis'],"d_plantation" => $get_nbr_wt['d_plantation'],"d_recolte" => $get_nbr_wt['d_recolte'],"d_rempotage" => $get_nbr_wt['d_rempotage']);
-      log::add('potager', 'debug', '> e fin');
+      log::add('jardin', 'debug', '> e fin');
       return $result;
    }
 
 
    public function get_nbr_wt($year=null) //type : 'd_semis' 'd_plantation' 'd_recolte' etc
    {
-      log::add('potager', 'debug', '> e1 s');
+      log::add('jardin', 'debug', '> e1 s');
       $resultA=array("d_semis"=>0,"d_plantation"=>0,"d_recolte"=>0,"d_rempotage"=>0);
       if($year==null){
          $year=date('Y');
@@ -842,11 +842,11 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
          return $resultA;
       }
       $liste_semis=$this->getConfiguration('liste_semis');
-      log::add('potager', 'debug', '> e2');
+      log::add('jardin', 'debug', '> e2');
       foreach ($resultA as $type=>$res) {
          $aucun_semis=false;
          $result=0;
-         log::add('potager', 'debug', '> e3 ' . $type);
+         log::add('jardin', 'debug', '> e3 ' . $type);
          if($liste_semis != ''){
             foreach ($liste_semis as $un_semis) {
                if(array_key_exists($type,$un_semis)==false){
@@ -892,7 +892,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
             $resultA[$type]=$result;
          }
       }
-      log::add('potager', 'debug', '> e3 ' . json_encode($resultA));
+      log::add('jardin', 'debug', '> e3 ' . json_encode($resultA));
       return $resultA;
    }
 
@@ -1040,8 +1040,8 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
 
    
 
-   $nom_a=potager::stripAccents(strtolower($a->getName()));
-   $nom_b=potager::stripAccents(strtolower($b->getName()));
+   $nom_a=jardin::stripAccents(strtolower($a->getName()));
+   $nom_b=jardin::stripAccents(strtolower($b->getName()));
    
     return (strcmp ($nom_a,$nom_b));
 }
@@ -1121,7 +1121,7 @@ public function get_info(){
 
    public function getPathImgIcon(){
 
-      $path='plugins/potager/data/img/';
+      $path='plugins/jardin/data/img/';
 
       $type=$this->getConfiguration('type');
       if($type == 'potager'){
@@ -1129,7 +1129,7 @@ public function get_info(){
       }
       
       if($type == 'lune'){
-         return 'plugins/potager/data/img/lune/' . $this->getConfiguration('img_lune');//todo
+         return 'plugins/jardin/data/img/lune/' . $this->getConfiguration('img_lune');//todo
       }
 
       $img='semence.png';
@@ -1212,7 +1212,7 @@ public function get_info(){
       $etat='Non planté';
       $liste_semis=$this->getConfiguration('liste_semis');
       if($liste_semis == ''){
-         log::add('potager', 'debug', '   > liste_semis vide');
+         log::add('jardin', 'debug', '   > liste_semis vide');
          $this->checkAndUpdateCmd('etat',$etat);
          $this->save();
          return false;
@@ -1246,7 +1246,7 @@ public function get_info(){
          }
       }
 
-      log::add('potager', 'debug', '   > etat : ' . $etat);
+      log::add('jardin', 'debug', '   > etat : ' . $etat);
 
       $this->checkAndUpdateCmd('etat',$etat);
       //$this->save();
@@ -1294,10 +1294,10 @@ public function get_info(){
     
     //Fonction exécutée automatiquement toutes les heures par Jeedom
       public static function cronHourly($force_mode=false) {
-         potager::notifications();
+         jardin::notifications();
          $heure=intval(date("G"));
 
-            $plugin = plugin::byId('potager');
+            $plugin = plugin::byId('jardin');
             $eqLogics = eqLogic::byType($plugin->getId());
 
             foreach ($eqLogics as $eqLogic) {
@@ -1320,8 +1320,8 @@ public function get_info(){
                if($type == 'semence'){
                   $notifs=$eqLogic->notifications_ns($force_mode);
                   if($notifs['notif_tache'] != ''){
-                     log::add('potager', 'debug', '   > notif_tache : '  .$notifs['notif_tache']);
-                     potager::send_notifications('[potager] &#x1F343 &#x0A;Rappel de taches : &#x0A;' . $notifs['notif_tache']);
+                     log::add('jardin', 'debug', '   > notif_tache : '  .$notifs['notif_tache']);
+                     jardin::send_notifications('[potager] &#x1F343 &#x0A;Rappel de taches : &#x0A;' . $notifs['notif_tache']);
                   }
                }
 
@@ -1376,13 +1376,13 @@ public function get_info(){
                }
                if(substr($date_peremption,6,4) != date('Y')){
                   $date_peremption='';
-                  log::add('potager', 'debug', '   > date_peremption année pas bonne ' . $date_peremption);
+                  log::add('jardin', 'debug', '   > date_peremption année pas bonne ' . $date_peremption);
                }
                if($date_peremption != ''){
                   //log::add('potager', 'debug', '   > date_peremption non null ' . $date_peremption_mois);
                      $date_peremption_mois=intval(substr($date_peremption,3,2));
                      if(config::byKey('notif_peremption', __CLASS__) == 1 && $date_peremption_mois==$mois &&  $jour==1){
-                        log::add('potager', 'debug', '   > Notif péremption semence');
+                        log::add('jardin', 'debug', '   > Notif péremption semence');
       
                         $result['notif_peremption']=$nom . ' ' . $detail;
                         //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' date de péremption imminente ! (ce mois ci)');
@@ -1394,17 +1394,17 @@ public function get_info(){
          
 
          if(config::byKey('notif_semis', __CLASS__) == 1 && $date_semis='' && $eqLogic->getConfiguration('semis_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('semis_' . ($mois -1)) == 1 && $jour==1){
-            log::add('potager', 'debug', '   > Notif Semis');
+            log::add('jardin', 'debug', '   > Notif Semis');
             //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de semis');
             $result['notif_semis']=$nom . ' ' . $detail;
          }
          if(config::byKey('notif_semis_terre', __CLASS__)== 1 &&$eqLogic->getConfiguration('semis_terre_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('semis_terre_' . ($mois -1)) == 1 && $jour==1){
-            log::add('potager', 'debug', '   > Notif Semis terre');
+            log::add('jardin', 'debug', '   > Notif Semis terre');
             //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de mise en terre');
             $result['notif_met']=$nom . ' ' . $detail;
          }
          if(config::byKey('notif_recolte', __CLASS__)== 1 &&$eqLogic->getConfiguration('recolte_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('recolte_' . ($mois -1)) == 1 && $jour==1){
-            log::add('potager', 'debug', '   > Notif Recolte');
+            log::add('jardin', 'debug', '   > Notif Recolte');
             //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de récolte');
 
             $result['notif_recolte']=$nom . ' ' . $detail;
@@ -1423,9 +1423,9 @@ public function get_info(){
                $dateTache_d=date_create_from_format('Y-m-d',$dateTache);
                $dateJour=new Datetime();//date_create_from_format('Y-m-d','2022-06-30');
                $type=$une_tache['type_plan_tache'];
-               log::add('potager', 'debug', '   > dateTache : "' . $type . '" - ' . $dateTache);
+               log::add('jardin', 'debug', '   > dateTache : "' . $type . '" - ' . $dateTache);
                $diff_date = date_diff($dateTache_d, $dateJour);
-               log::add('potager', 'debug', '   > diff jour ' . intval($diff_date->format('%d')));
+               log::add('jardin', 'debug', '   > diff jour ' . intval($diff_date->format('%d')));
                
                if($dateTache_d == ''){
                   $type='';
@@ -1450,12 +1450,12 @@ public function get_info(){
                      $result_ok=true;
                   }
                }
-               log::add('potager', 'debug', '   > e2');
+               log::add('jardin', 'debug', '   > e2');
                $indJ=strrpos($type,'s');
                if($indJ !==false){
                   $nbr=intval(substr($type,0,$indJ));
                   $diff_w=intval($diff_date->format('%d'))/7;
-                  log::add('potager', 'debug', '   > diff_w : ' . $diff_date->format('%d') . ' - ' . $diff_w);
+                  log::add('jardin', 'debug', '   > diff_w : ' . $diff_date->format('%d') . ' - ' . $diff_w);
                   if($diff_w - intval($diff_w) ==0){
                      
                      if($dateJour >= $dateTache_d && $diff_w % $nbr === 0){
@@ -1475,7 +1475,7 @@ public function get_info(){
                }
 
                $indJ=strrpos($type,'a');
-               log::add('potager', 'debug', '   > ind année : ' . $indJ);
+               log::add('jardin', 'debug', '   > ind année : ' . $indJ);
                if($indJ !==false){
                   $nbr=intval(substr($type,0,$indJ));
                   if($dateJour >= $dateTache_d && intval($diff_date->format('%y')) % $nbr === 0 && intval($diff_date->format('%d'))==0 && intval($diff_date->format('%m'))==0){
@@ -1485,7 +1485,7 @@ public function get_info(){
                }
 
                if($result_ok){
-                  log::add('potager', 'debug', '   > result_ok : tache to rappel');
+                  log::add('jardin', 'debug', '   > result_ok : tache to rappel');
                   if($result['notif_tache'] == ''){
                         $result['notif_tache']=$nom . ' ' . $detail . ' : ';
                   }else{
@@ -1504,15 +1504,15 @@ public function get_info(){
               
             }
          }
-         log::add('potager', 'debug', $result['notif_tache']);
-         log::add('potager', 'debug', '=============FIN CRON Notifications NS=================');
+         log::add('jardin', 'debug', $result['notif_tache']);
+         log::add('jardin', 'debug', '=============FIN CRON Notifications NS=================');
          return $result;
 
 
       }
 
       public static function notifications(){
-         log::add('potager', 'debug', '=============CRON Notifications=================');
+         log::add('jardin', 'debug', '=============CRON Notifications=================');
 
           setlocale(LC_TIME, 'fra_fra');
           $heure=intval(date("G"));
@@ -1527,7 +1527,7 @@ public function get_info(){
             return;
          }
 
-         $plugin = plugin::byId('potager');
+         $plugin = plugin::byId('jardin');
          $eqLogics = eqLogic::byType($plugin->getId());
          $notif_semis="";
          $notif_met="";
@@ -1562,14 +1562,14 @@ public function get_info(){
                   }
                   if(substr($date_peremption,6,4) != date('Y')){
                      $date_peremption='';
-                     log::add('potager', 'debug', '   > date_peremption année pas bonne ' . $date_peremption);
+                     log::add('jardin', 'debug', '   > date_peremption année pas bonne ' . $date_peremption);
                  }
                  if($date_peremption != ''){
                   //log::add('potager', 'debug', '   > date_peremption non null ' . $date_peremption_mois);
                      $date_peremption_mois=intval(substr($date_peremption,3,2));
                      if(config::byKey('notif_peremption', __CLASS__) == 1 && $date_peremption_mois==$mois &&  $jour==1){
-                        log::add('potager', 'debug', '   > Notif péremption semence');
-                        potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' date de péremption imminente ! (ce mois ci)');
+                        log::add('jardin', 'debug', '   > Notif péremption semence');
+                        jardin::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' date de péremption imminente ! (ce mois ci)');
                      }
                  }
                }
@@ -1579,7 +1579,7 @@ public function get_info(){
             
 
             if( config::byKey('notif_semis', __CLASS__) == 1 && $date_semis='' && $eqLogic->getConfiguration('semis_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('semis_' . ($mois -1)) == 1 && $jour==1){
-               log::add('potager', 'debug', '   > Notif Semis');
+               log::add('jardin', 'debug', '   > Notif Semis');
                //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de semis');
                if($notif_semis != ''){
                   $notif_semis=$notif_semis.',&#x0A;';
@@ -1587,7 +1587,7 @@ public function get_info(){
                $notif_semis=$notif_semis . $nom . ' ' . $detail;
             }
             if(config::byKey('notif_semis_terre', __CLASS__)== 1 &&$eqLogic->getConfiguration('semis_terre_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('semis_terre_' . ($mois -1)) == 1 && $jour==1){
-               log::add('potager', 'debug', '   > Notif Semis terre');
+               log::add('jardin', 'debug', '   > Notif Semis terre');
                //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de mise en terre');
                if($notif_met != ''){
                   $notif_met=$notif_met.',&#x0A;';
@@ -1595,7 +1595,7 @@ public function get_info(){
                $notif_met=$notif_met . $nom . ' ' . $detail;
             }
             if(config::byKey('notif_recolte', __CLASS__)== 1 &&$eqLogic->getConfiguration('recolte_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('recolte_' . ($mois -1)) == 1 && $jour==1){
-               log::add('potager', 'debug', '   > Notif Recolte');
+               log::add('jardin', 'debug', '   > Notif Recolte');
                //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de récolte');
                if($notif_recolte != ''){
                   $notif_recolte=$notif_recolte.',&#x0A;';
@@ -1620,10 +1620,10 @@ public function get_info(){
             }
          }
          if($texte_notif != ''){
-            potager::send_notifications('[potager] &#x1F343 &#x0A;&#x0A;' . $texte_notif);
+            jardin::send_notifications('[potager] &#x1F343 &#x0A;&#x0A;' . $texte_notif);
          }
 
-         log::add('potager', 'debug', '=============FIN CRON Notifications=================');
+         log::add('jardin', 'debug', '=============FIN CRON Notifications=================');
       }
 
       
@@ -1631,21 +1631,21 @@ public function get_info(){
       public static function send_notifications($message = 'Erreur message potager',$titre = 'Potager'){
          $messagerie = config::byKey('messagerie', __CLASS__);
 
-         log::add('potager', 'debug', 'send_notifications : ' . $titre . ' - ' . strlen($message));
+         log::add('jardin', 'debug', 'send_notifications : ' . $titre . ' - ' . strlen($message));
 
          if($messagerie == ''){
-            log::add('potager', 'debug', 'cmd messagerie vide !');
+            log::add('jardin', 'debug', 'cmd messagerie vide !');
             return;
          }
          $cmd=cmd::byString($messagerie);
-         log::add('potager', 'debug', 't1');
+         log::add('jardin', 'debug', 't1');
 
          $i=0;
          do{
-             log::add('potager', 'debug', 'té');
+             log::add('jardin', 'debug', 'té');
              $i++;
              $maxl=strlen($message)-($i-1)*4000;
-             log::add('potager', 'debug', 't3');
+             log::add('jardin', 'debug', 't3');
              if($maxl > 4000){
                 $maxl=4000;
              }
@@ -1690,17 +1690,17 @@ public function get_info(){
     }
 
     private function recherche_element($texte,$str_d,$str_e){
-      log::add('potager', 'debug', '> recherche_element');
+      log::add('jardin', 'debug', '> recherche_element');
       $texte = str_replace(array("\r\n", "\r", "\n","\t"), "", $texte);
       $is=strpos($texte,$str_d);
-      log::add('potager', 'debug', '> is ' . $is);
-      log::add('potager', 'debug', '> str_e ' . $str_e);
+      log::add('jardin', 'debug', '> is ' . $is);
+      log::add('jardin', 'debug', '> str_e ' . $str_e);
       if($is !== false){
           $ie=strpos($texte,$str_e,$is);
-          log::add('potager', 'debug', '> ie ' . $ie);
+          log::add('jardin', 'debug', '> ie ' . $ie);
           if($ie !== false){
-            log::add('potager', 'debug', '> len ' . ($ie-($is + strlen($str_d))));
-            log::add('potager', 'debug', '> res ' .substr($texte,($is + strlen($str_d)),($ie-($is + strlen($str_d)))));
+            log::add('jardin', 'debug', '> len ' . ($ie-($is + strlen($str_d))));
+            log::add('jardin', 'debug', '> res ' .substr($texte,($is + strlen($str_d)),($ie-($is + strlen($str_d)))));
               return substr($texte,($is + strlen($str_d)),($ie-($is + strlen($str_d))));
           }
       }
@@ -1709,9 +1709,9 @@ public function get_info(){
 
     public function refresh_lune($ns=false){
 
-      $result=potager::whatMoon();
+      $result=jardin::whatMoon();
 
-      log::add('potager', 'debug', '> refresh_lune ' . $this->getHumanName());
+      log::add('jardin', 'debug', '> refresh_lune ' . $this->getHumanName());
       $endpoint1='https://www.calendrier-lunaire.net/';
       $etat=$result["etat"];
       $phase_lune=$result["phase"];
@@ -1742,7 +1742,7 @@ public function get_info(){
 
  // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement 
     public function postSave() {
-      log::add('potager', 'debug', '> postSave ' . $this->getHumanName());
+      log::add('jardin', 'debug', '> postSave ' . $this->getHumanName());
 
       $liste_cf_arrosage=$this->getConfiguration('liste_cf_arrosage');
       $type=$this->getConfiguration('type');
@@ -1751,7 +1751,7 @@ public function get_info(){
       if($type == 'semence'){
          $info = $this->getCmd(null, 'etat');
          if (!is_object($info)) {
-             $info = new potagerCmd();
+             $info = new jardinCmd();
              $info->setIsHistorized(1);
          }
          $info->setName(__('Etat semence', __FILE__));
@@ -1767,7 +1767,7 @@ public function get_info(){
    
          $action = $this->getCmd(null, 'init');
          if (!is_object($action)) {
-             $action = new potagerCmd();
+             $action = new jardinCmd();
          }
          $action->setName(__('Réinitialiser les semis', __FILE__));
          $action->setLogicalId('init');
@@ -1793,11 +1793,11 @@ public function get_info(){
       }
       if($type == 'lune'){
          $liste_arrosage=$this->getConfiguration('liste_arrosage');
-         log::add('potager', 'debug', '> postSave 1 ' . $this->getHumanName());
+         log::add('jardin', 'debug', '> postSave 1 ' . $this->getHumanName());
          if(is_array ($liste_arrosage)){
-            log::add('potager', 'debug', '> postSave 2 ' . count($liste_arrosage));
+            log::add('jardin', 'debug', '> postSave 2 ' . count($liste_arrosage));
             if(count($liste_arrosage) != 0){
-               log::add('potager', 'debug', '> postSave 3 ' . $this->getHumanName());
+               log::add('jardin', 'debug', '> postSave 3 ' . $this->getHumanName());
                $this->setConfiguration('liste_arrosage',[]);
                $this->save();
             }
@@ -1805,7 +1805,7 @@ public function get_info(){
 
          $info = $this->getCmd(null, 'etat_lune');
          if (!is_object($info)) {
-             $info = new potagerCmd();
+             $info = new jardinCmd();
              $info->setIsHistorized(1);
          }
          $info->setName(__('Etat lune', __FILE__));
@@ -1819,7 +1819,7 @@ public function get_info(){
 
          $info = $this->getCmd(null, 'phase_lune');
          if (!is_object($info)) {
-             $info = new potagerCmd();
+             $info = new jardinCmd();
              $info->setIsHistorized(1);
          }
          $info->setName(__('Phase lune', __FILE__));
@@ -1840,7 +1840,7 @@ public function get_info(){
          $id_cmds=[];
          $action = $this->getCmd(null, 'stop_arrosage_#' . $un_arrosage['id']);
          if (!is_object($action)) {
-             $action = new potagerCmd();
+             $action = new jardinCmd();
          }
          $action->setName(__('Arrêter arrosage -' . $un_arrosage['nom'] . '-', __FILE__));
          $action->setLogicalId('stop_arrosage_#' . $un_arrosage['id'] );
@@ -1853,7 +1853,7 @@ public function get_info(){
 
          $action = $this->getCmd(null, 'start_arrosage_#' . $un_arrosage['id']);
          if (!is_object($action)) {
-             $action = new potagerCmd();
+             $action = new jardinCmd();
              
          }
          $action->setName(__('Démarrer arrosage -' . $un_arrosage['nom'] . '-', __FILE__));
@@ -1868,7 +1868,7 @@ public function get_info(){
          $action = $this->getCmd(null, 'etat_arrosage_#' . $un_arrosage['id']);
          $creation=false;
          if (!is_object($action)) {
-             $action = new potagerCmd();
+             $action = new jardinCmd();
              $creation=true;
              $action->setIsHistorized(1);
          }
@@ -1889,7 +1889,7 @@ public function get_info(){
          $action = $this->getCmd(null, 'conso_arrosage_#' . $un_arrosage['id']);
          $creation=false;
          if (!is_object($action)) {
-            $action = new potagerCmd();
+            $action = new jardinCmd();
             $creation=true;
             $action->setIsHistorized(1);
          }
@@ -1936,7 +1936,7 @@ public function get_info(){
       
 
       if($this->getConfiguration('need_refresh_cron_listener')=='oui'){
-         log::add('potager', 'debug', '   > need_refresh_cron_listener OUI');
+         log::add('jardin', 'debug', '   > need_refresh_cron_listener OUI');
          $this->setConfiguration('need_refresh_cron_listener','non');
          $this->setConfiguration('is_running','');
          $this->refresh_all_cron_start_all_arrosage();
@@ -1945,7 +1945,7 @@ public function get_info(){
          $this->save();
          $this->stop_all_arrosage();
       }else{
-         log::add('potager', 'debug', '   > need_refresh_cron_listener NON');
+         log::add('jardin', 'debug', '   > need_refresh_cron_listener NON');
       }
     }
 
@@ -2164,10 +2164,11 @@ public function get_info(){
          $replace=$this->replace_f($replace,'Lieu de culture habituel','lieu_culture');
 
          $replace['#detail#'] = $this->getConfiguration('detail');
-         $replace['#type#'] = '/plugins/potager/data/img/' . $this->getConfiguration('l_type') . '.png';
+         $replace['#type#'] = '/plugins/jardin/data/img/' . $this->getConfiguration('l_type') . '.png';
 
          $cmd=$this->getCmd(null,'etat');
          $replace['#etat#'] = $cmd->execCmd();
+         log::add('jardin','debug','PROBLEME '.print_r($replace['#etat#'],true));
          $replace['#img#'] = $this->getPathImgIcon();
          $qte=$this->getConfiguration('quantite');
          if($qte == ''){
@@ -2231,7 +2232,7 @@ public function get_info(){
          }
 
          $return = array(
-            'img' => $etatValue == 0 ? "plugins/potager/data/img/arrosage/sprinklerOff.png" : "plugins/potager/data/img/arrosage/sprinklerOn.png",
+            'img' => $etatValue == 0 ? "plugins/jardin/data/img/arrosage/sprinklerOff.png" : "plugins/jardin/data/img/arrosage/sprinklerOn.png",
             'DateLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : $arrayConso['0']['datetime'],
             'DureeLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : convertDuration($arrayConso['0']['duree']),
             'TypeLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : $TypeLastArrosage,
@@ -2258,7 +2259,7 @@ public function get_info(){
     /*     * **********************Getteur Setteur*************************** */
 }
 
-class potagerCmd extends cmd {
+class jardinCmd extends cmd {
     /*     * *************************Attributs****************************** */
     
     /*
@@ -2319,5 +2320,3 @@ class potagerCmd extends cmd {
 
     /*     * **********************Getteur Setteur*************************** */
 }
-
-

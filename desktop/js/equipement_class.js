@@ -49,7 +49,7 @@ var equipement=class equipement extends un_objet {
                 var icon_item=$('<img/>', {
                     "class": 'menu_obj_item_icon',
                 }).appendTo(item);
-                icon_item.attr('src',base_url +  '/plugins/potager/data/img/transparent.png')
+                icon_item.attr('src',base_url +  '/plugins/jardin/data/img/transparent.png')
     
                 var text_item=$('<div/>', {
                     "class": 'menu_obj_item_text',
@@ -75,7 +75,7 @@ var equipement=class equipement extends un_objet {
                 var icon_item=$('<img/>', {
                     "class": 'menu_obj_item_icon',
                 }).appendTo(item);
-                icon_item.attr('src',base_url +  + '/plugins/potager/data/img/titre.png')
+                icon_item.attr('src',base_url +  + '/plugins/jardin/data/img/titre.png')
     
                 var text_item=$('<div/>', {
                     "class": 'menu_obj_item_text',
@@ -104,7 +104,7 @@ var equipement=class equipement extends un_objet {
         var that=this
         $.ajax({
             type: 'POST',
-            url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+            url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
             data: {
                 action: 'get_info_equipement',
                 id: init(this.id_bdd),

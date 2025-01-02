@@ -18,7 +18,7 @@ function get_phase_lune(){
 
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'get_phase_lune',
         },
@@ -48,7 +48,7 @@ function get_phase_lune(){
             var img=$('<img/>', {
             "class": "img_lune",
             }).appendTo(lune_frixo);
-            img.attr('src',base_url + '/plugins/potager/data/img/lune/' + imgL)
+            img.attr('src',base_url + '/plugins/jardin/data/img/lune/' + imgL)
 
             var row_lune=$('<div/>', {
                 "class": "info_lune_row",

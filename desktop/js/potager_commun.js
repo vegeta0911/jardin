@@ -1,10 +1,10 @@
 
-var nom_key_date=[{"nom":"Date de semis","key":"d_semis","class":"dt_semis","text":"Semée le","img":"/plugins/potager/data/img/semis_godet.png","adj":"semée","qte_ass":"qte_seme"},
-    {"nom":"Date de germination","key":"d_germination","class":"dt_germination","text":"Germée le","img":"/plugins/potager/data/img/germe.png","adj":"germée","qte_ass":"qte_germe"},
-    {"nom":"Date de plantation","key":"d_plantation","class":"dt_semis_terre","text":"Plantée le","img":"/plugins/potager/data/img/terre.png","adj":"plantée","qte_ass":"qte_plante"},
-    {"nom":"Date d'éclaircissage","key":"d_eclaircissage","class":"dt_eclaircissage","text":"Eclaircie le","img":"/plugins/potager/data/img/eclaircie.png","adj":"éclaircie","qte_ass":"qte_eclairci"},
-    {"nom":"Date de rempotage","key":"d_rempotage","class":"dt_rempotage","text":"Rempotée le","img":"/plugins/potager/data/img/rempotage.png","adj":"rempotée","qte_ass":"qte_rempote"},
-    {"nom":"Date de récolte","key":"d_recolte","class":"dt_recolte","text":"Récoltée le","img":"/plugins/potager/data/img/recolte.png","adj":"récoltée","qte_ass":"poid_recolte"}
+var nom_key_date=[{"nom":"Date de semis","key":"d_semis","class":"dt_semis","text":"Semée le","img":"/plugins/jardin/data/img/semis_godet.png","adj":"semée","qte_ass":"qte_seme"},
+    {"nom":"Date de germination","key":"d_germination","class":"dt_germination","text":"Germée le","img":"/plugins/jardin/data/img/germe.png","adj":"germée","qte_ass":"qte_germe"},
+    {"nom":"Date de plantation","key":"d_plantation","class":"dt_semis_terre","text":"Plantée le","img":"/plugins/jardin/data/img/terre.png","adj":"plantée","qte_ass":"qte_plante"},
+    {"nom":"Date d'éclaircissage","key":"d_eclaircissage","class":"dt_eclaircissage","text":"Eclaircie le","img":"/plugins/jardin/data/img/eclaircie.png","adj":"éclaircie","qte_ass":"qte_eclairci"},
+    {"nom":"Date de rempotage","key":"d_rempotage","class":"dt_rempotage","text":"Rempotée le","img":"/plugins/jardin/data/img/rempotage.png","adj":"rempotée","qte_ass":"qte_rempote"},
+    {"nom":"Date de récolte","key":"d_recolte","class":"dt_recolte","text":"Récoltée le","img":"/plugins/jardin/data/img/recolte.png","adj":"récoltée","qte_ass":"poid_recolte"}
 ]
 var no_ia=['fleur','arbre','arbuste','autre','aromate']
 
@@ -165,7 +165,7 @@ function date_php_to_dateFR(date){
 function migrer_semence(id){
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'migrer_une_semence',
             id: init(id)
@@ -202,7 +202,7 @@ $('#b_debug').off().on('click',function(){
 function debug_ajax(id){
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'debug',
             id: init(id)
@@ -354,7 +354,7 @@ function save_config(config,value){
     console.log('save_config ' + config + ' : ' + value)
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'set_config',
             config: init(config),
@@ -375,7 +375,7 @@ function save_config(config,value){
 function get_config(config,callback){
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'get_config',
             config: init(config)

@@ -1,12 +1,13 @@
-<?php require_once('configuration_potager.php'); ?>
-<?php echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/association.js"></script>'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/plan_potager.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/menu_top.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/detail_semence.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressource/css/potager/menu_top.css">'?>
+<?php 
+require_once('configuration_potager.php');
+echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/jardin/data/association.js"></script>';
+echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/plan_potager.css">';
+echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/menu_top.css">';
+echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/detail_semence.css">';
+// echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressource/css/potager/menu_top.css">';
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<?php
+//<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
 
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
@@ -48,9 +49,9 @@ sendVarToJs('base_url', $base_url);
 
 
 
-$plugin = plugin::byId('potager');
+$plugin = plugin::byId('jardin');
 sendVarToJs('id_plugin', $plugin->getId());
-$eqLogics = potager::byType($plugin->getId());
+$eqLogics = eqLogic::byType($plugin->getId());
 function filtre_potager($var)
 {
     if($var->getIsEnable() == false){
@@ -64,29 +65,56 @@ function filtre_potager($var)
 $eqLogics=array_filter($eqLogics, "filtre_potager");
 ?>
 
-<div id="menu_top_potager">
-<?php
-echo '<i id=\'add_item\' class="menu_top_potager_bouton  fas fa-plus-circle"></i>';
-echo '<a class="menu_top_potager_bouton " href="' . $base_url . '/index.php?v=d&m=potager&p=potager"><i class="fas fa-th-large"></i><div class="hide_if_mobile">&nbsp;&nbsp;Gestion</div></a>';
-echo '<a class="menu_top_potager_bouton" href="' . $base_url . '/index.php?v=d&m=potager&p=planning" ><i class="fas fa-calendar-alt"></i><div class="hide_if_mobile">&nbsp;&nbsp;Planning</div></a>';
-echo '<a class="menu_top_potager_bouton menu_top_potager_bouton_select" href="#"><i class="far fa-map"></i><div class="hide_if_mobile">&nbsp;&nbsp;Potager</div></a>';
-echo '<i id=\'gotoconf\' class="hide_standalone_mode menu_top_potager_bouton  fas fa-wrench"></i>';
-?>
-
+<div class="eqLogicThumbnailContainer" id="menu_top_potager">
+        <div class="cursor eqLogicAction logoPrimary" id="add_item">
+           <i class="fas fa-plus-circle"></i>
+           <div class="hide_if_mobile">
+                <span>{{Ajouter}}</span>
+           </div>
+        </div>
+    <div class="cursor eqLogicAction">
+      <a  href=<?php echo $base_url.'/index.php?v=d&m=jardin&p=jardin';?>>
+        <div class="cursor eqLogicAction info" >
+           <i class="fas fa-tasks" style="font-size:270%;"></i>
+           <div class="hide_if_mobile">
+              <span>{{Gestion}}</span>
+           </div>
+        </div>
+      </a>
+    </div>
+    <div class="cursor eqLogicAction">
+		<a class="info" href=<?php echo $base_url.'/index.php?v=d&m=jardin&p=planning';?>>
+		    <i class="icon kiko-calendar" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Planning}}</span>
+            </div>
+        </a> 
+    </div>
+    <div class="cursor eqLogicAction">
+		<a class="info" href="#">
+		    <i class="icon nature-plant30" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Potager}}</span>
+            </div>
+        </a> 
+    </div>
+    <br>
+</div>
+  
 <script>
-$('#gotoconf').off('click').on('click', function () {
-   $('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
-   $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
-});
 $('#add_item').off('click').on('click', function () {
     setCookie('add_item', 'oui',1);
-    window.open(base_url + "/index.php?v=d&m=potager&p=potager","_self")
+    window.open(base_url + "/index.php?v=d&m=jardin&p=jardin","_self")
 //    $('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
 //    $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
 });
 </script>
 
-</div>
+
 <div id="les_potagers" style="display:none">
 
 
@@ -143,35 +171,37 @@ foreach ($eqLogics as $eqLogic) {
     Chargement des potagers...
 </div>
 <div id="aucun_potager" style="color:red;display:none">
-    Vous n'avez pas encore créé de potager ! Pour ce faire, cliquez sur le bouton '+' ci-dessus , créez un élément de TYPE  'POTAGER' !
+    <br>
+    <br>
+    Vous n&apos;avez pas encore créé de potager ! Pour ce faire, cliquez sur le bouton '+' ci-dessus , créez un élément de TYPE  'POTAGER' !
 </div>
-
+<br>
+<br>
 <div class="plan_potager_bouton" style="display:none">
 <input type="text" spellcheck="false" class="recherche_semence" placeholder="Rechercher et ajouter une semence"/>
 
 
 <div class="plan_potager_un_ensemble_bouton b_add_equipement hide_standalone_mode" type_bouton="">
-    <div class="plan_potager_un_ensemble_bouton_img equipement_img" style="background-color:none">
-    </div>
-    <div class="plan_potager_un_ensemble_bouton_txt hide_if_mobile">Un équipement</div>
+    <div class="plan_potager_un_ensemble_bouton_img equipement_img" style="background-color:none"></div>
+    <div class="plan_potager_un_ensemble_bouton_txt hide_if_mobile warning">Un équipement</div>
 </div>
 
 <div class="plan_potager_un_ensemble_bouton b_add_cmd hide_standalone_mode" type_bouton="">
     <div class="plan_potager_un_ensemble_bouton_img cmd_img" style="background-color:none">
     </div>
-    <div class="plan_potager_un_ensemble_bouton_txt hide_if_mobile">Une Commande/Info</div>
+    <div class="plan_potager_un_ensemble_bouton_txt hide_if_mobile warning">Une Commande/Info</div>
 </div>
 
-<div class="plan_potager_liste_element" type_bouton=""><i class="far fa-plus-square"></i><p class="plan_potager_liste_element_titre hide_if_mobile">Ajouter un élément</p></div>
+<div class="plan_potager_liste_element" type_bouton=""><i class="fas fas fa-plus-circle success"></i><p class="plan_potager_liste_element_titre hide_if_mobile success">Ajouter un élément</p></div>
 
-<div title="Verrouiller tous les éléments du potager sauf les semences" class="plan_potager_btn_element lock_background"><i class="fas fa-lock"></i><p class="plan_potager_liste_element_titre hide_if_mobile">Déverrouiller l'arrière plan</p></div>
-<div title="Verrouiller les semences" class="plan_potager_btn_element lock_semence"><i class="fas fa-lock"></i><p class="plan_potager_liste_element_titre hide_if_mobile">Déverrouiller les semences</p></div>
+<div title="Verrouiller tous les éléments du potager sauf les semences" class="plan_potager_btn_element lock_background"><i class="fas fa-lock danger"></i><p class="plan_potager_liste_element_titre hide_if_mobile danger">Déverrouiller l&apos;arrière plan</p></div>
+<div title="Verrouiller les semences" class="plan_potager_btn_element lock_semence"><i class="fas fa-lock danger"></i><p class="plan_potager_liste_element_titre hide_if_mobile danger">Déverrouiller les semences</p></div>
 
 
 <div class="plan_potager_un_ensemble_bouton bouton_print" type_bouton="">
     <div class="plan_potager_un_ensemble_bouton_img bouton_print_img">
     </div>
-    <div class="plan_potager_un_ensemble_bouton_txt">Imprimer</div>
+    <div class="plan_potager_un_ensemble_bouton_txt info">Imprimer</div>
     </div>
 </div>
 
@@ -183,7 +213,7 @@ foreach ($eqLogics as $eqLogic) {
     <?php
         
         if(count($eqLogics) == 0){
-            echo '<a href="/index.php?v=d&m=potager&p=potager&option=add" id="start_help">Pour commencer , veuillez créer un (ou plus) potager <br/><br/>(Cliquez sur ajouter, et définissez le type "Potager" (et activez le))</a>';
+            echo '<a href="/index.php?v=d&m=jardin&p=jardin&option=add" id="start_help">Pour commencer , veuillez créer un (ou plus) potager <br/><br/>(Cliquez sur ajouter, et définissez le type "Potager" (et activez le))</a>';
         }
 
         
@@ -202,17 +232,17 @@ foreach ($eqLogics as $eqLogic) {
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 
 <?php
-include_file('desktop', 'lune', 'js', 'potager');
-include_file('desktop', 'potager_commun', 'js', 'potager');
-include_file('desktop', 'potager_class', 'js', 'potager');
-include_file('desktop', 'association', 'js', 'potager');
-include_file('desktop', 'equipement_class', 'js', 'potager');
-include_file('desktop', 'cmd_class', 'js', 'potager');
-include_file('desktop', 'plan_potager', 'js', 'potager');
-include_file('desktop', 'cancel_plan_potager', 'js', 'potager');
+include_file('desktop', 'lune', 'js', 'jardin');
+include_file('desktop', 'potager_commun', 'js', 'jardin');
+include_file('desktop', 'potager_class', 'js', 'jardin');
+include_file('desktop', 'association', 'js', 'jardin');
+include_file('desktop', 'equipement_class', 'js', 'jardin');
+include_file('desktop', 'cmd_class', 'js', 'jardin');
+include_file('desktop', 'plan_potager', 'js', 'jardin');
+include_file('desktop', 'cancel_plan_potager', 'js', 'jardin');
 
 ?>
 <div id="debug" style="display:none"></div>
 <!-- <script type="text/javascript" src="plugins/potager/desktop/js/potager_class.js"></script>
-<script type="text/javascript" src="plugins/potager/desktop/js/association.js"></script>
-<script type="text/javascript" src="plugins/potager/desktop/js/plan_potager.js"></script> -->
+<script type="text/javascript" src="plugins/jardin/desktop/js/association.js"></script>
+<script type="text/javascript" src="plugins/jardin/desktop/js/plan_potager.js"></script> -->

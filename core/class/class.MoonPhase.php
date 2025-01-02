@@ -8,7 +8,7 @@
  **/
 namespace Solaris;
 
-class MoonPhase2 {
+class MoonPhase3 {
 	private $timestamp;
 	private $phase;
 	private $illum;

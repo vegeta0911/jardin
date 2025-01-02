@@ -1,29 +1,28 @@
-<?php require_once('configuration_potager.php'); ?>
+<?php 
+  
+require_once('configuration_potager.php');
 
 
-<?php
+
 	if($conf_mode_potager == 'jeedom'){
 		// echo '<script type="text/javascript" src="core/php/downloadFile.php?pathfile=/var/www/html/plugins/potager/data/association.json"></script>';
 		// echo '<script type="text/javascript" src="core/php/downloadFile.php?pathfile=/var/www/html/plugins/potager/data/pays.json"></script>';
-		echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/association.js"></script>';
-		echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/pays.js"></script>';
+		echo '<script type="text/javascript" src="plugins/jardin/data/association.js"></script>';
+		echo '<script type="text/javascript" src="plugins/jardin/data/pays.js"></script>';
 	}else{
-		echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/association.js"></script>';
-		echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/pays.js"></script>';
+		echo '<script type="text/javascript" src="plugins/jardin/data/association.js"></script>';
+		echo '<script type="text/javascript" src="plugins/jardin/data/pays.js"></script>';
 	}
 
-?>
 
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/potager_main.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressources/css/potager/potager_main.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressources/css/potager/menu_top.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/menu_top.css">'?>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+
+echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/potager_main.css">';
+//echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressources/css/jardin/potager_main.css">';
+//echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressources/css/potager/menu_top.css">';
+echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/menu_top.css">';
+echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/animate.min.css"/>'; ?>
   
+<!--meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /-->
 
 <?php
 if (!isConnect('admin')) {
@@ -55,40 +54,75 @@ $base_url=$conf_add_url_root . $base_url;
 sendVarToJs('base_url', $base_url);
 
 // Déclaration des variables obligatoires
-$plugin = plugin::byId('potager');
+$plugin = plugin::byId('jardin');
 sendVarToJs('id_plugin', $plugin->getId());
 sendVarToJS('eqType', $plugin->getId());
 $version_potager_mig=config::byKey('version_potager_mig', 'potager');
 sendVarToJS('version_potager_mig', $version_potager_mig);
 $eqLogics = eqLogic::byType($plugin->getId());
-usort($eqLogics, array('potager','cmp')); 
+usort($eqLogics, array('jardin','cmp')); 
+//log::add('jardin','debug', 'essai '.print_r(usort($eqLogics, array('jardin','cmp')),true));
 ?>
 
 <div class="row row-overflow">
-	<!-- Page d'accueil du plugin -->
+	<!-- Page accueil du plugin -->
 	<div class="col-xs-12 eqLogicThumbnailDisplay">
 
 
-		<div id="menu_top_potager">
-		<?php
-		echo '<i id=\'add_item\' class="menu_top_potager_bouton  fas fa-plus-circle"></i>';
-		echo '<a class="menu_top_potager_bouton menu_top_potager_bouton_select" href="#"><i class="fas fa-th-large"></i><div class="hide_if_mobile">&nbsp;&nbsp;Gestion</div></a>';
-		echo '<a class="menu_top_potager_bouton" href="' . $base_url . '/index.php?v=d&m=potager&p=planning" ><i class="fas fa-calendar-alt"></i><div class="hide_if_mobile">&nbsp;&nbsp;Planning</div></a>';
-		echo '<a class="menu_top_potager_bouton " href="' . $base_url . '/index.php?v=d&m=potager&p=panel"><i class="far fa-map"></i><div class="hide_if_mobile">&nbsp;&nbsp;Potager</div></a>';
-		echo '<i id=\'gotoconf\' class="hide_standalone_mode menu_top_potager_bouton  fas fa-wrench"></i>';
-		?>
-
-		<script>
-		$('#gotoconf').off('click').on('click', function () {
-		$('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
-		$('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
-		});
-		$('#add_item').off('click').on('click', function () {
-			$("div[data-action='add']")[0].click();
-		});
-		</script>
-
-		</div>
+	<div class="eqLogicThumbnailContainer" id="menu_top_potager">
+        <div class="cursor eqLogicAction logoPrimary" id="add_item">
+           <i class="fas fa-plus-circle"></i>
+           
+           <br>
+		   <div class="hide_if_mobile">
+             <span>{{Ajouter}}</span>
+           </div>
+        </div>
+ 
+ 
+    <div class="cursor eqLogicAction">
+        <a href="#" class="info">
+           <i class="fas fa-tasks" style="font-size:270%;"></i>
+            <br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Gestion}}</span>
+            </div> 
+        </a>
+    </div>
+	<div class="cursor eqLogicAction">
+		<a class="info" href=<?php echo $base_url.'/index.php?v=d&m=jardin&p=planning';?>>
+		    <i class="icon kiko-calendar" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Planning}}</span>
+            </div>
+        </a> 
+    </div>
+	<div class="cursor eqLogicAction">
+		<a class="info" href=<?php echo $base_url . "/index.php?v=d&m=jardin&p=panel";?>>
+		    <i class="icon nature-plant30" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Potager}}</span>
+            </div>
+        </a> 
+    </div>
+	<div class="cursor eqLogicAction logoSecondary warning" data-action="gotoPluginConf">
+			<i class="fas fa-wrench"></i>
+			<br>
+			<div class="hide_if_mobile">
+				<span>{{Configuration Plugin Potager}}</span>
+            </div>
+</div>
+          
+<script>
+	$('#add_item').off('click').on('click', function () {
+		$("div[data-action='add']")[0].click();
+	});
+</script>
 
 <div style="display:none">
 		<legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
@@ -119,22 +153,28 @@ usort($eqLogics, array('potager','cmp'));
 			</div>
 		</div>
 	</div>
-
+</div>
+  
 		<legend><i class="fas fa-table"></i> {{Mes semences}}</legend>
 		<!-- Champ de recherche -->
-		<div class="input-group" style="margin:5px;">
+		<div class="input-group" style="margin:5px;" >
 			<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic"/>
 			<div class="input-group-btn">
 				<a id="bt_resetSearch" class="btn roundedRight" style="width:30px"><i class="fas fa-times"></i></a>
 			</div>
 		</div>
-		<!-- Liste des équipements du plugin -->
+
+<!-- Liste des équipements du plugin -->
+    
 		<div class="eqLogicThumbnailContainer">
+        
 			<?php
+  
 			foreach ($eqLogics as $eqLogic) {
 				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
 				$detail=$eqLogic->getConfiguration('detail');
 				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+                echo '<br>';
 				$type_s=$eqLogic->getConfiguration('type');
 				if($type_s == ''){
 					$type_s='semence';
@@ -1227,18 +1267,16 @@ function detectBrowser() {
 </script>
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php 
-include_file('desktop', 'lune', 'js', 'potager');
-include_file('desktop', 'potager_commun', 'js', 'potager');
-include_file('desktop', 'potager_class', 'js', 'potager');
-include_file('desktop', 'association', 'js', 'potager');
-include_file('desktop', 'potager', 'js', 'potager');
-include_file('desktop', 'semis', 'js', 'potager');
-include_file('desktop', 'arrosage', 'js', 'potager');
-include_file('desktop', 'achat', 'js', 'potager');
-include_file('desktop', 'tache', 'js', 'potager');
+include_file('desktop', 'lune', 'js', 'jardin');
+include_file('desktop', 'potager_commun', 'js', 'jardin');
+include_file('desktop', 'potager_class', 'js', 'jardin');
+include_file('desktop', 'association', 'js', 'jardin');
+include_file('desktop', 'jardin', 'js', 'jardin');
+include_file('desktop', 'semis', 'js', 'jardin');
+include_file('desktop', 'arrosage', 'js', 'jardin');
+include_file('desktop', 'achat', 'js', 'jardin');
+include_file('desktop', 'tache', 'js', 'jardin');
 include_file('core', 'plugin.template', 'js');
-
-
 ?>
 
 <script>
@@ -1248,10 +1286,7 @@ function addCmdToTable2(_cmd) {
     }
      if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
-    }           
-
-            
-			
+    }           	
 		var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 			tr += '<td>';
 			tr += '<span class="cmdAttr" data-l1key="id" ></span>';
@@ -1270,10 +1305,6 @@ function addCmdToTable2(_cmd) {
 			tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i></td>';
 			tr += '</tr>';
 			$('#table_cmd tbody').append(tr);
-			$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-            
+			$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');           
 } 
-
-
-
 </script>

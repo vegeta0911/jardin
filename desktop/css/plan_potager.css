@@ -117,12 +117,12 @@
     position: relative;
 }
 .un_plan_potager_bk_terre{
-    background-image: url('../../../../plugins/potager/data/img/terre_fond.jpg');
+    background-image: url('../../../../plugins/jardin/data/img/terre_fond.jpg');
     background-size: 250px 250px;
     background-repeat: repeat;
 }
 .un_plan_potager_bk_herbe{
-    background-image: url('../../../../plugins/potager/data/img/herbe2.jpg');
+    background-image: url('../../../../plugins/jardin/data/img/herbe2.jpg');
     background-size: 200px 150px;
     background-repeat: repeat;
 }
@@ -243,7 +243,7 @@
     min-width: 25px;
     background-color: rgba(0, 0, 0, 0.2);
 
-    background-image: url('../../../../plugins/potager/data/img/terre_fond.jpg');
+    background-image: url('../../../../plugins/jardin/data/img/terre_fond.jpg');
     background-size: 250px 250px;
     background-repeat: repeat;
 }
@@ -251,7 +251,7 @@
 .herbe_img{
     min-height: 25px;
     min-width: 25px;
-    background-image: url('../../../../plugins/potager/data/img/herbe2.jpg');
+    background-image: url('../../../../plugins/jardin/data/img/herbe2.jpg');
     background-size: 200px 150px;
     background-repeat: repeat;
 }
@@ -259,7 +259,7 @@
 .etiquette_img{
     min-height: 25px;
     min-width: 25px;
-    background-image: url('../../../../plugins/potager/data/img/etiquette.png');
+    background-image: url('../../../../plugins/jardin/data/img/etiquette.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -268,7 +268,7 @@
 .dalle_jardin_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/dale_jardin.png');
+    background: url('../../../../plugins/jardin/data/img/dale_jardin.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -277,7 +277,7 @@
 .equipement_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/equipement.png');
+    background: url('../../../../plugins/jardin/data/img/equipement.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -286,13 +286,13 @@
 .cmd_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/cmd.png');
+    background: url('../../../../plugins/jardin/data/img/cmd.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
 }
 
-.plan_potager_un_ensemble_bouton_img{
+.plan_jardin_un_ensemble_bouton_img{
     
 }
 
@@ -523,7 +523,7 @@
 .muret_img{
     min-height: 10px;
     min-width: 25px;
-    background:url('../../../../plugins/potager/data/img/mur.png');
+    background:url('../../../../plugins/jardin/data/img/mur.png');
     background-size: 35px 35px;
     background-repeat: repeat;
     max-height: 25px;
@@ -534,7 +534,7 @@
 .cours_d_eau_img{
     min-height: 25px;
     min-width: 25px;
-    background:linear-gradient(rgba(255, 255, 255, 0.3),rgba(255, 255, 255, 0.3)),url('../../../../plugins/potager/data/img/eau.png');
+    background:linear-gradient(rgba(255, 255, 255, 0.3),rgba(255, 255, 255, 0.3)),url('../../../../plugins/jardin/data/img/eau.png');
     background-size: 35px 35px;
     background-repeat: repeat;
     background-color: none;
@@ -543,7 +543,7 @@
 .mare_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/mare.png');
+    background: url('../../../../plugins/jardin/data/img/mare.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -552,7 +552,7 @@
 .arbre_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/arbre.png');
+    background: url('../../../../plugins/jardin/data/img/arbre.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -561,7 +561,7 @@
 .composteur_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/compost.png');
+    background: url('../../../../plugins/jardin/data/img/compost.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -570,7 +570,7 @@
 .cuve_eau_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/cuve_eau.png');
+    background: url('../../../../plugins/jardin/data/img/cuve_eau.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -597,7 +597,7 @@
 .cabane_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/cabane.png');
+    background: url('../../../../plugins/jardin/data/img/cabane.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -606,7 +606,7 @@
 .poulailler_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/poulailler.png');
+    background: url('../../../../plugins/jardin/data/img/poulailler.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -625,7 +625,7 @@
 .rocher_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/rocher.png');
+    background: url('../../../../plugins/jardin/data/img/rocher.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -634,7 +634,7 @@
 .terrasse_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/terrasse.png');
+    background: url('../../../../plugins/jardin/data/img/terrasse.png');
     background-size: 60px 60px;
     background-repeat: repeat;
     background-color: none;
@@ -643,7 +643,7 @@
 .evier_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/evier.png');
+    background: url('../../../../plugins/jardin/data/img/evier.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -652,7 +652,7 @@
 .table_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/table.png');
+    background: url('../../../../plugins/jardin/data/img/table.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -661,7 +661,7 @@
 .bois_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/bois.png');
+    background: url('../../../../plugins/jardin/data/img/bois.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -670,7 +670,7 @@
 .arrosoir_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/arrosoir.png');
+    background: url('../../../../plugins/jardin/data/img/arrosoir.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -679,7 +679,7 @@
 .paillage_semence{
     height: 100%;
     width: 100%;
-    background: url('../../../../plugins/potager/data/img/paille2.png');
+    background: url('../../../../plugins/jardin/data/img/paille2.png');
     background-size: contain;
     background-repeat: repeat;
     background-color: none;
@@ -691,7 +691,7 @@
     top :6px;
     height: 22px;
     width: 22px;
-    background: url('../../../../plugins/potager/data/img/drapeau.png');
+    background: url('../../../../plugins/jardin/data/img/drapeau.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -815,7 +815,7 @@
 .robot_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/robot.png');
+    background: url('../../../../plugins/jardin/data/img/robot.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -824,7 +824,7 @@
 .poubelle_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/poubelle.png');
+    background: url('../../../../plugins/jardin/data/img/poubelle.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -833,7 +833,7 @@
 .barbecue_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/barbecue.png');
+    background: url('../../../../plugins/jardin/data/img/barbecue.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;
@@ -871,7 +871,7 @@
 .puit_img{
     min-height: 25px;
     min-width: 25px;
-    background: url('../../../../plugins/potager/data/img/puit.png');
+    background: url('../../../../plugins/jardin/data/img/puit.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-color: none;

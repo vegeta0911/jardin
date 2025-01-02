@@ -228,7 +228,7 @@ function marque_comme_suite2(semence,ind_semis,type_date,date,nom_semis,qte=''){
     }
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'set_date_semis',
             object_id: init(semence),
@@ -406,7 +406,7 @@ function rename_semis_suite(nom,element){
     
             $.ajax({
                 type: 'POST',
-                url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+                url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
                 data: {
                     action: 'rename_semis',
                     id_semence: init(element.attr('semence')),
@@ -438,7 +438,7 @@ function rename_semis_suite(nom,element){
 function rupture_semence(element,id_semence,rupture='oui'){
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'rupture_semence',
             id_semence: init(id_semence),
@@ -493,7 +493,7 @@ function delete_semis_suite(element){
     
             $.ajax({
                 type: 'POST',
-                url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+                url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
                 data: {
                     action: 'delete_semis',
                     id_semence: init(element.attr('semence')),
@@ -574,7 +574,7 @@ function nouveau_semis(id_semence,index_semis){
 
             $.ajax({
                 type: 'POST',
-                url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+                url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
                 data: {
                     action: 'nouveau_semis',
                     id_semence: init(id_semence),
@@ -613,7 +613,7 @@ function menu_clic_droit(element,id_semence,event){
     var l_fiche=$('<div class="menu_potager_ligne" >Accéder à la fiche de la semence</div>').appendTo('#menu_potager');
     l_fiche.on( "click",  function(e) {
         $('#menu_potager').remove();
-        window.open(base_url + '/index.php?v=d&m=potager&p=potager&id=' +id_semence ,'_blank');
+        window.open(base_url + '/index.php?v=d&m=jardin&p=jardin&id=' +id_semence ,'_blank');
     })
 
     var ind_semis_new=element.parent().find('.un_semis').length;
@@ -707,7 +707,7 @@ $('.potager_ligne_principale').off("contextmenu").on("contextmenu",function(e){
     return false;
 });
 $('.potager_ligne_principale').on("dblclick",function(e){
-    window.open('/index.php?v=d&m=potager&p=potager&id=' +$(e.currentTarget).parent().attr('semence') ,'_self');
+    window.open('/index.php?v=d&m=jardin&p=jardin&id=' +$(e.currentTarget).parent().attr('semence') ,'_self');
 });
 
 
@@ -961,7 +961,7 @@ $('#bouton_print').on('click',function(){print_liste()});
 
     var mywindow = window.open( "#Print potager", "new div",strWindowFeatures );
     mywindow.document.write( "<!DOCTYPE html><html><head><title></title>" );
-    mywindow.document.write( "<link rel=\"stylesheet\" href=\"" + base_url + "plugins/potager/desktop/css/planning_print.css\" type=\"text/css\"/><style type=\"text/css\" media=\"print\">*{-webkit-print-color-adjust: exact !important; /*Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}</style>" );
+    mywindow.document.write( "<link rel=\"stylesheet\" href=\"" + base_url + "plugins/jardin/desktop/css/planning_print.css\" type=\"text/css\"/><style type=\"text/css\" media=\"print\">*{-webkit-print-color-adjust: exact !important; /*Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}</style>" );
     mywindow.document.write( "</head><body><h1>" + $('#g_date_d').text() + " - Planning de mes semences</h1><br/>" );
     mywindow.document.write(content);
     mywindow.document.write( "</body></html>" );
@@ -1097,7 +1097,7 @@ function trier_liste(){
     that.hide();
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'get_nbr_info_all',
             annee: init(annee_en_cours)

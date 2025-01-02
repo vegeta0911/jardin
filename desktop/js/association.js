@@ -130,7 +130,7 @@ var semence=class semence extends un_objet {
             if(that.clear_masquer_pop_up){
                 console.log('pop_up_detail_semence mouseleave')
                 that.clear_masquer_pop_up=false;
-                that.masquer_pop_up_detail('potager',false);
+                that.masquer_pop_up_detail('jardin',false);
             }
             return false
         });
@@ -144,7 +144,7 @@ var semence=class semence extends un_objet {
         }).appendTo(pop_up_detail_semence);
         bouton_detail_fiche_popup.attr('title','Ouvrir la fiche semence')
         bouton_detail_fiche_popup.on('click',function(){
-            window.open(base_url + '/index.php?v=d&m=potager&p=potager&id=' + that.id_bdd,'_blank');
+            window.open(base_url + '/index.php?v=d&m=jardin&p=jardin&id=' + that.id_bdd,'_blank');
         })
 
         if(this.match_bdd != null){
@@ -159,7 +159,7 @@ var semence=class semence extends un_objet {
                 var ensemble_ia_haut_pop_up_img=$('<img/>', {
                     "class": 'ensemble_ia_haut_pop_up_img',
                 }).appendTo(ensemble_ia_haut_pop_up);
-                ensemble_ia_haut_pop_up_img.attr('src',base_url + '/plugins/potager/data/img/semences/' + url)
+                ensemble_ia_haut_pop_up_img.attr('src',base_url + '/plugins/jardin/data/img/semences/' + url)
 
                 
             }
@@ -184,7 +184,7 @@ var semence=class semence extends un_objet {
                     var ensemble_ia_haut_pop_up_un_widget=$('<img/>', {
                         "class": 'ensemble_ia_haut_pop_up_un_widget',
                     }).appendTo(ensemble_ia_haut_pop_up_widgets);
-                    ensemble_ia_haut_pop_up_un_widget.attr('src',base_url + '/plugins/potager/data/img/' + img)
+                    ensemble_ia_haut_pop_up_un_widget.attr('src',base_url + '/plugins/jardin/data/img/' + img)
                 }
             }
 
@@ -194,7 +194,7 @@ var semence=class semence extends un_objet {
                     var ensemble_ia_haut_pop_up_un_widget=$('<img/>', {
                         "class": 'ensemble_ia_haut_pop_up_un_widget',
                     }).appendTo(ensemble_ia_haut_pop_up_widgets);
-                    ensemble_ia_haut_pop_up_un_widget.attr('src',base_url + '/plugins/potager/data/img/' + img)
+                    ensemble_ia_haut_pop_up_un_widget.attr('src',base_url + '/plugins/jardin/data/img/' + img)
                 }
             }
             
@@ -383,7 +383,7 @@ var semence=class semence extends un_objet {
             this.pop_up_detail=null;
         }
         
-        this.masquer_pop_up_detail('potager',false);
+        this.masquer_pop_up_detail('jardin',false);
     }
 
     fin_selectionne(){
@@ -413,7 +413,7 @@ var semence=class semence extends un_objet {
 
 
         this.fin_hoover()
-        this.masquer_pop_up_detail('potager',true);
+        this.masquer_pop_up_detail('jardin',true);
         //console.log('etape 0')
         //lorsqu'on selectionne (pour bouger par exemple) une semence
         //on fait briller les semences a eviter ou a associer 
@@ -467,7 +467,7 @@ var semence=class semence extends un_objet {
         var that=this
         $.ajax({
             type: 'POST',
-            url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+            url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
             data: {
                 action: 'get_info_semence',
                 id: init(this.id_bdd),
@@ -582,7 +582,7 @@ var semence=class semence extends un_objet {
         if(this.match_bdd != null){
             if(this.match_bdd.img != null && this.match_bdd.img != ''){
                 var url=this.match_bdd.img
-                img_semence.css('background-image','url("' + base_url + '/plugins/potager/data/img/semences/' + url + '")')
+                img_semence.css('background-image','url("' + base_url + '/plugins/jardin/data/img/semences/' + url + '")')
             }
             
         }
@@ -708,7 +708,7 @@ var semence=class semence extends un_objet {
             var icon_item=$('<img/>', {
                 "class": 'menu_obj_item_icon',
             }).appendTo(item_ss);
-            icon_item.attr('src',base_url + '/plugins/potager/data/img/sel_identique.png')
+            icon_item.attr('src',base_url + '/plugins/jardin/data/img/sel_identique.png')
 
             var text_item=$('<div/>', {
                 "class": 'menu_obj_item_text',
@@ -726,7 +726,7 @@ var semence=class semence extends un_objet {
                 var icon_item=$('<img/>', {
                     "class": 'menu_obj_item_icon',
                 }).appendTo(item_ss);
-                icon_item.attr('src',base_url +  '/plugins/potager/data/img/semence.png')
+                icon_item.attr('src',base_url +  '/plugins/jardin/data/img/semence.png')
     
                 var text_item=$('<div/>', {
                     "class": 'menu_obj_item_text',
@@ -735,7 +735,7 @@ var semence=class semence extends un_objet {
             text_item.text('Ouvrir la fiche de la semence')
             item_ss.on('click',function(){
                 $('.marqueur_compatibilite').remove();
-                window.open(base_url + '/index.php?v=d&m=potager&p=potager&id=' + that.id_bdd,'_blank');
+                window.open(base_url + '/index.php?v=d&m=jardin&p=jardin&id=' + that.id_bdd,'_blank');
             });
 
 
@@ -747,7 +747,7 @@ var semence=class semence extends un_objet {
                 var icon_item=$('<img/>', {
                     "class": 'menu_obj_item_icon',
                 }).appendTo(item_ss);
-                icon_item.attr('src',base_url + '/plugins/potager/data/img/paille2.png')
+                icon_item.attr('src',base_url + '/plugins/jardin/data/img/paille2.png')
     
                 var text_item=$('<div/>', {
                     "class": 'menu_obj_item_text',

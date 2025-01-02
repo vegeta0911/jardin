@@ -1,5 +1,6 @@
-<?php require_once('../../desktop/php/configuration_potager.php'); ?>
-<?php
+<?php 
+require_once('../../desktop/php/configuration_potager.php');
+
 
 /* This file is part of Jeedom.
  *
@@ -42,20 +43,20 @@ try {
 
     //get_info_plan
     if (init('action') == 'get_info_plan') {
-      $object = potager::byId(init('object_id'));
+      $object = jardin::byId(init('object_id'));
       ajax::success($object->get_info());
     }
 
     //ajax plan
     if (init('action') == 'save_plan') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax save_plan');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax save_plan');
       $object->setConfiguration('width',init('width'));
       $object->setConfiguration('height',init('height'));
       $object->setConfiguration('options',init('options'));
 
       $object->save();
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
 
@@ -82,7 +83,7 @@ try {
       $_version = 'dashboard';
 
       if($eqLogic == null){
-        log::add('potager', 'info', 'cmd id ' . init('id') . ' not found !' );
+        log::add('jardin', 'info', 'cmd id ' . init('id') . ' not found !' );
         ajax::success("null");
       }
       if($eqLogic->getIsEnable() == false){
@@ -93,18 +94,18 @@ try {
     }
     
     if (init('action') == 'migrer_une_semence') {
-      $plugin = plugin::byId('potager');
-      $eqLogic = potager::byId(init('id'));
+      $plugin = plugin::byId('jardin');
+      $eqLogic = jardin::byId(init('id'));
       $eqLogic->migrationV2_data();
       ajax::success();
     }
 
     if (init('action') == 'get_info_semence') {
-      $plugin = plugin::byId('potager');
-      $eqLogic = potager::byId(init('id'));
+      $plugin = plugin::byId('jardin');
+      $eqLogic = jardin::byId(init('id'));
 
       if($eqLogic == null){
-        log::add('potager', 'info', 'id ' . init('id') . ' not found !' );
+        log::add('jardin', 'info', 'id ' . init('id') . ' not found !' );
         ajax::success("null");
       }
 
@@ -123,8 +124,8 @@ try {
 
       $recherche=skip_accents($recherche);
       $return=array();
-      $plugin = plugin::byId('potager');
-      $eqLogics = potager::byType($plugin->getId());
+      $plugin = plugin::byId('jardin');
+      $eqLogics = jardin::byType($plugin->getId());
       foreach ($eqLogics as $eqLogic) {
         if($eqLogic->getIsEnable() == false){
             continue;
@@ -151,7 +152,7 @@ try {
 
     
     if (init('action') == 'get_elements_plan') {
-      $object = potager::byId(init('object_id'));
+      $object = jardin::byId(init('object_id'));
 
       $return=array();
       $i=0;
@@ -166,11 +167,11 @@ try {
     if (init('action') == 'get_phase_lune') {
       // $endpoint1='https://www.calendrier-lunaire.net/';
       // $result=file_get_contents($endpoint1);
-      ajax::success(potager::whatMoon());
+      ajax::success(jardin::whatMoon());
     }
 
     if (init('action') == 'debug') {
-      $eqLogics = eqLogic::byType('potager');
+      $eqLogics = eqLogic::byType('jardin');
       foreach ($eqLogics as $eqLogic) {
         $eqLogic->migration_data();
       }
@@ -183,22 +184,22 @@ try {
     }
 
     if (init('action') == 'get_nbr_info') {
-      $object = potager::byId(init('id'));
+      $object = jardin::byId(init('id'));
       $result=$object->get_nbr_info(init('annee'));
       ajax::success($result);
     }
 
     if (init('action') == 'get_nbr_info_all') {
-      $result = potager::get_nbr_info_s(init('annee'));
+      $result = jardin::get_nbr_info_s(init('annee'));
       ajax::success($result);
     }
     
     if (init('action') == 'del_one_element_plan') {
       
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax del_one_element_plan');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax del_one_element_plan');
       $id_to_dell = init('id_to_dell');
-      log::add('potager', 'info', 'del_one_element_plan ' . $id_to_dell);
+      log::add('jardin', 'info', 'del_one_element_plan ' . $id_to_dell);
 
       $i=0;
       $found=false;
@@ -216,47 +217,47 @@ try {
           $i++;
         }
         $object->save();
-        potager::set_potager_non_run(init('object_id')); 
+        jardin::set_potager_non_run(init('object_id')); 
         ajax::success("ok");
       }
-      potager::set_potager_non_run(init('object_id')); 
+      jardin::set_potager_non_run(init('object_id')); 
       ajax::success("not found");
     }
 
     
     if (init('action') == 'action_arrosage') {
       //$object = potager::byId(init('id'));
-      $object=potager::get_potager_check_non_run(init('id'),true,'ajax action_arrosage');
+      $object=jardin::get_potager_check_non_run(init('id'),true,'ajax action_arrosage');
       $action_arrosage = init('action_arrosage');
       $un_arrosage=$object->get_arrosage_by_id(init('id_arrosage'));
       $timer_manual = init('timer_manual');
        if($un_arrosage != null){
          if($action_arrosage == "start"){
-           log::add('potager', 'info', 'action_arrosage start');
+           log::add('jardin', 'info', 'action_arrosage start');
            $object->start_arrosage($un_arrosage['arrosage'],$un_arrosage['key'],true, $timer_manual);
          }
          if($action_arrosage  == "stop"){
-           log::add('potager', 'info', 'action_arrosage stop');
+           log::add('jardin', 'info', 'action_arrosage stop');
            $object->stop_arrosage($un_arrosage['arrosage'],$un_arrosage['key']);
          }
        }
-       potager::set_potager_non_run(init('id')); 
+       jardin::set_potager_non_run(init('id')); 
        ajax::success("ok");
     }
 
     if (init('action') == 'get_data_arrosage') {
-      ajax::success(potager::dataToWidget(init('id_eqlogic'),init('id_arrosage')));
+      ajax::success(jardin::dataToWidget(init('id_eqlogic'),init('id_arrosage')));
     }
 
     if (init('action') == 'save_one_element_plan') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax save_one_element_plan');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax save_one_element_plan');
       $object_to_save = init('objet');
 
       $id_unique=explode ("|",$object_to_save)[5];
 
 
-       log::add('potager', 'info', 'save element id_unique ' . $id_unique );
+       log::add('jardin', 'info', 'save element id_unique ' . $id_unique );
       $i=0;
       while($object->getConfiguration('element_' . $i) != '' && strpos($object->getConfiguration('element_' . $i),$id_unique)==false){
         $i++;
@@ -266,7 +267,7 @@ try {
       $object->save();
 
 
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
     
@@ -278,7 +279,7 @@ try {
 
     if (init('action') == 'nouveau_semis') {
       //$object = potager::byId(init('id_semence'));
-      $object=potager::get_potager_check_non_run(init('id_semence'),true,'ajax nouveau_semis');
+      $object=jardin::get_potager_check_non_run(init('id_semence'),true,'ajax nouveau_semis');
 
       $liste_semis=$object->getConfiguration('liste_semis');
       if($liste_semis == ''){
@@ -299,15 +300,15 @@ try {
       $liste_semis[]=$un_semis;
       $object->setConfiguration('liste_semis',$liste_semis);
       $object->save();
-      potager::set_potager_non_run(init('id_semence'));
+      jardin::set_potager_non_run(init('id_semence'));
       ajax::success();
     }
 
     if (init('action') == 'rename_semis') {
-      log::add('potager', 'debug', 'rename_semis '  .init('id_semence') . ' - ' . init('ind_semis'));
+      log::add('jardin', 'debug', 'rename_semis '  .init('id_semence') . ' - ' . init('ind_semis'));
 
       //$object = potager::byId(init('id_semence'));
-      $object=potager::get_potager_check_non_run(init('id_semence'),true,'ajax rename_semis');
+      $object=jardin::get_potager_check_non_run(init('id_semence'),true,'ajax rename_semis');
 
       $liste_semis=$object->getConfiguration('liste_semis');
       $semis=$liste_semis[intval(init('ind_semis'))];
@@ -315,38 +316,38 @@ try {
       $liste_semis[intval(init('ind_semis'))]=$semis;
       $object->setConfiguration('liste_semis',$liste_semis);
       $object->save();
-      potager::set_potager_non_run(init('id_semence'));
+      jardin::set_potager_non_run(init('id_semence'));
       ajax::success();
     }
 
     if (init('action') == 'delete_semis') {
-      log::add('potager', 'debug', 'delete_semis '  .init('id_semence') . ' - ' . init('ind_semis'));
+      log::add('jardin', 'debug', 'delete_semis '  .init('id_semence') . ' - ' . init('ind_semis'));
       //$object = potager::byId(init('id_semence'));
-      $object=potager::get_potager_check_non_run(init('id_semence'),true,'ajax delete_semis');
+      $object=jardin::get_potager_check_non_run(init('id_semence'),true,'ajax delete_semis');
       $liste_semis=$object->getConfiguration('liste_semis');
       unset($liste_semis[intval(init('ind_semis'))]);
 
       $liste_semis=array_values($liste_semis);
       $object->setConfiguration('liste_semis',$liste_semis);
       $object->save();
-      potager::set_potager_non_run(init('id_semence'));
+      jardin::set_potager_non_run(init('id_semence'));
       ajax::success();
     }
 
     if (init('action') == 'rupture_semence') {
-      log::add('potager', 'debug', 'rupture_semis '  .init('id_semence') );
+      log::add('jardin', 'debug', 'rupture_semis '  .init('id_semence') );
       //$object = potager::byId(init('id_semence'));
-      $object=potager::get_potager_check_non_run(init('id_semence'),true,'ajax rupture_semence');
+      $object=jardin::get_potager_check_non_run(init('id_semence'),true,'ajax rupture_semence');
       $object->setConfiguration('l_rupture',init('rupture'));
       $object->save();
-      potager::set_potager_non_run(init('id_semence'));
+      jardin::set_potager_non_run(init('id_semence'));
       ajax::success();
     }
     
     if (init('action') == 'get_recap_semence') {
       $type_s=array("fruit"=>"Fruit","legume"=>"Légume","plante"=>"Plante","fleur"=>"Fleur","arbuste"=>"Arbuste","arbre"=>"Arbre","aromate"=>"Aromates","condiment"=>"Condiment","autre"=>"Autres");
-      log::add('potager', 'debug', 'get_recap_semence ' );
-      $plugin = plugin::byId('potager');
+      log::add('jardin', 'debug', 'get_recap_semence ' );
+      $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
       $result=[];
       foreach ($eqLogics as $key => $eqLogic) {
@@ -370,7 +371,7 @@ try {
 
     if (init('action') == 'set_date_semis') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax set_date_semis');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax set_date_semis');
 
       $qte=init('qte');
       $liste_semis=$object->getConfiguration('liste_semis');
@@ -403,55 +404,55 @@ try {
       $liste_semis[intval(init('ind_semis'))]=$semis;
       $object->setConfiguration('liste_semis',$liste_semis);
       $object->save();
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
 
     if (init('action') == 'set_config') {
-      config::save(init('config'),init('value'), 'potager');
+      config::save(init('config'),init('value'), 'jardin');
       ajax::success('ok');
     }
 
     if (init('action') == 'get_config') {
-      $config = config::byKey(init('config'), 'potager');
+      $config = config::byKey(init('config'), 'jardin');
       ajax::success($config);
     }
 
     if (init('action') == 'set_seme') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax set_seme');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax set_seme');
       $object->m_semis(init('date_s'));
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
 
     if (init('action') == 'set_seme_terre') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax set_seme_terre');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax set_seme_terre');
       $object->m_semis_terre(init('date_s'));
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
 
     if (init('action') == 'set_eclairci') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax set_eclairci');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax set_eclairci');
       $object->m_eclaircissage(init('date_s'));
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
 
     if (init('action') == 'set_recolte') {
       //$object = potager::byId(init('object_id'));
-      $object=potager::get_potager_check_non_run(init('object_id'),true,'ajax set_recolte');
+      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax set_recolte');
       $object->m_recolte(init('date_s'));
-      potager::set_potager_non_run(init('object_id'));
+      jardin::set_potager_non_run(init('object_id'));
       ajax::success();
     }
 
     
     if (init('action') == 'refresh_all_semis') {
-      $plugin = plugin::byId('potager');
+      $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
       foreach ($eqLogics as $eqLogic) {
 				if($eqLogic->getIsEnable()){
@@ -467,7 +468,7 @@ try {
     }
 
     if (init('action') == 'init_all_semis') {
-      $plugin = plugin::byId('potager');
+      $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
       foreach ($eqLogics as $eqLogic) {
 				if($eqLogic->getIsEnable()){

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="plugins/potager/desktop/css/potager.css">
+<link rel="stylesheet" href="plugins/jardin/desktop/css/potager.css">
 
 <?php
 
@@ -21,9 +21,9 @@
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
-$plugin = plugin::byId('potager');
-$eqLogics = potager::byType($plugin->getId());
-usort($eqLogics, array('potager','cmp')); 
+$plugin = plugin::byId('jardin');
+$eqLogics = jardin::byType($plugin->getId());
+usort($eqLogics, array('jardin','cmp')); 
 ?>
 
 
@@ -111,31 +111,31 @@ usort($eqLogics, array('potager','cmp'));
         $type=$eqLogic->getConfiguration('l_type');
         $type_t=$type;
         if($type == 'fruit'){
-            $type='/plugins/potager/data/img/fruit.png';
+            $type='/plugins/jardin/data/img/fruit.png';
         }
         if($type == 'legume'){
-            $type='/plugins/potager/data/img/legume.png';
+            $type='/plugins/jardin/data/img/legume.png';
         }
         if($type == 'plante'){
-            $type='/plugins/potager/data/img/plante.png';
+            $type='/plugins/jardin/data/img/plante.png';
         }
         if($type == 'fleur'){
-            $type='/plugins/potager/data/img/fleur.png';
+            $type='/plugins/jardin/data/img/fleur.png';
         }
         if($type == 'arbuste'){
-            $type='/plugins/potager/data/img/arbuste.png';
+            $type='/plugins/jardin/data/img/arbuste.png';
         }
         if($type == 'autre'){
-            $type='/plugins/potager/data/img/autre.png';
+            $type='/plugins/jardin/data/img/autre.png';
         }
 
         $type_semis_aide='';
         if($type_semis == 'godet'){
-            $type_semis='/plugins/potager/data/img/semis_godet.png';
+            $type_semis='/plugins/jardin/data/img/semis_godet.png';
             $type_semis_aide='Semis en godet';
         }
         if($type_semis == 'terre'){
-            $type_semis='/plugins/potager/data/img/semis_terre.png';
+            $type_semis='/plugins/jardin/data/img/semis_terre.png';
             $type_semis_aide='Semis en pleine terre';
         }
 
@@ -149,7 +149,7 @@ usort($eqLogics, array('potager','cmp'));
             $couleur_ligne='couleur1';
         }
 
-        echo '<div class="potager_ligne_semence"  onClick="location.href=\'./index.php?v=d&m=potager&p=potager&id=' . $eqLogic->getId() . '\'">' ;
+        echo '<div class="potager_ligne_semence"  onClick="location.href=\'./index.php?v=d&m=jardin&p=jardin&id=' . $eqLogic->getId() . '\'">' ;
         
         
         echo '<img class="potager_ligne_semence_img" title="' . $type_t . '" src="' . $type . '"/>';
@@ -280,7 +280,7 @@ function menu_clic_droit(element,id_semence){
 
         $.ajax({
         type: 'POST',
-        url: 'plugins/potager/core/ajax/potager.ajax.php',
+        url: 'plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'set_seme',
             object_id: init(id_semence),
@@ -317,7 +317,7 @@ function menu_clic_droit(element,id_semence){
 
         $.ajax({
         type: 'POST',
-        url: 'plugins/potager/core/ajax/potager.ajax.php',
+        url: 'plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'set_seme_terre',
             object_id: init(id_semence),
@@ -354,7 +354,7 @@ function menu_clic_droit(element,id_semence){
 
         $.ajax({
         type: 'POST',
-        url: 'plugins/potager/core/ajax/potager.ajax.php',
+        url: 'plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'set_eclairci',
             object_id: init(id_semence),
@@ -391,7 +391,7 @@ function menu_clic_droit(element,id_semence){
 
         $.ajax({
         type: 'POST',
-        url: 'plugins/potager/core/ajax/potager.ajax.php',
+        url: 'plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'set_recolte',
             object_id: init(id_semence),
@@ -480,7 +480,7 @@ $('#bouton_print').on('click',function(){print_liste()});
 
   var mywindow = window.open( "#Print potager", "new div",strWindowFeatures );
   mywindow.document.write( "<!DOCTYPE html><html><head><title></title>" );
-  mywindow.document.write( "<link rel=\"stylesheet\" href=\"/plugins/potager/desktop/css/potager_print.css\" type=\"text/css\"/><style type=\"text/css\" media=\"print\">*{-webkit-print-color-adjust: exact !important; /*Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}</style>" );
+  mywindow.document.write( "<link rel=\"stylesheet\" href=\"/plugins/jardin/desktop/css/potager_print.css\" type=\"text/css\"/><style type=\"text/css\" media=\"print\">*{-webkit-print-color-adjust: exact !important; /*Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}</style>" );
   mywindow.document.write( "</head><body><h1>Planning de mes semences</h1><br/>" );
   mywindow.document.write(content);
   mywindow.document.write( "</body></html>" );

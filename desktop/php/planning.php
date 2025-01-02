@@ -1,11 +1,14 @@
-<?php require_once('configuration_potager.php'); ?>
-<?php echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/potager/data/association.js"></script>'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/planning.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/detail_semence.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/potager/desktop/css/menu_top.css">'?>
-<?php  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressource/css/potager/menu_top.css">'?>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<?php
+<?php 
+  require_once('configuration_potager.php'); 
+
+  echo '<script type="text/javascript" src="' . $conf_add_url_root . 'plugins/jardin/data/association.js"></script>';
+  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/planning.css">';
+  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/detail_semence.css">';
+  echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/menu_top.css">';
+  //echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'ressource/css/potager/menu_top.css">'
+ 
+//<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
 $current_theme=jeedom::getThemeConfig()['current_desktop_theme'];
 $dark_mode=false;
 $add_img_dm='';
@@ -59,43 +62,76 @@ $base_url=$conf_add_url_root . $base_url;
 sendVarToJs('base_url', $base_url);
 
 
-$plugin = plugin::byId('potager');
+$plugin = plugin::byId('jardin');
 sendVarToJs('id_plugin', $plugin->getId());
-$eqLogics = potager::byType($plugin->getId());
-usort($eqLogics, array('potager','cmp')); 
+$eqLogics = jardin::byType($plugin->getId());
+usort($eqLogics, array('jardin','cmp')); 
 //usort($eqLogics, array('potager','cmp')); 
 ?>
 
 <div id="conteneur_planning">
-
-
 <div id="menu_top_potager">
-<?php
-echo '<i id=\'add_item\' class="menu_top_potager_bouton  fas fa-plus-circle"></i>';
-echo '<a class="menu_top_potager_bouton " href="' . $base_url . '/index.php?v=d&m=potager&p=potager"><i class="fas fa-th-large"></i><div class="hide_if_mobile">&nbsp;&nbsp;Gestion</div></a>';
-echo '<a class="menu_top_potager_bouton menu_top_potager_bouton_select" href="#" ><i class="fas fa-calendar-alt"></i><div class="hide_if_mobile">&nbsp;&nbsp;Planning</div></a>';
-echo '<a class="menu_top_potager_bouton " href="' . $base_url . '/index.php?v=d&m=potager&p=panel"><i class="far fa-map"></i><div class="hide_if_mobile">&nbsp;&nbsp;Potager</div></a>';
-echo '<i id=\'gotoconf\' class="hide_standalone_mode menu_top_potager_bouton  fas fa-wrench"></i>';
-?>
-
+        
+        <div class="eqLogicThumbnailContainer">
+        <div class="cursor eqLogicAction logoPrimary" id="add_item">
+           <i class="fas fa-plus-circle"></i>
+           
+           <br>
+		   <div class="hide_if_mobile">
+             <span>{{Ajouter}}</span>
+           </div>
+        </div>
+  
+        <div class="cursor eqLogicAction logoSecondary">
+        <a href=<?php echo $base_url.'/index.php?v=d&m=jardin&p=jardin';?> class="info">
+           <i class="fas fa-tasks" style="font-size:270%;"></i>
+            <br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Gestion}}</span>
+            </div> 
+        </a>
+    </div>
+	<div class="cursor eqLogicAction logoSecondary">
+		<a class="info" href='#'>
+		    <i class="icon kiko-calendar" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Planning}}</span>
+            </div>
+        </a> 
+    </div>
+	<div class="cursor eqLogicAction logoSecondary ">
+		<a class="info" href=<?php echo $base_url . "/index.php?v=d&m=jardin&p=panel";?>>
+		    <i class="icon nature-plant30" style="font-size:265%;"></i>
+			<br>
+            <br>
+			<div class="hide_if_mobile">
+               <span>{{Potager}}</span>
+            </div>
+        </a> 
+    </div>
+</div>
+          
 <script>
-$('#gotoconf').off('click').on('click', function () {
-   $('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
-   $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
-});
 $('#add_item').off('click').on('click', function () {
     setCookie('add_item', 'oui',1);
-    window.open(base_url + "/index.php?v=d&m=potager&p=potager","_self")
+    window.open(base_url + "/index.php?v=d&m=jardin&p=jardin","_self")
 //    $('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
 //    $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
 });
 </script>
-
-
-</div>
+  
 <div id="g_date"><div id="b_date_moins">-</div><div id="g_date_d">...</div><div id="b_date_plus">+</div></div>
+  <br>
+    <br>
+      <br>
+       <br>
+        <br>
+         <br>
 <div id="filtre_potager_planning">
-    <div class="label_filtre">Filtrer l'affichage </div>
+    <div class="label_filtre">Filtrer l&apos;affichage </div>
     <select id="filtre_potager" class="un_filtre" style="width:150px">
         <option value="">{{Tout afficher}}</option>
         <option value="seme_only">{{Afficher uniquement les semences semées}}</option>
@@ -268,37 +304,37 @@ $('#add_item').off('click').on('click', function () {
         $type=$eqLogic->getConfiguration('l_type');
         $type_t=$type;
         if($type == 'fruit'){
-            $type='plugins/potager/data/img/fruit' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/fruit' . $add_img_dm . '.png';
         }
         if($type == 'legume'){
-            $type='plugins/potager/data/img/legume' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/legume' . $add_img_dm . '.png';
         }
         if($type == 'plante'){
-            $type='plugins/potager/data/img/plante' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/plante' . $add_img_dm . '.png';
         }
         if($type == 'fleur'){
-            $type='plugins/potager/data/img/fleur' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/fleur' . $add_img_dm . '.png';
         }
         if($type == 'arbuste'){
-            $type='plugins/potager/data/img/arbuste' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/arbuste' . $add_img_dm . '.png';
         }
         if($type == 'arbre'){
-            $type='plugins/potager/data/img/arbre2' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/arbre2' . $add_img_dm . '.png';
         }
         if($type == 'autre'){
-            $type='plugins/potager/data/img/autre' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/autre' . $add_img_dm . '.png';
         }
         if($type == 'aromate' || $type == 'condiment'){
-            $type='plugins/potager/data/img/plante' . $add_img_dm . '.png';
+            $type='plugins/jardin/data/img/plante' . $add_img_dm . '.png';
         }
 
         $type_semis_aide='';
         if($type_semis == 'godet'){
-            $type_semis='plugins/potager/data/img/semis_godet' . $add_img_dm . '.png';
+            $type_semis='plugins/jardin/data/img/semis_godet' . $add_img_dm . '.png';
             $type_semis_aide='Semis en godet';
         }
         if($type_semis == 'terre'){
-            $type_semis='plugins/potager/data/img/semis_terre' . $add_img_dm . '.png';
+            $type_semis='plugins/jardin/data/img/semis_terre' . $add_img_dm . '.png';
             $type_semis_aide='Semis en pleine terre';
         }
 
@@ -399,20 +435,10 @@ $('#add_item').off('click').on('click', function () {
     }
 
     echo '<div class="potager_ligne_fin"></div>';
-        
 
+include_file('desktop', 'lune', 'js', 'jardin');
+include_file('desktop', 'potager_commun', 'js', 'jardin');
+include_file('desktop', 'potager_class', 'js', 'jardin');
+include_file('desktop', 'association', 'js', 'jardin');
+include_file('desktop', 'planning', 'js', 'jardin');
 ?>
-
-</div>
-
-<?php
-include_file('desktop', 'lune', 'js', 'potager');
-include_file('desktop', 'potager_commun', 'js', 'potager');
-include_file('desktop', 'potager_class', 'js', 'potager');
-include_file('desktop', 'association', 'js', 'potager');
-include_file('desktop', 'planning', 'js', 'potager');
-?>
-
-<script>
-    
-</script>

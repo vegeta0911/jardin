@@ -99,7 +99,7 @@ if (!isConnect()) {
   $('.init_semis').on('click', function () {
 	 $.ajax({// fonction permettant de faire de l'ajax
             type: "POST", // methode de transmission des données au fichier php
-            url: "plugins/potager/core/ajax/potager.ajax.php", // url du fichier php
+            url: "plugins/jardin/core/ajax/jardin.ajax.php", // url du fichier php
             data: {
                 action: "init_all_semis"
             },
@@ -120,7 +120,7 @@ if (!isConnect()) {
     $('.refresh_semis').on('click', function () {
 	 $.ajax({// fonction permettant de faire de l'ajax
             type: "POST", // methode de transmission des données au fichier php
-            url: "plugins/potager/core/ajax/potager.ajax.php", // url du fichier php
+            url: "plugins/jardin/core/ajax/jardin.ajax.php", // url du fichier php
             data: {
                 action: "refresh_all_semis"
             },

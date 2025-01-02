@@ -107,7 +107,7 @@ var cmd_action_info=class cmd_action_info extends un_objet {
                 var icon_item=$('<img/>', {
                     "class": 'menu_obj_item_icon',
                 }).appendTo(item);
-                icon_item.attr('src',base_url + '/plugins/potager/data/img/titre.png')
+                icon_item.attr('src',base_url + '/plugins/jardin/data/img/titre.png')
     
                 var text_item=$('<div/>', {
                     "class": 'menu_obj_item_text',
@@ -135,7 +135,7 @@ var cmd_action_info=class cmd_action_info extends un_objet {
         var that=this
         $.ajax({
             type: 'POST',
-            url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+            url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
             data: {
                 action: 'get_info_cmd_action_info',
                 id: init(this.id_bdd),

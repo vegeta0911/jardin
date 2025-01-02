@@ -589,7 +589,7 @@ $('.un_plan_potager_father').on('mouseleave',function(event){
 function ajax_search_semence(recherche){
     $.ajax({
         type: 'POST',
-        url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+        url: '/plugins/jardin/core/ajax/jardin.ajax.php',
         data: {
             action: 'chercher_semences',
             recherche: init(recherche)
@@ -712,7 +712,7 @@ function printdiv( node , nom) {
 
     var mywindow = window.open( "#Print potager", "new div",strWindowFeatures );
     mywindow.document.write( "<!DOCTYPE html><html><head><title></title>" );
-    mywindow.document.write( "<link rel=\"stylesheet\" href=\"" + base_url + "/plugins/potager/desktop/css/plan_potager_print.css\" type=\"text/css\"/>" );
+    mywindow.document.write( "<link rel=\"stylesheet\" href=\"" + base_url + "/plugins/jardin/desktop/css/plan_potager_print.css\" type=\"text/css\"/>" );
     mywindow.document.write( "</head><body style=\"color-adjust: exact; -webkit-print-color-adjust: exact\"><h1>Plan du potager '" + nom + "'</h1><br/>" );
     mywindow.document.write(content);
     mywindow.document.write( "</body></html>" );

@@ -16,7 +16,7 @@ $('img[type_s="semence"][ia!="1"]').each(function(){
 
   //pour un chargement plus rapide :D
   if(url_img_ia !=''){
-    $(this).attr('src',base_url + '/plugins/potager/data/img/semences/' + url_img_ia);
+    $(this).attr('src',base_url + '/plugins/jardin/data/img/semences/' + url_img_ia);
     return
   }
   
@@ -27,7 +27,7 @@ $('img[type_s="semence"][ia!="1"]').each(function(){
   if(u_semence.match_bdd != null){
     if(u_semence.match_bdd.img != null)
     {
-      $(this).attr('src',base_url + '/plugins/potager/data/img/semences/' + u_semence.match_bdd.img);
+      $(this).attr('src',base_url + '/plugins/jardin/data/img/semences/' + u_semence.match_bdd.img);
     }
   }
 
@@ -35,21 +35,19 @@ $('img[type_s="semence"][ia!="1"]').each(function(){
 })
 
 $('#bt_voirplpotager').off('click').on('click', function () {
-  window.open(base_url + "/index.php?v=d&m=potager&p=planning","_self")
+  window.open(base_url + "/index.php?v=d&m=jardin&p=planning","_self")
   // $('#md_modal').dialog({title: "{{Planning du potager}}"});
   // $('#md_modal').load('index.php?v=d&plugin=potager&modal=modal.plpotager').dialog('open');
 });
 
 $('#bt_potager_plan').off('click').on('click', function () {
-  window.open(base_url + "/index.php?v=d&m=potager&p=panel","_self")
+  window.open(base_url + "/index.php?v=d&m=jardin&p=panel","_self")
   // $('#md_modal').dialog({title: "{{Plan du potager}}"});
   // $('#md_modal').load('index.php?v=d&plugin=potager&modal=modal.planpotager').dialog('open');
 });
 
 
 $('#sel_type').on('change',function(e){
-  
-
   detect_semence();
   hide_visible_potager();
   if($('#sel_type').val() == 'potager' || $('#sel_type').val() == 'lune'){
@@ -183,7 +181,7 @@ function detect_semence(){
           $('.detect_as').show();
           if(u_semence.match_bdd.img != null){
             $('.img_semence').show();
-            $('.img_semence').attr('src',base_url + '/plugins/potager/data/img/semences/' + u_semence.match_bdd.img);
+            $('.img_semence').attr('src',base_url + '/plugins/jardin/data/img/semences/' + u_semence.match_bdd.img);
             $('#url_img_ia').val(u_semence.match_bdd.img)
           }else{
             $('.img_semence').hide();
@@ -284,7 +282,7 @@ function icon_widget(key,txt){
     $('.grp_img_' + key).show();
     $('.img_' + key).show();
     $('.img_' + key).addClass('animate__heartBeat')
-    $('.img_' + key).attr('src',base_url + "plugins/potager/data/img/" + img);
+    $('.img_' + key).attr('src',base_url + "plugins/jardin/data/img/" + img);
     $('.img_' + key).attr('title',txt);
     $('.grp_img_' + key).css('display','flex');addCmdToTable
     $('.txt_img_' + key).text(txt);
@@ -369,7 +367,8 @@ function addCmdToTable(_cmd) {
    tr += '</tr>';
    $('#table_cmd tbody').append(tr);
    var tr = $('#table_cmd tbody tr').last();
-   jeedom.eqLogic.builSelectCmd({
+  
+   jeedom.eqLogic.buildSelectCmd({
      id:  $('.eqLogicAttr[data-l1key=id]').value(),
      filter: {type: 'info'},
      error: function (error) {
@@ -393,11 +392,11 @@ function addCmdToTable(_cmd) {
 
 if(version_potager_mig != '4' && conf_mode_potager!='standalone'){
   bootbox.alert({
-    message: "<h2>Bienvenue sur Potager !</h2> <br/><br/>Je me permets de soliciter <u>votre aide</u> !<br/><br/> Accepteriez vous de laisser un avis sur le Marquet de JEEDOM <a href='https://market.jeedom.com/index.php?v=d&p=market_display&id=4130'><u>CLIQUEZ ICI POUR LE FAIRE</u></a> ? <br/><br/>Et de plus : je cherche à <b>faire connaître</b> l'application POTAGER , et qui mieux que <b>VOUS</b> pour en faire la promotion ! Je compte sur vous pour en parler autour de vous !<br/><br/><i>Ce message ne s'affichera plus , soyez tranquille</i>",
+    message: "<h2>Bienvenue sur Jardin & Potager !</h2> <br/><br/>Je me permets de soliciter <u>votre aide</u> !<br/><br/> Accepteriez vous de laisser un avis sur le Marquet de JEEDOM <a href='https://market.jeedom.com/index.php?v=d&p=market_display&id=4530'><u>CLIQUEZ ICI POUR LE FAIRE</u></a> ? <br/><br/>Et de plus : je cherche à <b>faire connaître</b> l'application POTAGER , et qui mieux que <b>VOUS</b> pour en faire la promotion ! Je compte sur vous pour en parler autour de vous !<br/><br/><i>Ce message ne s'affichera plus , soyez tranquille</i>",
   })
   $.ajax({
     type: 'POST',
-    url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+    url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
     data: {
         action: 'set_version_potager_mig',
         version_potager_mig: init('4'),
@@ -440,7 +439,7 @@ function printdiv(divName) {
     head.appendChild(link); 
   }
 
-  add_css(base_url + '/plugins/potager/desktop/css/potager_main_print.css')
+  add_css(base_url + '/plugins/jardin/desktop/css/potager_main_print.css')
   add_css(base_url + '/3rdparty/font-awesome5/css/all.min.css')
 
   //add_css('/desktop/css/desktop.main.css')
@@ -462,7 +461,7 @@ function printdiv(divName) {
 function recap_semence(){
   $.ajax({
     type: 'GET',
-    url: base_url + '/plugins/potager/core/ajax/potager.ajax.php',
+    url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
     data: {
         action: 'get_recap_semence',
     },
