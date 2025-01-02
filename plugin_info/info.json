@@ -12,7 +12,7 @@
         "pluginVersion": "0.1",
         "os" : {
 		"min" : 11,
-		"max" : 12.99
+		"max" : ""
         },
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
