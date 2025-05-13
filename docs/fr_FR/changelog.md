@@ -7,6 +7,7 @@
 13/05/2025
 ===
 - amélioration de l'affichage du tableau planning
+  
 19/092024
 ===
  - correction de bug pour le passage en debian 12
