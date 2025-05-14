@@ -173,7 +173,7 @@ usort($eqLogics, array('jardin','cmp'));
 			foreach ($eqLogics as $eqLogic) {
 				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
 				$detail=$eqLogic->getConfiguration('detail');
-				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+				echo '<div class="cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
                 echo '<br>';
 				$type_s=$eqLogic->getConfiguration('type');
 				if($type_s == ''){
