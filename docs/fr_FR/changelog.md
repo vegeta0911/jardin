@@ -1,8 +1,8 @@
-# Changelog plugin 
+Important à lire !
+===
+Vous trouverez ci-dessous les notes, les ajouts et les correctifs de chaque version du plugin
 
->**IMPORTANT**
->
->Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
+Remarque : en cas de mise à jour non listée ici, c’est que celle-ci ne comporte que des changements mineurs du type documentation ou corrections de bugs mineurs.
 
 15/05/2025
 ===
