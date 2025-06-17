@@ -12,7 +12,6 @@
         "pluginVersion": "0.1",
         "os" : {
 		"min" : 11,
-		"max" : ""
         },
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
