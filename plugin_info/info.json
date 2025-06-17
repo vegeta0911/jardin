@@ -11,7 +11,7 @@
 	"display": "panel",
         "pluginVersion": "0.1",
         "os" : {
-		"min" : 11,
+		"min" : 11
         },
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
