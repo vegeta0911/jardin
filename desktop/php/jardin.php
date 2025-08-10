@@ -114,7 +114,7 @@ usort($eqLogics, array('jardin','cmp'));
 			<i class="fas fa-wrench"></i>
 			<br>
 			<div class="hide_if_mobile">
-				<span>{{Configuration Plugin Potager}}</span>
+				<span>{{Plugin Jardin & Potager}}</span>
             </div>
 </div>
           
