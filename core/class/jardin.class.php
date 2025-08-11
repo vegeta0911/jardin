@@ -96,18 +96,6 @@ class jardin extends eqLogic {
       return $result;
   }
 
-
-
-   
-
-
-
-
-   
-
-
-
-
 //parcours les declencheurs et s'assure que 1 est bien validé
 public function check_start_arrosage(){
    if($this->getIsEnable() == 0){
@@ -414,6 +402,7 @@ public function unset_all_cron_start_one_arrosage($un_arrosage){
 public function set_all_cron_start_one_arrosage($un_arrosage){
    log::add('jardin', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom']);
 
+      
    foreach($un_arrosage['liste_programmation'] as $key=>$un_cron_start){
       $options=[];
       $options['potager_id']=$this->getId();
@@ -431,8 +420,11 @@ public function set_all_cron_start_one_arrosage($un_arrosage){
       //$_next = strtotime($_next);
       $cron->setSchedule($un_cron_start);
       //$cron->setOnce(1);
+      
+
       $cron->save();
-      log::add('jardin', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . '- cron index ' .  $key);
+      
+   log::add('jardin', 'debug', '> set_all_cron_start_one_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . '- cron index ' .  $key);
    }
    
 }
@@ -568,10 +560,22 @@ public static function cron_start_arrosage($_option){
       if($un_arrosage['id'] == $_option['arrosage_id']){
          log::add('jardin', 'debug', '> cron_start_arrosage : ' . $el_potager->getHumanName() . ' arrosage a démarrer via déclencheur trouvé (via CRON)! -> '  .$_option['arrosage_id']);
          $el_potager->start_arrosage($un_arrosage,$key);
+         
+         $crons = $un_arrosage['liste_programmation'];
+         $now = new DateTime();
+         $c = new Cron\CronExpression($crons[0], new Cron\FieldFactory);
+         $nextRun = $c->getNextRunDate($now, 0, false);
+         $eqLogic = eqLogic::byId($_option['potager_id']);
+         $eqLogic->checkAndUpdateCmd('prochaine_execution_#'. $un_arrosage['id'], $nextRun->format('d-m-Y H:i:s'));
+      
+         log::add('jardin', 'debug', '> Prochaine exécution : ' . print_r($nextRun->format('d-m-Y H:i:s'),true));
+         
          jardin::set_potager_non_run($_option['potager_id']);
          return;
       }
+  
    }
+   
    jardin::set_potager_non_run($_option['potager_id']); 
 }
 
@@ -722,11 +726,6 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
       log::add('jardin', 'debug', '       > set_listeners_one_arrosage ok !');
    }
 }
-   
-
-   
-
-   
 
    public function unset_listeners_one_arrosage($arrosage){
       log::add('jardin', 'debug', '   > unset_listeners_one_arrosage ' . $un_arrosage['id']);
@@ -1842,7 +1841,7 @@ public function get_info(){
          if (!is_object($action)) {
              $action = new jardinCmd();
          }
-         $action->setName(__('Arrêter arrosage -' . $un_arrosage['nom'] . '-', __FILE__));
+         $action->setName(__('Arrêter arrosage -' . $un_arrosage['nom'], __FILE__));
          $action->setLogicalId('stop_arrosage_#' . $un_arrosage['id'] );
          $action->setEqLogic_id($this->getId());
          $action->setType('action');
@@ -1856,7 +1855,7 @@ public function get_info(){
              $action = new jardinCmd();
              
          }
-         $action->setName(__('Démarrer arrosage -' . $un_arrosage['nom'] . '-', __FILE__));
+         $action->setName(__('Démarrer arrosage -' . $un_arrosage['nom'], __FILE__));
          $action->setLogicalId('start_arrosage_#' . $un_arrosage['id']);
          $action->setEqLogic_id($this->getId());
          $action->setType('action');
@@ -1873,7 +1872,7 @@ public function get_info(){
              $action->setIsHistorized(1);
          }
          $action->setConfiguration('historizeMode','none');
-         $action->setName(__('Etat arrosage -' . $un_arrosage['nom'] . '-', __FILE__));
+         $action->setName(__('Etat arrosage -' . $un_arrosage['nom'], __FILE__));
          $action->setLogicalId('etat_arrosage_#' . $un_arrosage['id']);
          $action->setEqLogic_id($this->getId());
          $action->setType('info');
@@ -1881,6 +1880,24 @@ public function get_info(){
          
          $action->setOrder($order++);
          $action->save();
+         
+         $action = $this->getCmd(null, 'prochaine_execution_#' . $un_arrosage['id']);
+         $creation=false;
+         if (!is_object($action)) {
+             $action = new jardinCmd();
+             $creation=true;
+             $action->setIsHistorized(1);
+         }
+         $action->setConfiguration('historizeMode','none');
+         $action->setName(__('Prochain arrosage -' . $un_arrosage['nom'], __FILE__));
+         $action->setLogicalId('prochaine_execution_#' . $un_arrosage['id']);
+         $action->setEqLogic_id($this->getId());
+         $action->setType('info');
+         $action->setSubType('string');
+         
+         $action->setOrder($order++);
+         $action->save();
+
          if($creation){
             $action->event(0);
          }
@@ -1894,7 +1911,7 @@ public function get_info(){
             $action->setIsHistorized(1);
          }
          $action->setConfiguration('historizeMode','none');
-         $action->setName(__('Consommation arrosage -' . $un_arrosage['nom'] . '-', __FILE__));
+         $action->setName(__('Consommation arrosage -' . $un_arrosage['nom'], __FILE__));
          $action->setLogicalId('conso_arrosage_#' . $un_arrosage['id']);
          $action->setEqLogic_id($this->getId());
          $action->setType('info');
