@@ -1740,7 +1740,7 @@ public function get_info(){
     }
 
  // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement 
-    public function postSave() {
+   public function postSave() {
       log::add('jardin', 'debug', '> postSave ' . $this->getHumanName());
 
       $liste_cf_arrosage=$this->getConfiguration('liste_cf_arrosage');
@@ -1964,7 +1964,31 @@ public function get_info(){
       }else{
          log::add('jardin', 'debug', '   > need_refresh_cron_listener NON');
       }
-    }
+      $liste_arrosage=$this->getConfiguration('liste_arrosage');
+      foreach ($liste_arrosage as $un_arrosage) {
+        if (empty($un_arrosage['liste_programmation'][0])) {
+            log::add('jardin', 'debug', "Pas de programmation pour arrosage {$un_arrosage['nom']}");
+            continue;
+        }
+
+        try {
+            $now = new DateTime();
+            $cronExpr = $un_arrosage['liste_programmation'][0];
+            $c = new Cron\CronExpression($cronExpr, new Cron\FieldFactory);
+            $nextRun = $c->getNextRunDate($now, 0, false);
+
+            // On met à jour la commande directement sur CET eqLogic
+            $this->checkAndUpdateCmd(
+                'prochaine_execution_#' . $un_arrosage['id'],
+                $nextRun->format('d-m-Y H:i:s')
+            );
+
+            log::add('jardin', 'debug', "Prochaine exécution pour {$un_arrosage['nom']} : " . $nextRun->format('d-m-Y H:i:s'));
+        } catch (Exception $e) {
+            log::add('jardin', 'error', "Erreur calcul prochaine exécution ({$un_arrosage['nom']}) : " . $e->getMessage());
+        }
+      }
+   }
 
     
   
@@ -2159,7 +2183,7 @@ public function get_info(){
             $version = jeedom::versionAlias($_version);
             $version = 'dashboard';
          }
-		 if($un_arrosage['visible_arrosage']){
+         if($un_arrosage['visible_arrosage']){
                $html .= template_replace($replace, getTemplate('core', $version, 'arrosage', 'potager'));
          }
 
