@@ -458,7 +458,7 @@ function load_arrosage(_eqLogic){
     if(_eqLogic.configuration == null){
       return
     }
-    if (isset(_eqLogic.configuration.liste_arrosage) && _eqLogic.configuration.liste_arrosage != '') {
+      if (isset(_eqLogic.configuration.liste_arrosage) && _eqLogic.configuration.liste_arrosage != '') {
         for (var i in _eqLogic.configuration.liste_arrosage) {
             var un_arrosage=_eqLogic.configuration.liste_arrosage[i]
             var arrosage=addArrosage(_eqLogic.configuration.liste_arrosage[i]);
@@ -490,15 +490,26 @@ function load_arrosage(_eqLogic){
             }
 
             if(un_arrosage.timer=='' && un_arrosage.liste_cd_fin.length == 0){
-              bootbox.alert("ATTENTION : L'arrosage '" + un_arrosage.nom + "' n'a aucune condition de fin d'arrosage ni de timer !");
+              $('#md_modal').html("ATTENTION : L'arrosage '" + un_arrosage.nom + "' n'a aucune condition de fin d'arrosage ni de timer !").dialog({
+                width: 'auto',
+                height: 'auto',
+                modal: true,
+                resizable: true,
+                closeOnEscape: true,
+                open: function(event, ui) {
+                  $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+                },
+                buttons: {
+                  "OK": function() {$(this).dialog("close");}
+                }
+              }).dialog('open');
             }
 
-            one_refresh_action_declencheur_select(arrosage.find('.declencheur').last())
+          one_refresh_action_declencheur_select(arrosage.find('.declencheur').last())
         }
-
-    }
-
+      } 
 }
+
 function testRom()
 {
 
