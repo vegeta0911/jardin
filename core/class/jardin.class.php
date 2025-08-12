@@ -2158,9 +2158,9 @@ public function get_info(){
 
             $version = jeedom::versionAlias($_version);
             $version = 'dashboard';
-            if($un_arrosage['visible_arrosage']){
+         }
+		 if($un_arrosage['visible_arrosage']){
                $html .= template_replace($replace, getTemplate('core', $version, 'arrosage', 'potager'));
-            }
          }
 
          if ($type == 'potager') {
