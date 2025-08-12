@@ -194,16 +194,7 @@ debugB=null;
 
   function ajouter_programmation(_eqLogic,un_arrosage,une_prog){
     
-  const infos = _eqLogic.cmd
-    .filter(c => c.subType === 'string' && c.type === 'info');
 
-  const allArrosages = $('.un_arrosage');
-
-  const idx = allArrosages.index(un_arrosage);
-
-  const state = (idx >= 0 && idx < infos.length) ? infos[idx].state : '';
-
-  console.log(state);
 
     if(typeof une_prog === "string"){
       une_prog=une_prog.replaceAll('"','&quot;')
@@ -228,13 +219,24 @@ debugB=null;
     div += '<div class="form-group">';
     div += '<label class="col-sm-2 control-label">{{Prochaine execution}}</label>';
     div += '<div class="col-sm-2">';
-    div += '<span class="control-label label-success" >'  +  state  +  '</span>';
+    div += '<span class="control-label label-success" >'  +  programNext(_eqLogic,un_arrosage)  +  '</span>';
     div += '</div>';
     div += ' </div>';
     var el=un_arrosage.find('.declencheur').last().parent().parent();
     el.after(div)
     
   }
+  
+function programNext(_eqLogic,un_arrosage){
+  if (_eqLogic.cmd != null) {
+    const infos = _eqLogic.cmd.filter(c => c.subType === 'string' && c.type === 'info');
+    const allArrosages = $('.un_arrosage');
+    const idx = allArrosages.index(un_arrosage);
+    const state = (idx >= 0 && idx < infos.length) ? infos[idx].state : '';
+    return state;
+  }
+  
+}
 
   function ajouter_timer(un_arrosage,element){
     var div = '<div class="form-group un_timer" >';
@@ -336,7 +338,7 @@ debugB=null;
   }
 
   
-  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function () {
+  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function (_eqLogic) {
     modifyWithoutSave=true;
     var el = $(this).parent().parent();
     ajouter_programmation(_eqLogic,el,'')
