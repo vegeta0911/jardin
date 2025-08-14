@@ -192,13 +192,14 @@ function addArrosage(un_arrosage){
 debugA=null;
 debugB=null;
 
-  function ajouter_programmation(un_arrosage,une_prog){
+  function ajouter_programmation(_eqLogic,un_arrosage,une_prog){
+    
+
 
     if(typeof une_prog === "string"){
       une_prog=une_prog.replaceAll('"','&quot;')
     }
 
-    
     var div = '<div class="form-group une_programmation" >';
     div += '<label class="col-sm-2 control-label">{{Programmation}}</label>';
     div += '<div class="col-sm-7"  >';
@@ -215,10 +216,27 @@ debugB=null;
     div += '</div>';
     div += '</div>';
     div += ' </div>';
-
+    div += '<div class="form-group">';
+    div += '<label class="col-sm-2 control-label">{{Prochaine execution}}</label>';
+    div += '<div class="col-sm-2">';
+    div += '<span class="control-label label-success" >'  +  programNext(_eqLogic,un_arrosage)  +  '</span>';
+    div += '</div>';
+    div += ' </div>';
     var el=un_arrosage.find('.declencheur').last().parent().parent();
     el.after(div)
+    
   }
+  
+function programNext(_eqLogic,un_arrosage){
+  if (_eqLogic.cmd != null) {
+    const infos = _eqLogic.cmd.filter(c => c.subType === 'string' && c.type === 'info');
+    const allArrosages = $('.un_arrosage');
+    const idx = allArrosages.index(un_arrosage);
+    const state = (idx >= 0 && idx < infos.length) ? infos[idx].state : '';
+    return state;
+  }
+  
+}
 
   function ajouter_timer(un_arrosage,element){
     var div = '<div class="form-group un_timer" >';
@@ -320,10 +338,10 @@ debugB=null;
   }
 
   
-  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function () {
+  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function (_eqLogic) {
     modifyWithoutSave=true;
     var el = $(this).parent().parent();
-    ajouter_programmation(el,'')
+    ajouter_programmation(_eqLogic,el,'')
   });
   $("body").off('click','.remove_programmation').on('click','.remove_programmation',function () {
     modifyWithoutSave=true;
@@ -425,7 +443,7 @@ $('body').off('focusout','.cmdAction.expressionAttr[data-l1key=cmd]').on('focuso
   var type = $(this).attr('data-type');
   var expression = $(this).parent().getValues('.expressionAttr');
   var el = $(this).parent().parent().parent();
-  console.log(expression)
+  console.log(type.expression)
   debugC=$(this)
   jeedom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
     el.find('.actionOptions').html(html);
@@ -440,12 +458,10 @@ function load_arrosage(_eqLogic){
     if(_eqLogic.configuration == null){
       return
     }
-    if (isset(_eqLogic.configuration.liste_arrosage) && _eqLogic.configuration.liste_arrosage != '') {
+      if (isset(_eqLogic.configuration.liste_arrosage) && _eqLogic.configuration.liste_arrosage != '') {
         for (var i in _eqLogic.configuration.liste_arrosage) {
             var un_arrosage=_eqLogic.configuration.liste_arrosage[i]
             var arrosage=addArrosage(_eqLogic.configuration.liste_arrosage[i]);
-            // console.log('arrosage')
-            // console.log(un_arrosage)
             var mode=arrosage.find('.declencheur').last()
             debug=un_arrosage
             mode.val(un_arrosage.declencheur);
@@ -454,7 +470,7 @@ function load_arrosage(_eqLogic){
                 ajouter_declencheur(arrosage,element,null,'Déclencheur')
             });
             (un_arrosage.liste_programmation).forEach(element => {
-                ajouter_programmation(arrosage,element)
+                ajouter_programmation(_eqLogic,arrosage,element)
             });
             (un_arrosage.liste_an_declencheur).forEach(element => {
                 ajouter_declencheur(arrosage,element,'an_declencheur','')
@@ -474,15 +490,26 @@ function load_arrosage(_eqLogic){
             }
 
             if(un_arrosage.timer=='' && un_arrosage.liste_cd_fin.length == 0){
-              bootbox.alert("ATTENTION : L'arrosage '" + un_arrosage.nom + "' n'a aucune condition de fin d'arrosage ni de timer !");
+              $('#md_modal').html("ATTENTION : L'arrosage '" + un_arrosage.nom + "' n'a aucune condition de fin d'arrosage ni de timer !").dialog({
+                width: 'auto',
+                height: 'auto',
+                modal: true,
+                resizable: true,
+                closeOnEscape: true,
+                open: function(event, ui) {
+                  $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+                },
+                buttons: {
+                  "OK": function() {$(this).dialog("close");}
+                }
+              }).dialog('open');
             }
 
-            one_refresh_action_declencheur_select(arrosage.find('.declencheur').last())
+          one_refresh_action_declencheur_select(arrosage.find('.declencheur').last())
         }
-
-    }
-
+      } 
 }
+
 function testRom()
 {
 
@@ -492,6 +519,7 @@ function save_arrosage(_eqLogic){
 
     _eqLogic.configuration.liste_arrosage = [];
     _eqLogic.configuration.need_refresh_cron_listener='oui'
+    
     $('.un_arrosage').each(function () {
         var un_arrosage={};
         un_arrosage.id=$(this).attr('id_arrosage');
@@ -506,7 +534,7 @@ function save_arrosage(_eqLogic){
         un_arrosage.liste_end=[];
         un_arrosage.timer='';
         un_arrosage.liste_cd_fin=[];
-
+         //console.log(_eqLogic)
         //declencheur
         $(this).find('.un_declencheur_').each( function() {
             //var un_declencheur=$(this).find('.un_declencheur_item').last().val();
