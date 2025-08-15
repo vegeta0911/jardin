@@ -222,6 +222,8 @@ function ajouter_programmation(_eqLogic, un_arrosage, une_prog, numProg = 0) {
       <label class="col-sm-2 control-label">{{Prochaine execution}}</label>
       <div class="col-sm-2">
         <span class="control-label label-success">${prochaineExec}</span>
+         <br/>
+        <br/>
       </div>
     </div>
   `;
