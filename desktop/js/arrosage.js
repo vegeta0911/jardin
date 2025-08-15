@@ -192,50 +192,64 @@ function addArrosage(un_arrosage){
 debugA=null;
 debugB=null;
 
-  function ajouter_programmation(_eqLogic,un_arrosage,une_prog){
-    
-
-
-    if(typeof une_prog === "string"){
-      une_prog=une_prog.replaceAll('"','&quot;')
-    }
-
-    var div = '<div class="form-group une_programmation" >';
-    div += '<label class="col-sm-2 control-label">{{Programmation}}</label>';
-    div += '<div class="col-sm-7"  >';
-    div += '<div class="input-group">';
-    div += '<input type="text" class=" une_prog_item form-control" placeholder="{{Cliquer sur ? pour afficher l\'assistant cron}}" value="' + une_prog + '"/>';
-    div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">';
-    div += '<i class="fas fa-question-circle"></i>';
-    div += '</a>';
-    div += '<a class="btn btn-default cursor jeeHelper roundedRight remove_programmation"  title="Supprimer">';
-    div += '<i class="far fa-trash-alt"></i>';
-    div += '</a>';
-    div += '</span>';
-    div += '</div>';
-    div += '</div>';
-    div += ' </div>';
-    div += '<div class="form-group">';
-    div += '<label class="col-sm-2 control-label">{{Prochaine execution}}</label>';
-    div += '<div class="col-sm-2">';
-    div += '<span class="control-label label-success" >'  +  programNext(_eqLogic,un_arrosage)  +  '</span>';
-    div += '</div>';
-    div += ' </div>';
-    var el=un_arrosage.find('.declencheur').last().parent().parent();
-    el.after(div)
-    
+function ajouter_programmation(_eqLogic, un_arrosage, une_prog, numProg = 0) {
+  if (typeof une_prog === "string") {
+    une_prog = une_prog.replaceAll('"','&quot;');
   }
+
+  const prochaineExec = programNext(_eqLogic, un_arrosage, numProg) || '';
+
+  const html = `
+    <div class="form-group une_programmation">
+      <label class="col-sm-2 control-label">{{Programmation}}</label>
+      <div class="col-sm-7">
+        <div class="input-group">
+          <input type="text" class="une_prog_item form-control"
+                 placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}"
+                 value="${une_prog}" />
+          <span class="input-group-btn">
+            <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
+              <i class="fas fa-question-circle"></i>
+            </a>
+            <a class="btn btn-default cursor jeeHelper roundedRight remove_programmation" title="Supprimer">
+              <i class="far fa-trash-alt"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{Prochaine execution}}</label>
+      <div class="col-sm-2">
+        <span class="control-label label-success">${prochaineExec}</span>
+      </div>
+    </div>
+  `;
+
+  const $arro = un_arrosage.jquery ? un_arrosage : $(un_arrosage);
+  const $after = $arro.find('.declencheur').last().closest('.form-group');
+  $after.after(html);
+}
   
-function programNext(_eqLogic,un_arrosage){
-  if (_eqLogic.cmd != null) {
-    const infos = _eqLogic.cmd.filter(c => c.subType === 'string' && c.type === 'info');
-    const allArrosages = $('.un_arrosage');
-    const idx = allArrosages.index(un_arrosage);
-    const state = (idx >= 0 && idx < infos.length) ? infos[idx].state : '';
-    return state;
+function programNext(_eqLogic, un_arrosage, numProg = 0) {
+  try {
+    if (!_eqLogic || !_eqLogic.cmd) return '';
+    const $bloc = un_arrosage.jquery ? un_arrosage : $(un_arrosage);
+    const idArrosage = $bloc.attr('id_arrosage'); // ex: 1257102149468
+    if (!idArrosage) return '';
+
+    const logicalId = `prochaine_execution_${numProg}_#${idArrosage}`;
+    const cmd = _eqLogic.cmd.find(c =>
+      c.logicalId === logicalId &&
+      c.type === 'info' &&
+      c.subType === 'string'
+    );
+
+    return (cmd && typeof cmd.state !== 'undefined') ? cmd.state : '';
+  } catch (e) {
+    console.warn('programNext error', e);
+    return '';
   }
-  
 }
 
   function ajouter_timer(un_arrosage,element){
@@ -338,10 +352,12 @@ function programNext(_eqLogic,un_arrosage){
   }
 
   
-  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function (_eqLogic) {
-    modifyWithoutSave=true;
-    var el = $(this).parent().parent();
-    ajouter_programmation(_eqLogic,el,'')
+  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function () {
+    modifyWithoutSave = true;
+    const $arrosage = $(this).closest('.un_arrosage');         // le bon bloc
+    const numProg = $arrosage.find('.une_programmation').length; // index suivant
+    const eq = (typeof objT !== 'undefined' && objT) ? objT : current_element; // _eqLogic courant
+  ajouter_programmation(eq, $arrosage, '', numProg);
   });
   $("body").off('click','.remove_programmation').on('click','.remove_programmation',function () {
     modifyWithoutSave=true;
@@ -469,8 +485,8 @@ function load_arrosage(_eqLogic){
               //alert(element)
                 ajouter_declencheur(arrosage,element,null,'Déclencheur')
             });
-            (un_arrosage.liste_programmation).forEach(element => {
-                ajouter_programmation(_eqLogic,arrosage,element)
+            (un_arrosage.liste_programmation).forEach((element, idx) => {
+                ajouter_programmation(_eqLogic, arrosage, element, idx);
             });
             (un_arrosage.liste_an_declencheur).forEach(element => {
                 ajouter_declencheur(arrosage,element,'an_declencheur','')
