@@ -112,14 +112,35 @@ function addArrosage(un_arrosage){
     var el = $(this);
     var arrosage_el=el.closest('.un_arrosage');
 
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer cet arrosage }} ?', function (result) {
+    /*bootbox.confirm('{{Etes-vous sûr de vouloir supprimer cet arrosage }} ?', function (result) {
       if (result !== false) {
         el.closest('.un_arrosage').remove();
         modifyWithoutSave=true;
         supprimer_arrosage(arrosage_el.attr('id_arrosage'));
       }
-    });
-  });
+    });*/
+      $('#md_modal').html("{{Etes-vous sûr de vouloir supprimer cet arrosage ?}}").dialog({
+                title: "{{Suppression de l'arrosage}}",
+                width: 'auto',
+                height: 'auto',
+                modal: true,
+                resizable: true,
+                closeOnEscape: true,
+                open: function(event, ui) {
+                  $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+                },
+                buttons: {
+                  "OK": function(result) {if (result !== false) {
+                        el.closest('.un_arrosage').remove();
+                        modifyWithoutSave=true;
+                        supprimer_arrosage(arrosage_el.attr('id_arrosage'));
+                        $(this).dialog("close");
+                  }},
+                  "Annuler": function() {$(this).dialog("close");}
+                }
+              }).dialog('open');
+  });         
+          
 
   function supprimer_all_arrosage(){
     $('.un_arrosage').each( function(){
@@ -128,12 +149,35 @@ function addArrosage(un_arrosage){
     })
   }
 
-  function supprimer_arrosage(id_arro){
+function supprimer_arrosage(id_arro,_eqLogic){
+    
+    const index = current_element.configuration.liste_arrosage.findIndex(e => e.id == id_arro);
+  if (index !== -1) {
+    const arrosage = current_element.configuration.liste_arrosage[index];
 
-    var arrosage=current_element.configuration.liste_arrosage.find(element => element.id == id_arro);
-    if(arrosage != null){
-      arrosage.cmds.forEach( element => remove_cmd(element))
+    // 1. Supprimer toutes les commandes de la liste cmds
+    if (arrosage.cmds && arrosage.cmds.length > 0) {
+      arrosage.cmds.forEach(cmdId => remove_cmd(cmdId));
     }
+
+    // 2. Supprimer toutes les commandes liées par logicalId
+    if (current_element && current_element.cmd) {
+      const logicalIds = [
+        'etat_arrosage_#' + id_arro
+      ];
+      current_element.cmd.forEach(c => {
+        if (logicalIds.includes(c.logicalId)) {
+          remove_cmd(c.id);
+        }
+      });
+    }
+
+    // 3. Retirer l’arrosage de la configuration
+    current_element.configuration.liste_arrosage.splice(index, 1);
+
+    // 4. Retirer du DOM
+    $(`.un_arrosage[data-id="${id_arro}"]`).remove();
+  }
 }
 
 
@@ -192,50 +236,66 @@ function addArrosage(un_arrosage){
 debugA=null;
 debugB=null;
 
-  function ajouter_programmation(_eqLogic,un_arrosage,une_prog){
-    
-
-
-    if(typeof une_prog === "string"){
-      une_prog=une_prog.replaceAll('"','&quot;')
-    }
-
-    var div = '<div class="form-group une_programmation" >';
-    div += '<label class="col-sm-2 control-label">{{Programmation}}</label>';
-    div += '<div class="col-sm-7"  >';
-    div += '<div class="input-group">';
-    div += '<input type="text" class=" une_prog_item form-control" placeholder="{{Cliquer sur ? pour afficher l\'assistant cron}}" value="' + une_prog + '"/>';
-    div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">';
-    div += '<i class="fas fa-question-circle"></i>';
-    div += '</a>';
-    div += '<a class="btn btn-default cursor jeeHelper roundedRight remove_programmation"  title="Supprimer">';
-    div += '<i class="far fa-trash-alt"></i>';
-    div += '</a>';
-    div += '</span>';
-    div += '</div>';
-    div += '</div>';
-    div += ' </div>';
-    div += '<div class="form-group">';
-    div += '<label class="col-sm-2 control-label">{{Prochaine execution}}</label>';
-    div += '<div class="col-sm-2">';
-    div += '<span class="control-label label-success" >'  +  programNext(_eqLogic,un_arrosage)  +  '</span>';
-    div += '</div>';
-    div += ' </div>';
-    var el=un_arrosage.find('.declencheur').last().parent().parent();
-    el.after(div)
-    
+function ajouter_programmation(_eqLogic, un_arrosage, une_prog, numProg = 0) {
+  if (typeof une_prog === "string") {
+    une_prog = une_prog.replaceAll('"','&quot;');
   }
+  console.log(un_arrosage)
+  const prochaineExec = programNext(_eqLogic, un_arrosage, numProg) || '';
+
+  const html = `
+    <div class="form-group une_programmation" data-id="${un_arrosage.attr('id_arrosage')}" data-index="${numProg}">
+      <label class="col-sm-2 control-label">{{Programmation}}</label>
+      <div class="col-sm-7">
+        <div class="input-group">
+          <input type="text" class="une_prog_item form-control"
+                 placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}"
+                 value="${une_prog}" />
+          <span class="input-group-btn">
+            <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
+              <i class="fas fa-question-circle"></i>
+            </a>
+            <a class="btn btn-default cursor jeeHelper roundedRight remove_programmation" title="Supprimer">
+              <i class="far fa-trash-alt"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{Prochaine execution}}</label>
+      <div class="col-sm-2">
+        <span class="control-label label-success">${prochaineExec}</span>
+         <br/>
+        <br/>
+      </div>
+    </div>
+  `;
+
+  const $arro = un_arrosage.jquery ? un_arrosage : $(un_arrosage);
+  const $after = $arro.find('.declencheur').last().closest('.form-group');
+  $after.after(html);
+}
   
-function programNext(_eqLogic,un_arrosage){
-  if (_eqLogic.cmd != null) {
-    const infos = _eqLogic.cmd.filter(c => c.subType === 'string' && c.type === 'info');
-    const allArrosages = $('.un_arrosage');
-    const idx = allArrosages.index(un_arrosage);
-    const state = (idx >= 0 && idx < infos.length) ? infos[idx].state : '';
-    return state;
+function programNext(_eqLogic, un_arrosage, numProg = 0) {
+  try {
+    if (!_eqLogic || !_eqLogic.cmd) return '';
+    const $bloc = un_arrosage.jquery ? un_arrosage : $(un_arrosage);
+    const idArrosage = $bloc.attr('id_arrosage'); // ex: 1257102149468
+    if (!idArrosage) return '';
+
+    const logicalId = `prochaine_execution_${numProg}_#${idArrosage}`;
+    const cmd = _eqLogic.cmd.find(c =>
+      c.logicalId === logicalId &&
+      c.type === 'info' &&
+      c.subType === 'string'
+    );
+
+    return (cmd && typeof cmd.state !== 'undefined') ? cmd.state : '';
+  } catch (e) {
+    console.warn('programNext error', e);
+    return '';
   }
-  
 }
 
   function ajouter_timer(un_arrosage,element){
@@ -338,15 +398,44 @@ function programNext(_eqLogic,un_arrosage){
   }
 
   
-  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function (_eqLogic) {
-    modifyWithoutSave=true;
-    var el = $(this).parent().parent();
-    ajouter_programmation(_eqLogic,el,'')
+  $("body").off('click','.b_add_programmation').on('click','.b_add_programmation',function () {
+    modifyWithoutSave = true;
+    const $arrosage = $(this).closest('.un_arrosage');         // le bon bloc
+    const numProg = $arrosage.find('.une_programmation').length; // index suivant
+    const eq = (typeof objT !== 'undefined' && objT) ? objT : current_element; // _eqLogic courant
+    ajouter_programmation(eq, $arrosage, '', numProg);
   });
+
   $("body").off('click','.remove_programmation').on('click','.remove_programmation',function () {
-    modifyWithoutSave=true;
-    $(this).parent().parent().parent().parent().remove();
+    modifyWithoutSave = true;
+
+    // Trouver le bloc "une_programmation"
+    const progDiv = $(this).closest('.une_programmation');
+
+    // Récupérer l'ID de l’arrosage et l’index de la programmation
+    const id_arro = progDiv.data('id');      // ajoute data-id="${id_arro}" quand tu crées le HTML
+    const indexProg = progDiv.data('index'); // ajoute data-index="${i}" quand tu crées la prog
+
+    // 1. Supprimer la programmation du tableau JS
+    const arrosage = current_element.configuration.liste_arrosage.find(e => e.id == id_arro);
+    if (arrosage && arrosage.liste_programmation && indexProg < arrosage.liste_programmation.length) {
+        arrosage.liste_programmation.splice(indexProg, 1);
+    }
+
+    // 2. Supprimer la commande info "prochaine_execution_<index>_<id_arro>"
+    if (current_element && current_element.cmd) {
+        const logicalId = 'prochaine_execution_' + indexProg + '_#' + id_arro;
+        console.log(logicalId)
+        const cmd = current_element.cmd.find(c => c.logicalId === logicalId);
+        if (cmd) {
+            remove_cmd(cmd.id);
+        }
+    }
+
+    // 3. Supprimer du DOM
+    progDiv.remove();
   });
+
   $("body").off('click','.remove_declencheur').on('click','.remove_declencheur',function () {
     modifyWithoutSave=true;
     $(this).parent().parent().parent().parent().remove();
@@ -357,7 +446,6 @@ function programNext(_eqLogic,un_arrosage){
         one_refresh_action_declencheur_select($(this))
     })
   }
-
 
   function one_refresh_action_declencheur_select(select_item){
         $(select_item).parent().parent().find('.b_add_declencheur').show();
@@ -469,8 +557,8 @@ function load_arrosage(_eqLogic){
               //alert(element)
                 ajouter_declencheur(arrosage,element,null,'Déclencheur')
             });
-            (un_arrosage.liste_programmation).forEach(element => {
-                ajouter_programmation(_eqLogic,arrosage,element)
+            (un_arrosage.liste_programmation).forEach((element, idx) => {
+                ajouter_programmation(_eqLogic, arrosage, element, idx);
             });
             (un_arrosage.liste_an_declencheur).forEach(element => {
                 ajouter_declencheur(arrosage,element,'an_declencheur','')

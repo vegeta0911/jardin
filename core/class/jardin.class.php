@@ -1881,22 +1881,41 @@ public function get_info(){
          $action->setOrder($order++);
          $action->save();
          
-         $action = $this->getCmd(null, 'prochaine_execution_#' . $un_arrosage['id']);
-         $creation=false;
-         if (!is_object($action)) {
-             $action = new jardinCmd();
-             $creation=true;
-             $action->setIsHistorized(1);
-         }
-         $action->setConfiguration('historizeMode','none');
-         $action->setName(__('Prochain arrosage -' . $un_arrosage['nom'], __FILE__));
-         $action->setLogicalId('prochaine_execution_#' . $un_arrosage['id']);
-         $action->setEqLogic_id($this->getId());
-         $action->setType('info');
-         $action->setSubType('string');
-         
-         $action->setOrder($order++);
-         $action->save();
+         $crons = $un_arrosage['liste_programmation'];
+         $now = new DateTime();
+
+       foreach ($crons as $index => $cronExpr) {
+        try {
+        $c = new Cron\CronExpression($cronExpr, new Cron\FieldFactory);
+        $nextRun = $c->getNextRunDate($now, 0, false);
+
+        // Création ou récupération de la commande info
+        $cmdLogicalId = 'prochaine_execution_' . $index . '_#' . $un_arrosage['id'];
+        $action = $this->getCmd(null, $cmdLogicalId);
+        $creation = false;
+        if (!is_object($action)) {
+            $action = new jardinCmd();
+            $creation = true;
+            $action->setIsHistorized(1);
+        }
+        $action->setConfiguration('historizeMode', 'none');
+        $action->setName(__('Prochain arrosage (' . $un_arrosage['nom'] . ') - Prog ' . ($index + 1), __FILE__));
+        $action->setLogicalId($cmdLogicalId);
+        $action->setEqLogic_id($this->getId());
+        $action->setType('info');
+        $action->setSubType('string');
+        $action->setOrder($order++);
+        $action->save();
+
+        // Mise à jour de la valeur
+        $this->checkAndUpdateCmd($cmdLogicalId, $nextRun->format('d-m-Y H:i:s'));
+
+        log::add('jardin', 'debug', "Prochaine exécution pour CRON {$cronExpr} : " . $nextRun->format('d-m-Y H:i:s'));
+
+        } catch (Exception $e) {
+        log::add('jardin', 'error', 'Expression CRON invalide : ' . $cronExpr);
+        }
+       }
 
          if($creation){
             $action->event(0);
