@@ -2182,7 +2182,7 @@ public function get_info(){
             $replace['#nom#'] = $this->getName(true);
             $version = jeedom::versionAlias($_version);
             $version = 'dashboard';
-            $html = template_replace($replace, getTemplate('core', $version, 'lune', 'potager'));
+            $html = template_replace($replace, getTemplate('core', $version, 'lune', 'jardin'));
             return $html;
          }
 
@@ -2203,7 +2203,7 @@ public function get_info(){
             $version = 'dashboard';
          }
          if($un_arrosage['visible_arrosage']){
-               $html .= template_replace($replace, getTemplate('core', $version, 'arrosage', 'potager'));
+               $html .= template_replace($replace, getTemplate('core', $version, 'arrosage', 'jardin'));
          }
 
          if ($type == 'potager') {
@@ -2238,11 +2238,11 @@ public function get_info(){
          $replace['#qte_semence#']=$qte;
          $version = jeedom::versionAlias($_version);
          $version = 'dashboard';
-         $html .= template_replace($replace, getTemplate('core', $version, 'defaut', 'potager'));
+         $html .= template_replace($replace, getTemplate('core', $version, 'defaut', 'jardin'));
          return $html;
       }
 
-      public function dataToWidget($id_eqlogic, $idarrosage)
+      public static function dataToWidget($id_eqlogic, $idarrosage)
       {
          $plugin = eqLogic::byId($id_eqlogic);
          $etat = $plugin->getCmd(null, 'etat_arrosage_#' . $idarrosage);
