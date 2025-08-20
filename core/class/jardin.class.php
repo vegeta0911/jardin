@@ -37,11 +37,6 @@ class jardin extends eqLogic {
    public function debug(){
       log::add('jardin', 'debug', '> debug');
       jardin::whatMoon();//->notifications_ns(true);
-      //potager::cronHourly();
-      // $liste_arrosage=$this->getConfiguration('liste_arrosage');
-      // //$this->lancer_timer_arrosage($liste_arrosage[0],1);
-      // $this->refresh_all_cron_start_all_arrosage();
-      // //potager::extract_equipement_jeedom_from_txt($liste_arrosage[0]['liste_cd_fin'][0]);
    }
 
    // Moon
@@ -954,10 +949,6 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
       }
    }
 
-
-
-
-
    public function getName($clean_affichage=false,$detail=false){
       $type=$this->getConfiguration('type');
       if($type == 'potager'){
@@ -1010,11 +1001,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
 
    $qtea=$a->getConfiguration('quantite');
    $qteb=$b->getConfiguration('quantite');
-   //log::add('potager', 'debug', 'TRIE ' . $a->getName());
-   // if($a->getName() == 'thym'){
-   //    log::add('potager', 'debug', 'TRIE ' . $a->getName() . ' - "' . $qtea . '" ' . $a->getConfiguration('quantite_plante'));
-   // }
-
+   
    if($qtea == 0 || $qtea == ''){
       //log::add('potager', 'debug', 'TRIE qte_plante ' . $a->getName());
       $qtea=$a->getConfiguration('quantite_plante');
@@ -1114,10 +1101,6 @@ public function get_info(){
    return $une_semence;
 }
 
-  
-
-
-
    public function getPathImgIcon(){
 
       $path='plugins/jardin/data/img/';
@@ -1182,10 +1165,7 @@ public function get_info(){
 
 
       }
-
-
-
-
+	   
       return $path . $img;
    }
 
@@ -1251,45 +1231,6 @@ public function get_info(){
       //$this->save();
    }
     /*     * *************************Attributs****************************** */
-    
-  /*
-   * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
-   * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
-	public static $_widgetPossibility = array();
-   */
-    
-    /*     * ***********************Methode static*************************** */
-
-    /*
-     * Fonction exécutée automatiquement toutes les minutes par Jeedom
-      public static function cron() {
-      }
-     */
-
-    /*
-      //Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-      public static function cron5() {
-
-      }
-      */
-
-    /*
-     * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-      public static function cron10() {
-      }
-     */
-    
-    /*
-     * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-      public static function cron15() {
-      }
-     */
-    
-    /*
-     * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-      public static function cron30() {
-      }
-     */
     
     //Fonction exécutée automatiquement toutes les heures par Jeedom
       public static function cronHourly($force_mode=false) {
@@ -1506,8 +1447,6 @@ public function get_info(){
          log::add('jardin', 'debug', $result['notif_tache']);
          log::add('jardin', 'debug', '=============FIN CRON Notifications NS=================');
          return $result;
-
-
       }
 
       public static function notifications(){
@@ -1517,10 +1456,6 @@ public function get_info(){
           $heure=intval(date("G"));
           $mois=intval(date("n"));
           $jour=intval(date("j"));
-
-
-
-
 
          if($heure != 9){
             return;
@@ -1654,40 +1589,6 @@ public function get_info(){
          }while (strlen($message) > 4000 * $i);
 
       }
-         
-        
-
-
-    /*
-     * Fonction exécutée automatiquement tous les jours par Jeedom
-      public static function cronDaily() {
-      }
-     */
-
-
-
-    /*     * *********************Méthodes d'instance************************* */
-    
- // Fonction exécutée automatiquement avant la création de l'équipement 
-    public function preInsert() {
-        
-    }
-
- // Fonction exécutée automatiquement après la création de l'équipement 
-    public function postInsert() {
-        
-    }
-
- // Fonction exécutée automatiquement avant la mise à jour de l'équipement 
-    public function preUpdate() {
-        
-    }
-
- // Fonction exécutée automatiquement après la mise à jour de l'équipement 
-    public function postUpdate() {
-        
-    }
-
     private function recherche_element($texte,$str_d,$str_e){
       log::add('jardin', 'debug', '> recherche_element');
       $texte = str_replace(array("\r\n", "\r", "\n","\t"), "", $texte);
@@ -1715,10 +1616,6 @@ public function get_info(){
       $etat=$result["etat"];
       $phase_lune=$result["phase"];
       $imgL=$result["imgL"];
-
-
-      
-
 
       $this->checkAndUpdateCmd('etat_lune',$etat);
       $this->checkAndUpdateCmd('phase_lune',$phase_lune);
@@ -1917,6 +1814,19 @@ public function get_info(){
         }
        }
 
+      
+         $info = $this->getCmd(null, 'potager');
+         if (!is_object($info)) {
+             $info = new jardinCmd();
+         }
+         $info->setName(__('Etat potager', __FILE__));
+         $info->setLogicalId('potager');
+         $info->setEqLogic_id($this->getId());
+         $info->setType('info');
+         $info->setSubType('string');
+         $info->setOrder($order++);
+         $info->save();
+
          if($creation){
             $action->event(0);
          }
@@ -2008,10 +1918,7 @@ public function get_info(){
         }
       }
    }
-
-    
-  
-
+	
     function dateFR_to_datePHP($dateFR){
        if(strlen($dateFR) != 10){
           return '';
@@ -2162,6 +2069,7 @@ public function get_info(){
 
    // Non obligatoire : permet de modifier l'affichage du widget (également utilisable par les commandes)
       public function toHtml($_version = 'dashboard') {
+    
          $type=$this->getConfiguration('type');
          $replace = $this->preToHtml($_version);
          if (!is_array($replace)) {
@@ -2194,11 +2102,24 @@ public function get_info(){
          $html = "";
          foreach ($liste_arrosage as $key => $un_arrosage) {
             $etat = $this->getCmd(null, 'etat_arrosage_#' . $un_arrosage['id']);
-
+           
             $replace['#nom#'] = $un_arrosage['nom'];
             $replace['#idArrosage#'] = $un_arrosage['id'];
             $replace['#refresh_id#'] = $etat->getId();
+            
+            $nextRuns = [];
+            if (!empty($un_arrosage['liste_programmation'])) {
+               foreach ($un_arrosage['liste_programmation'] as $index => $cron) {
+                  $cmdLogicalId = 'prochaine_execution_' . $index . '_#' . $un_arrosage['id'];
+                  $cmd = $this->getCmd(null, $cmdLogicalId);
 
+                  if (is_object($cmd)) {
+                     $nextRuns[] = $cmd->execCmd();   // on récupère la valeur actuelle
+                  }
+               }
+            }
+            $replace['#nextRuns#'] = implode('<br>', $nextRuns);
+           
             $version = jeedom::versionAlias($_version);
             $version = 'dashboard';
          }
@@ -2303,41 +2224,11 @@ public function get_info(){
             'ConsoAn' => $ConsoAn < 1000 ? round($ConsoAn) . ' L/' . date("Y") : round($ConsoAn / 1000, 1) . ' m3/' . date("Y"),
          );
          return $return;
-      }
-    /*
-     * Non obligatoire : permet de déclencher une action après modification de variable de configuration
-    public static function postConfig_<Variable>() {
-    }
-     */
-
-    /*
-     * Non obligatoire : permet de déclencher une action avant modification de variable de configuration
-    public static function preConfig_<Variable>() {
-    }
-     */
-
-    /*     * **********************Getteur Setteur*************************** */
+      }      
 }
 
 class jardinCmd extends cmd {
-    /*     * *************************Attributs****************************** */
-    
-    /*
-      public static $_widgetPossibility = array();
-    */
-    
-    /*     * ***********************Methode static*************************** */
-
-
-    /*     * *********************Methode d'instance************************* */
-
-    /*
-     * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-      public function dontRemoveCmd() {
-      return true;
-      }
-     */
-
+   
   // Exécution d'une commande  
      public function execute($_options = array()) {
       $eqlogic = $this->getEqLogic();
@@ -2367,16 +2258,5 @@ class jardinCmd extends cmd {
          $un_arrosage=$eqlogic->get_arrosage_by_id($id);
          $eqlogic->start_arrosage($un_arrosage['arrosage'],$un_arrosage['key']);
       }
-
-      // if(strpos($this->getLogicalId(),'etat_arrosage_#') === 0){
-      //    $ps=strpos($this->getLogicalId(),'#');
-      //    $id=substr($this->getLogicalId(),$ps+1,strlen($this->getLogicalId()) - ($ps+1));
-      //    $un_arrosage=$eqlogic->get_arrosage_by_id($id);
-      //    //$eqlogic->stop_arrosage($un_arrosage['arrosage'],$un_arrosage['key']);
-      // }
-
-
      }
-
-    /*     * **********************Getteur Setteur*************************** */
 }
