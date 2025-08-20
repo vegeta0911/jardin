@@ -78,17 +78,51 @@
         }
 
         function start_arrosage#idArrosage#(id_arrosage) {
-            bootbox.prompt({
-                title: "Combien de temps (min) voulez vous arroser (0 = pas de timer)?",
-                inputType: 'number',
-                callback: function (result) {
-                    timerreq = result
-                    if (result !== null && result !== false && result !== "") {
-                        action_arrosage#idArrosage#(id_arrosage, 'start', timerreq)
+            $('#md_modal').dialog({
+            title: "Arrosage",
+            width: 'auto',
+            height: 'auto',
+            modal: true,
+            resizable: false,
+            closeOnEscape: true,
+            open: function () {
+            // contenu du modal avec champ input
+            $(this).html(
+                '<div style="padding:10px;">' +
+                '<label for="timerreq">Combien de temps (min) voulez-vous arroser (0 = pas de timer) ?</label><br>' +
+                '<input type="number" id="timerreq" class="form-control" min="0" step="1" style="margin-top:8px;">' +
+                '</div>'
+            );
+            setTimeout(function(){ $('#timerreq').focus(); }, 100);
+           },
+           buttons: [
+            {
+                text: "OK",
+                click: function () {
+                    var val = $('#timerreq').val();
+                    if (val !== "" && val !== null) {
+                        var timerreq = parseInt(val, 10);
+                        if (!isNaN(timerreq)) {
+                          
+                            action_arrosage#idArrosage#(id_arrosage, 'start', timerreq);
+                            $(this).dialog("close");
+                            return;
+                        }
                     }
-
+                    $('#timerreq').focus();
                 }
-            });
+            },
+            {
+                text: "Annuler",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }
+            ],
+            close: function () {
+                $(this).dialog('destroy').html(''); // on nettoie le modal après fermeture
+           }
+           }).dialog('open');
         }
         function action_arrosage#idArrosage#(id_arrosage, action, timer = false) {
             $.ajax({
