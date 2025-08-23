@@ -542,7 +542,9 @@ debugC=null;
 objT=null;
 function load_arrosage(_eqLogic){
   objT=_eqLogic;
-    $('#l_arrosage').empty();
+    if(objT.cmd.length != 0 || objT.cache == null ){
+        $('#l_arrosage').empty();
+    }
     if(_eqLogic.configuration == null){
       return
     }
