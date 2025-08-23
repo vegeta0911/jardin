@@ -1815,7 +1815,7 @@ public function get_info(){
        }
 
       
-         $info = $this->getCmd(null, 'potager');
+         /*$info = $this->getCmd(null, 'potager');
          if (!is_object($info)) {
              $info = new jardinCmd();
          }
@@ -1825,7 +1825,7 @@ public function get_info(){
          $info->setType('info');
          $info->setSubType('string');
          $info->setOrder($order++);
-         $info->save();
+         $info->save();*/
 
          if($creation){
             $action->event(0);
@@ -2099,33 +2099,43 @@ public function get_info(){
             return "";
          }
 
-         $html = "";
+         $html = '';
          foreach ($liste_arrosage as $key => $un_arrosage) {
+
             $etat = $this->getCmd(null, 'etat_arrosage_#' . $un_arrosage['id']);
-           
             $replace['#nom#'] = $un_arrosage['nom'];
             $replace['#idArrosage#'] = $un_arrosage['id'];
             $replace['#refresh_id#'] = $etat->getId();
-            
+            $cmd = $this->getCmd(null, 'conso_arrosage_#' . $un_arrosage['id']);
+            if (is_object($cmd)) {
+               $replace['#consoArrosage#'] = $cmd->execCmd();
+            } else {
+               $replace['#consoArrosage#'] = 0;
+            }
+            log::add('jardin', 'debug', 'toHtml - consoArrosage : ' . json_encode($un_arrosage,true));
+            //$replace['#imgArrosage#'] = 'plugins/jardin/data/img/arrosage/' . $un_arrosage['type'] . '.png';
+            $replace['#etatArrosage#'] = $etat->execCmd();
+
             $nextRuns = [];
             if (!empty($un_arrosage['liste_programmation'])) {
                foreach ($un_arrosage['liste_programmation'] as $index => $cron) {
                   $cmdLogicalId = 'prochaine_execution_' . $index . '_#' . $un_arrosage['id'];
                   $cmd = $this->getCmd(null, $cmdLogicalId);
-
                   if (is_object($cmd)) {
-                     $nextRuns[] = $cmd->execCmd();   // on récupère la valeur actuelle
+                     $nextRuns[] = $cmd->execCmd();
                   }
-               }
+               } 
             }
             $replace['#nextRuns#'] = implode('<br>', $nextRuns);
-           
-            $version = jeedom::versionAlias($_version);
             $version = 'dashboard';
-         }
-         if($un_arrosage['visible_arrosage']){
+    
+            if ($un_arrosage['visible_arrosage']){
+               
                $html .= template_replace($replace, getTemplate('core', $version, 'arrosage', 'jardin'));
+               
+            }
          }
+        
 
          if ($type == 'potager') {
             return $html;
