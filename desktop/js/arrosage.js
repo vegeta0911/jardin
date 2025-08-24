@@ -1,3 +1,4 @@
+
 function addArrosage(un_arrosage){
     if (init(un_arrosage) == '') {
       return;
@@ -103,10 +104,10 @@ function addArrosage(un_arrosage){
     })
   }
 
-  $('#b_add_arrosage').off('click').on('click', function () {
+  //$('#b_add_arrosage').off('click').on('click', function () {
     modifyWithoutSave=true;
     addArrosage({nom: 'Nouvel arrosage ' + $('.un_arrosage').length,id: get_id_unique(), conso_arrosage: 0, visible_arrosage: true});
-  });
+  //});
   
   $("body").off('click','.removeArrosage').on('click','.removeArrosage',function () {
     var el = $(this);
@@ -542,7 +543,10 @@ debugC=null;
 objT=null;
 function load_arrosage(_eqLogic){
   objT=_eqLogic;
+  console.log(objT.configuration.type)
+  if(isset(objT.configuration.liste_arrosage) && Array.isArray(objT.configuration.liste_arrosage) && objT.configuration.liste_arrosage.length > 0 ){
     $('#l_arrosage').empty();
+  }
     if(_eqLogic.configuration == null){
       return
     }
