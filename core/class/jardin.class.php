@@ -2069,109 +2069,140 @@ public function get_info(){
 
    // Non obligatoire : permet de modifier l'affichage du widget (également utilisable par les commandes)
       public function toHtml($_version = 'dashboard') {
+
+    $type = $this->getConfiguration('type');
+    $replace = $this->preToHtml($_version);
+    if (!is_array($replace)) {
+        return $replace;
+    }
+
+    // ---------- LUNE ----------
+    if($type == 'lune'){
+        $replace['#img#'] = $this->getPathImgIcon();
+
+        $cmd = $this->getCmd(null,'etat_lune');
+        $replace['#etat#'] = $cmd->execCmd();
+
+        $cmd = $this->getCmd(null,'phase_lune');
+        $replace['#phase2#'] = $cmd->execCmd();
+
+        $replace['#nom#'] = $this->getName(true);
+
+        $version = 'dashboard';
+        $html = template_replace($replace, getTemplate('core', $version, 'lune', 'jardin'));
+        return $html;
+    }
+
+    // ---------- ARROSAGE ----------
+    $liste_arrosage = $this->getConfiguration('liste_arrosage');
     
-         $type=$this->getConfiguration('type');
-         $replace = $this->preToHtml($_version);
-         if (!is_array($replace)) {
-            return $replace;
-         }
-
-         if($type == 'lune'){
-            $replace['#img#'] = $this->getPathImgIcon();
-            
-            $cmd=$this->getCmd(null,'etat_lune');
-            $replace['#etat#'] = $cmd->execCmd();
-
-            $cmd=$this->getCmd(null,'phase_lune');
-            $replace['#phase2#'] = $cmd->execCmd();
-
-            
-
-            $replace['#nom#'] = $this->getName(true);
-            $version = jeedom::versionAlias($_version);
-            $version = 'dashboard';
-            $html = template_replace($replace, getTemplate('core', $version, 'lune', 'jardin'));
-            return $html;
-         }
-
-         $liste_arrosage = $this->getConfiguration('liste_arrosage');
-         if ($type == 'potager' && $liste_arrosage == '') {
-            return "";
-         }
-
-         $html = '';
-         foreach ($liste_arrosage as $key => $un_arrosage) {
-
-            $etat = $this->getCmd(null, 'etat_arrosage_#' . $un_arrosage['id']);
+    if ($type == 'potager') {
+      $html = '';
+      log::add('jardin', 'debug', '> toHtml potager ' . $type);
+    if (!empty($liste_arrosage)) {
+        foreach ($liste_arrosage as $key => $un_arrosage) {
+            $etat = $this->getCmd(null, 'etat_arrosage_#'.$un_arrosage['id']);
             $replace['#nom#'] = $un_arrosage['nom'];
             $replace['#idArrosage#'] = $un_arrosage['id'];
             $replace['#refresh_id#'] = $etat->getId();
-            $cmd = $this->getCmd(null, 'conso_arrosage_#' . $un_arrosage['id']);
-            if (is_object($cmd)) {
-               $replace['#consoArrosage#'] = $cmd->execCmd();
-            } else {
-               $replace['#consoArrosage#'] = 0;
-            }
-            log::add('jardin', 'debug', 'toHtml - consoArrosage : ' . json_encode($un_arrosage,true));
-            //$replace['#imgArrosage#'] = 'plugins/jardin/data/img/arrosage/' . $un_arrosage['type'] . '.png';
+
+            $cmd = $this->getCmd(null, 'conso_arrosage_#'.$un_arrosage['id']);
+            $replace['#consoArrosage#'] = is_object($cmd) ? $cmd->execCmd() : 0;
+
             $replace['#etatArrosage#'] = $etat->execCmd();
 
             $nextRuns = [];
             if (!empty($un_arrosage['liste_programmation'])) {
-               foreach ($un_arrosage['liste_programmation'] as $index => $cron) {
-                  $cmdLogicalId = 'prochaine_execution_' . $index . '_#' . $un_arrosage['id'];
-                  $cmd = $this->getCmd(null, $cmdLogicalId);
-                  if (is_object($cmd)) {
-                     $nextRuns[] = $cmd->execCmd();
-                  }
-               } 
+                foreach ($un_arrosage['liste_programmation'] as $index => $cron) {
+                    $cmdLogicalId = 'prochaine_execution_'.$index.'_#'.$un_arrosage['id'];
+                    $cmd = $this->getCmd(null, $cmdLogicalId);
+                    if (is_object($cmd)) {
+                        $nextRuns[] = $cmd->execCmd();
+                    }
+                }
             }
             $replace['#nextRuns#'] = implode('<br>', $nextRuns);
-            $version = 'dashboard';
-    
+
             if ($un_arrosage['visible_arrosage']){
-               
-               $html .= template_replace($replace, getTemplate('core', $version, 'arrosage', 'jardin'));
-               
+                $html .= template_replace($replace, getTemplate('core', 'dashboard', 'arrosage', 'jardin'));
+                return $html; // Retourne uniquement l'arrosage
             }
-         }
-        
-
-         if ($type == 'potager') {
-            return $html;
-         }
-
-         $replace['#nom#'] = $this->getName(true);
-         $replace['#detail#'] = $this->getConfiguration('detail');
-
+        }
          
-         $replace=$this->replace_f($replace,'Couleur','couleur');
-         $replace=$this->replace_f($replace,'Culture d\'origine','culture');
-         $replace=$this->replace_f($replace,'Origine','origine');
-         $replace=$this->replace_f($replace,'Ensoleillement','ensoleillement');
-         $replace=$this->replace_f($replace,'Distance de plantation','distance_plantation');
-         $replace=$this->replace_f($replace,'Hauteur de la plante','hauteur');
-         $replace=$this->replace_f($replace,'Arrosage','arrosage');
-         $replace=$this->replace_f($replace,'Lieu de culture habituel','lieu_culture');
+    }
+   }
 
-         $replace['#detail#'] = $this->getConfiguration('detail');
-         $replace['#type#'] = '/plugins/jardin/data/img/' . $this->getConfiguration('l_type') . '.png';
+    // ---------- POTAGER ----------
+    if ($type == 'plan') {
+        $html = '';
+        $plugin = plugin::byId('jardin');
+        $eqLogics = eqLogic::byType($plugin->getId());
+        $eqLogics = array_filter($eqLogics, function($var){
+            return $var->getIsEnable() && $var->getConfiguration('type') === 'potager';
+        });
 
-         $cmd=$this->getCmd(null,'etat');
-         $replace['#etat#'] = $cmd->execCmd();
-         log::add('jardin','debug','PROBLEME '.print_r($replace['#etat#'],true));
-         $replace['#img#'] = $this->getPathImgIcon();
-         $qte=$this->getConfiguration('quantite');
-         if($qte == ''){
-            $qte='-';
-         }
+        $html .= '<div class="eqLogicThumbnailContainer" id="menu_top_potager">';
+        $html .= '<div class="cursor eqLogicAction logoPrimary" id="add_item"><i class="fas fa-plus-circle"></i><div class="hide_if_mobile"><span>{{Ajouter}}</span></div></div>';
+        $html .= '<div class="cursor eqLogicAction"><a href="index.php?v=d&m=jardin&p=jardin"><div class="cursor eqLogicAction info"><i class="fas fa-tasks" style="font-size:270%;"></i><div class="hide_if_mobile"><span>{{Gestion}}</span></div></div></a></div>';
+        $html .= '<div class="cursor eqLogicAction"><a class="info" href="index.php?v=d&m=jardin&p=planning"><i class="icon kiko-calendar" style="font-size:265%;"></i><br><br><div class="hide_if_mobile"><span>{{Planning}}</span></div></a></div>';
+        $html .= '<div class="cursor eqLogicAction"><a class="info" href="#"><i class="icon nature-plant30" style="font-size:265%;"></i><br><br><div class="hide_if_mobile"><span>{{Potager}}</span></div></a></div>';
+        $html .= '</div>'; // fin menu_top
 
-         $replace['#qte_semence#']=$qte;
-         $version = jeedom::versionAlias($_version);
-         $version = 'dashboard';
-         $html .= template_replace($replace, getTemplate('core', $version, 'defaut', 'jardin'));
-         return $html;
-      }
+        $html .= '<div id="les_potagers" style="display:none">';
+        foreach ($eqLogics as $eqLogic) {
+            $height = $eqLogic->getConfiguration('height') ?: 300;
+            $width  = $eqLogic->getConfiguration('width')  ?: 300;
+            $lock = (strstr($eqLogic->getConfiguration('options'),'lock#oui#') !== false) ? 'oui' : 'non';
+            $lock_s = (strstr($eqLogic->getConfiguration('options'),'lock_s#oui#') !== false) ? 'oui' : 'non';
+
+            $html .= '<div class="un_plan_potager_father" lock="'.$lock.'" lock_s="'.$lock_s.'" id_plan="'.$eqLogic->getId().'" nom_plan="'.$eqLogic->getName().'">';
+            $html .= '<div class="un_plan_potager_bk_terre un_plan_potager" style="display:none;height:'.$height.'px;width:'.$width.'px" id_plan="'.$eqLogic->getId().'"></div>';
+            $html .= '</div>';
+        }
+        $html .= '</div>'; // fin les_potagers
+
+        if (count($eqLogics) == 0) {
+            $html .= '<div id="aucun_potager" style="color:red"><br><br>Vous n\'avez pas encore créé de potager ! Cliquez sur le bouton « + » ci-dessus.</div>';
+        } else {
+            $html .= '<div id="load_wait">Chargement des potagers...</div>';
+        }
+
+        return $html; // Retourne arrosage + plan potager
+    }
+
+    // ---------- DEFALT / SEMENCE ----------
+    if ($type == 'semence') {
+      $html = '';
+      log::add('jardin', 'debug', '> toHtml semence ' . $type);
+    $replace['#nom#'] = $this->getName(true);
+    $replace['#detail#'] = $this->getConfiguration('detail');
+
+    $replace = $this->replace_f($replace,'Couleur','couleur');
+    $replace = $this->replace_f($replace,'Culture d\'origine','culture');
+    $replace = $this->replace_f($replace,'Origine','origine');
+    $replace = $this->replace_f($replace,'Ensoleillement','ensoleillement');
+    $replace = $this->replace_f($replace,'Distance de plantation','distance_plantation');
+    $replace = $this->replace_f($replace,'Hauteur de la plante','hauteur');
+    $replace = $this->replace_f($replace,'Arrosage','arrosage');
+    $replace = $this->replace_f($replace,'Lieu de culture habituel','lieu_culture');
+
+    $replace['#detail#'] = $this->getConfiguration('detail');
+    $replace['#type#'] = '/plugins/jardin/data/img/' . $this->getConfiguration('l_type') . '.png';
+
+    $cmd = $this->getCmd(null,'etat');
+    $replace['#etat#'] = $cmd->execCmd();
+    $replace['#img#'] = $this->getPathImgIcon();
+
+    $qte = $this->getConfiguration('quantite') ?: '-';
+    $replace['#qte_semence#'] = $qte;
+
+    $html .= template_replace($replace, getTemplate('core', 'dashboard', 'defaut', 'jardin'));
+
+    return $html;
+    }
+}
+
+      
 
       public static function dataToWidget($id_eqlogic, $idarrosage)
       {
@@ -2221,19 +2252,48 @@ public function get_info(){
                      ) tab1 ORDER BY datetime DESC LIMIT 1
                ', NULL, DB::FETCH_TYPE_ROW)['value'];
          }
+         $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'MMM');
+         $mois = ucfirst($formatter->format(new DateTime()));
 
-         $return = array(
-            'img' => $etatValue == 0 ? "plugins/jardin/data/img/arrosage/sprinklerOff.png" : "plugins/jardin/data/img/arrosage/sprinklerOn.png",
-            'DateLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : $arrayConso['0']['datetime'],
-            'DureeLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : convertDuration($arrayConso['0']['duree']),
-            'TypeLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : $TypeLastArrosage,
-            'ConsoLastArrosage' => empty($arrayConso['0']['duree']) ? "No Data" : round($arrayConso['0']['conso']) . " L",
-            'ConsoJour' => $ConsoJour < 1000 ? round($ConsoJour) . ' L/Today' : round($ConsoJour / 1000, 1) . ' m3/Today',
-            'ConsoSemaine' => $ConsoSemaine < 1000 ? round($ConsoSemaine) . ' L/This Week' : round($ConsoSemaine / 1000, 1) . ' m3/this Week',
-            'ConsoMois' => $ConsoMois < 1000 ? round($ConsoMois) . ' L/' . date("M") : round($ConsoMois / 1000, 1) . ' m3/' . date("M"),
-            'ConsoAn' => $ConsoAn < 1000 ? round($ConsoAn) . ' L/' . date("Y") : round($ConsoAn / 1000, 1) . ' m3/' . date("Y"),
-         );
-         return $return;
+$return = array(
+    'img' => $etatValue == 0 
+        ? "plugins/jardin/data/img/arrosage/sprinklerOff.png" 
+        : "plugins/jardin/data/img/arrosage/sprinklerOn.png",
+
+    'DateLastArrosage' => empty($arrayConso['0']['duree']) 
+        ? "No Data" 
+        : $arrayConso['0']['datetime'],
+
+    'DureeLastArrosage' => empty($arrayConso['0']['duree']) 
+        ? "No Data" 
+        : convertDuration($arrayConso['0']['duree']),
+
+    'TypeLastArrosage' => empty($arrayConso['0']['duree']) 
+        ? "No Data" 
+        : $TypeLastArrosage,
+
+    'ConsoLastArrosage' => empty($arrayConso['0']['duree']) 
+        ? "No Data" 
+        : round($arrayConso['0']['conso']) . " L",
+
+    'ConsoJour' => $ConsoJour < 1000 
+        ? round($ConsoJour) . " L/Aujourd'hui" 
+        : round($ConsoJour / 1000, 1) . " m3/Aujourd'hui",
+
+    'ConsoSemaine' => $ConsoSemaine < 1000 
+        ? round($ConsoSemaine) . ' L/Semaine' 
+        : round($ConsoSemaine / 1000, 1) . ' m3/Semaine',
+
+    'ConsoMois' => $ConsoMois < 1000 
+        ? round($ConsoMois) . ' L/' . $mois 
+        : round($ConsoMois / 1000, 1) . ' m3/' . $mois,
+
+    'ConsoAn' => $ConsoAn < 1000 
+        ? round($ConsoAn) . ' L/' . date("Y") 
+        : round($ConsoAn / 1000, 1) . ' m3/' . date("Y"),
+);
+
+return $return;
       }      
 }
 
