@@ -2252,8 +2252,24 @@ public function get_info(){
                      ) tab1 ORDER BY datetime DESC LIMIT 1
                ', NULL, DB::FETCH_TYPE_ROW)['value'];
          }
-         $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'MMM');
-         $mois = ucfirst($formatter->format(new DateTime()));
+// Tableau des mois en français
+$moisFrancais = array(
+    1 => "Janvier",
+    2 => "Février",
+    3 => "Mars",
+    4 => "Avril",
+    5 => "Mai",
+    6 => "Juin",
+    7 => "Juillet",
+    8 => "Août",
+    9 => "Septembre",
+    10 => "Octobre",
+    11 => "Novembre",
+    12 => "Décembre"
+);
+
+// Mois complet en toutes lettres
+$mois = $moisFrancais[date("n")]; 
 
 $return = array(
     'img' => $etatValue == 0 
