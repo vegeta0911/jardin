@@ -298,7 +298,7 @@ function programNext(_eqLogic, un_arrosage, numProg = 0) {
     div += '<label class="col-sm-2 control-label">{{Timer (min)}}</label>';
     div += '<div class="col-sm-7"  >';
     div += '<div class="input-group">';
-    div += '<input data-type="cmd_arrosage" data-l1key="cmd" type="test" class=" expressionAttr un_declencheur_item un_timer_item form-control" placeholder="en min" value="' + element + '"/>';
+    div += '<input data-type="cmd_arrosage" data-l1key="cmd" type="test" class=" expressionAttr un_declencheur_item un_timer_item form-control" placeholder="en min ou commande" value="' + element + '"/>';
     div += '<span class="input-group-btn">';
     div += '<a class="btn btn-default listCmdInfo roundedRight"><i class="fas fa-list-alt"></i></a>';
     div += '<a class="btn btn-default cursor jeeHelper roundedRight remove_programmation"  title="Supprimer">';
