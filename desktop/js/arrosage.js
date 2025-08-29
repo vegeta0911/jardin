@@ -113,13 +113,6 @@ function addArrosage(un_arrosage){
     var el = $(this);
     var arrosage_el=el.closest('.un_arrosage');
 
-    /*bootbox.confirm('{{Etes-vous sûr de vouloir supprimer cet arrosage }} ?', function (result) {
-      if (result !== false) {
-        el.closest('.un_arrosage').remove();
-        modifyWithoutSave=true;
-        supprimer_arrosage(arrosage_el.attr('id_arrosage'));
-      }
-    });*/
       $('#md_modal').html("{{Etes-vous sûr de vouloir supprimer cet arrosage ?}}").dialog({
                 title: "{{Suppression de l'arrosage}}",
                 width: 'auto',
@@ -300,12 +293,14 @@ function programNext(_eqLogic, un_arrosage, numProg = 0) {
 }
 
   function ajouter_timer(un_arrosage,element){
+    
     var div = '<div class="form-group un_timer" >';
     div += '<label class="col-sm-2 control-label">{{Timer (min)}}</label>';
     div += '<div class="col-sm-7"  >';
     div += '<div class="input-group">';
-    div += '<input type="test" class=" un_timer_item form-control" placeholder="en min" value="' + element + '"/>';
+    div += '<input data-type="cmd_arrosage" data-l1key="cmd" type="test" class=" expressionAttr un_declencheur_item un_timer_item form-control" placeholder="en min" value="' + element + '"/>';
     div += '<span class="input-group-btn">';
+    div += '<a class="btn btn-default listCmdInfo roundedRight"><i class="fas fa-list-alt"></i></a>';
     div += '<a class="btn btn-default cursor jeeHelper roundedRight remove_programmation"  title="Supprimer">';
     div += '<i class="far fa-trash-alt"></i>';
     div += '</a>';
@@ -316,6 +311,7 @@ function programNext(_eqLogic, un_arrosage, numProg = 0) {
 
     var el=un_arrosage.find('.cd_fin_arrosage').last().parent();
     if(el.parent().find('.un_timer').length > 0){
+        console.log('element: ' + element);
         bootbox.alert('Il y a deja un timer , un seul timer par arrosage !')
     }else{
         el.after(div)
@@ -543,7 +539,7 @@ debugC=null;
 objT=null;
 function load_arrosage(_eqLogic){
   objT=_eqLogic;
-  console.log(objT.configuration.type)
+  console.log(objT/*.configuration.type*/)
   if(isset(objT.configuration.liste_arrosage) && Array.isArray(objT.configuration.liste_arrosage) && objT.configuration.liste_arrosage.length > 0 ){
     $('#l_arrosage').empty();
   }
@@ -578,8 +574,9 @@ function load_arrosage(_eqLogic){
             });
 
             if(un_arrosage.timer != ''){
-                ajouter_timer(arrosage,un_arrosage.timer,null,'')
+               ajouter_timer(arrosage,un_arrosage.timer,null,'');
             }
+            
 
             if(un_arrosage.timer=='' && un_arrosage.liste_cd_fin.length == 0){
               $('#md_modal').html("ATTENTION : L'arrosage '" + un_arrosage.nom + "' n'a aucune condition de fin d'arrosage ni de timer !").dialog({
@@ -607,73 +604,92 @@ function testRom()
 
   save_arrosage(objT);
 }
-function save_arrosage(_eqLogic){
-
+function save_arrosage(_eqLogic) {
+    if (!_eqLogic.configuration) _eqLogic.configuration = {};
     _eqLogic.configuration.liste_arrosage = [];
-    _eqLogic.configuration.need_refresh_cron_listener='oui'
-    
+    _eqLogic.configuration.need_refresh_cron_listener = 'oui';
+
     $('.un_arrosage').each(function () {
-        var un_arrosage={};
-        un_arrosage.id=$(this).attr('id_arrosage');
-        un_arrosage.nom=$(this).find('.nom_arrosage').last().val();
-        un_arrosage.declencheur=$(this).find('.declencheur').last().val();
-        un_arrosage.conso_arrosage=$(this).find('.conso_arrosage').last().val();
-        un_arrosage.visible_arrosage=$(this).find('.visible_arrosage').last().prop('checked');
-        un_arrosage.liste_declencheur=[];
-        un_arrosage.liste_programmation=[];
-        un_arrosage.liste_an_declencheur=[];
-        un_arrosage.liste_start=[];
-        un_arrosage.liste_end=[];
-        un_arrosage.timer='';
-        un_arrosage.liste_cd_fin=[];
-         //console.log(_eqLogic)
-        //declencheur
-        $(this).find('.un_declencheur_').each( function() {
-            //var un_declencheur=$(this).find('.un_declencheur_item').last().val();
-            var un_declencheur = $(this).last().getValues('.expressionAttr')[0];
-            un_arrosage.liste_declencheur.splice(0, 0, un_declencheur)
-        })
-        //prog
-        $(this).find('.une_programmation').each( function(){
-            var une_programmation=$(this).find('.une_prog_item').last().val();
-            //var une_programmation = $(this).last().getValues('.expressionAttr')[0];
-            un_arrosage.liste_programmation.splice(0, 0, une_programmation) 
-        })
-        //an declencheur
-        $(this).find('.un_declencheur_an_declencheur').each( function(){
-            //var un_declencheur_an=$(this).find('.un_declencheur_item').last().val();
-            var un_declencheur_an = $(this).last().getValues('.expressionAttr')[0];
-            un_arrosage.liste_an_declencheur.splice(0, 0, un_declencheur_an)
-        })
-        //liste_cd_fin
-        $(this).find('.un_declencheur_cd_fin_arrosage').each( function(){
-            //var cond_fin=$(this).find('.un_declencheur_item').last().val();
+        var un_arrosage = {};
+        un_arrosage.id = $(this).attr('id_arrosage');
+        un_arrosage.nom = $(this).find('.nom_arrosage').last().val();
+        un_arrosage.declencheur = $(this).find('.declencheur').last().val();
+        un_arrosage.conso_arrosage = $(this).find('.conso_arrosage').last().val();
+        un_arrosage.visible_arrosage = $(this).find('.visible_arrosage').last().prop('checked');
+
+        un_arrosage.liste_declencheur = [];
+        un_arrosage.liste_programmation = [];
+        un_arrosage.liste_an_declencheur = [];
+        un_arrosage.liste_start = [];
+        un_arrosage.liste_end = [];
+        un_arrosage.liste_cd_fin = [];
+        un_arrosage.timer = '';
+
+        // Déclencheurs
+        $(this).find('.un_declencheur_').each(function() {
+            var declencheur = $(this).last().getValues('.expressionAttr')[0];
+            if (declencheur) un_arrosage.liste_declencheur.unshift(declencheur);
+        });
+
+        // Programmations
+        $(this).find('.une_programmation').each(function() {
+            var prog = $(this).find('.une_prog_item').last().val();
+            un_arrosage.liste_programmation.unshift(prog);
+        });
+
+        // Annulateurs
+        $(this).find('.un_declencheur_an_declencheur').each(function() {
+            var annuleur = $(this).last().getValues('.expressionAttr')[0];
+            if (annuleur) un_arrosage.liste_an_declencheur.unshift(annuleur);
+        });
+
+        // Conditions de fin
+        $(this).find('.un_declencheur_cd_fin_arrosage').each(function() {
             var cond_fin = $(this).last().getValues('.expressionAttr')[0];
-            un_arrosage.liste_cd_fin.splice(0, 0, cond_fin) 
-        })
+            if (cond_fin) un_arrosage.liste_cd_fin.unshift(cond_fin);
+        });
 
-        //actions_start_arrosage
-        $(this).find('.un_declencheur_actions_start_arrosage').each( function(){
-            //var action=$(this).find('.un_declencheur_item').last().val();
+        // Actions start
+        $(this).find('.un_declencheur_actions_start_arrosage').each(function() {
             var action = $(this).last().getValues('.expressionAttr')[0];
-            un_arrosage.liste_start.splice(0, 0, action)
-        })
+            if (action) un_arrosage.liste_start.unshift(action);
+        });
 
-        //actions_stop_arrosage
-        $(this).find('.un_declencheur_actions_stop_arrosage').each( function(){
-            //var action=$(this).find('.un_declencheur_item').last().val();
+        // Actions stop
+        $(this).find('.un_declencheur_actions_stop_arrosage').each(function() {
             var action = $(this).last().getValues('.expressionAttr')[0];
-            un_arrosage.liste_end.splice(0, 0, action)
-        })
+            if (action) un_arrosage.liste_end.unshift(action);
+        });
 
-        if($(this).find('.un_timer_item').length == 1){
-            un_arrosage.timer=$(this).find('.un_timer_item').last().val();
-        }
+        // Timer
+      if($(this).find('.un_timer_item').length == 1){
+       /* var timerInput = $(this).find('.un_timer_item').last();
+        if (timerInput.length) {
+            var valeur = timerInput.val(); // valeur brute, peut être #[…]#
+            un_arrosage.timer = valeur;   // on garde la chaîne même si c’est une commande Jeedom
 
-        
-        
-
-        _eqLogic.configuration.liste_arrosage.push(un_arrosage)
-    })
+            if (/^#.*#$/.test(valeur)) {
+                // C'est une commande Jeedom
+                var cmdObj = current_element.cmd.find(c => c.name === valeur || c.logicalId === valeur);
+              var matches = valeur.match(/^#\[(.*?)\]\[(.*?)\]\[(.*?)\]#$/);
+if (matches && Array.isArray(current_element.cmd)) {
+    var eqName = matches[2];    // Jardin Essai
+    var cmdName = matches[3];   // Etat arrosage -Nouvel arrosage 0
+    cmdObj = current_element.cmd.find(c => c.name === cmdName /* && c.eqType === eqName si nécessaire *//*);
+}
+           console.log("Valeur trouvée :", cmdObj)
+           //un_arrosage.timer = cmdObj.state;
+ 
+            }else {*/
+            
+             un_arrosage.timer = $(this).find('.un_timer_item').last().val();
+            /*}
+        }*/
+      }
+       console.log("Valeur trouvée :",  un_arrosage.timer)
+        // Ajouter l’arrosage à la configuration
+        _eqLogic.configuration.liste_arrosage.push(un_arrosage);
+    });
+     
     return _eqLogic;
 }
