@@ -405,7 +405,7 @@ function programNext(_eqLogic, un_arrosage, numProg = 0) {
 
   $("body").off('click','.remove_programmation').on('click','.remove_programmation',function () {
     modifyWithoutSave = true;
-
+    $(this).parent().parent().parent().parent().remove();
     // Trouver le bloc "une_programmation"
     const progDiv = $(this).closest('.une_programmation');
 
