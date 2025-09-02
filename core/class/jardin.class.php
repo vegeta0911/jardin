@@ -722,7 +722,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    }
 }
 
-   public function unset_listeners_one_arrosage($arrosage){
+   public function unset_listeners_one_arrosage($un_arrosage){
       log::add('jardin', 'debug', '   > unset_listeners_one_arrosage ' . $un_arrosage['id']);
       $options=[];
       $options['potager_id']=$this->getId();
@@ -732,7 +732,7 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
          $listener->remove();
       }
 
-      $listener = listener::byClassAndFunction('jardin', 'listener_stop' . $action, $options);
+      $listener = listener::byClassAndFunction('jardin', 'listener_stop', $options);
       if (is_object($listener)) {
          $listener->remove();
       }
