@@ -259,6 +259,15 @@ public function set_etat_arrosage($id_arrosage,$etat='off', $conso=0){
       return false; //id null
    }
    $liste_cf_arrosage=$this->getConfiguration('liste_cf_arrosage');
+    // Normaliser en tableau
+     if (is_string($liste_cf_arrosage)) {
+         $decoded = json_decode($liste_cf_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_cf_arrosage = $decoded;
+      } else {
+         $liste_cf_arrosage = [];
+      }
+     }
    foreach($liste_cf_arrosage as $key => $une_cf_arrosage){
       if($une_cf_arrosage['id'] == $id_arrosage){
          $une_cf_arrosage['etat']=$etat;
@@ -318,10 +327,26 @@ public function del_conf_arrosage($id_arrosage){
 public function refresh_conf_arrosage(){
    log::add('jardin', 'debug', '> refresh_conf_arrosage');
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
+   // Normaliser en tableau
+     if (is_string($liste_arrosage)) {
+         $decoded = json_decode($liste_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_arrosage = $decoded;
+      } else {
+         $liste_arrosage = [];
+      }
+     }
    $liste_cf_arrosage= $this->getConfiguration('liste_cf_arrosage');
   //log::add('potager', 'debug', '> liste_cf_arrosage count ' . $this->getConfiguration('liste_cf_arrosage'));
    //log::add('potager', 'debug', '> liste_arrosage count ' . count($liste_arrosage));
-
+     if (is_string($liste_cf_arrosage)) {
+         $decoded = json_decode($liste_cf_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_cf_arrosage = $decoded;
+      } else {
+         $liste_cf_arrosage = [];
+      }
+     }
    foreach($liste_cf_arrosage as $key => $une_cf_arrosage){
       //log::add('potager', 'debug', '> une_cf_arrosage');
       $id_found=false;
@@ -368,6 +393,15 @@ public function get_arrosage_by_id($id){
 
 public function unset_all_cron_start_all_arrosage(){
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
+    // Normaliser en tableau
+     if (is_string($liste_arrosage)) {
+         $decoded = json_decode($liste_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_arrosage = $decoded;
+      } else {
+         $liste_arrosage = [];
+      }
+     }
    foreach($liste_arrosage as $key => $un_arrosage){
       $this->unset_all_cron_start_one_arrosage($un_arrosage);
    }
@@ -451,6 +485,15 @@ public function start_all_arrosage(){
 
 public function stop_all_timer_all_arrosage(){
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
+     // Normaliser en tableau
+     if (is_string($liste_arrosage)) {
+         $decoded = json_decode($liste_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_arrosage = $decoded;
+      } else {
+         $liste_arrosage = [];
+      }
+     }
    foreach($liste_arrosage as $key => $un_arrosage){
       $this->stop_timer_arrosage($un_arrosage);
    }
@@ -751,6 +794,15 @@ public function set_listeners_one_arrosage($un_arrosage,$action){ //$action : st
    public function unset_all_listener_all_arrosage(){
       log::add('jardin', 'debug', '> unset_all_listener_all_arrosage');
       $liste_arrosage=$this->getConfiguration('liste_arrosage');
+        // Normaliser en tableau
+     if (is_string($liste_arrosage)) {
+         $decoded = json_decode($liste_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_arrosage = $decoded;
+      } else {
+         $liste_arrosage = [];
+      }
+     }
       foreach($liste_arrosage as $un_arrosage){
          $this->unset_listeners_one_arrosage($un_arrosage);
       }
@@ -1732,6 +1784,20 @@ public function get_info(){
       }
 
       $liste_arrosage=$this->getConfiguration('liste_arrosage');
+      
+      // Normaliser en tableau
+     if (is_string($liste_arrosage)) {
+         $decoded = json_decode($liste_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_arrosage = $decoded;
+      } else {
+         $liste_arrosage = [];
+      }
+     }
+
+if (!is_array($liste_arrosage)) {
+    $liste_arrosage = [];
+}
       foreach($liste_arrosage as $key=>$un_arrosage){
          $id_cmds=[];
          $action = $this->getCmd(null, 'stop_arrosage_#' . $un_arrosage['id']);
@@ -1894,6 +1960,15 @@ public function get_info(){
          log::add('jardin', 'debug', '   > need_refresh_cron_listener NON');
       }
       $liste_arrosage=$this->getConfiguration('liste_arrosage');
+       // Normaliser en tableau
+     if (is_string($liste_arrosage)) {
+         $decoded = json_decode($liste_arrosage, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+         $liste_arrosage = $decoded;
+      } else {
+         $liste_arrosage = [];
+      }
+     }
       foreach ($liste_arrosage as $un_arrosage) {
         if (empty($un_arrosage['liste_programmation'][0])) {
             log::add('jardin', 'debug', "Pas de programmation pour arrosage {$un_arrosage['nom']}");
