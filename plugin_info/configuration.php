@@ -23,7 +23,7 @@ if (!isConnect()) {
 }
 ?>
 
-<form class="form-horizontal parametre_app_potager">
+<form class="form-horizontal">
 <fieldset>
     <legend><i class="fas fa-exclamation-triangle"></i> {{License}}</legend>
     <p>Les images proviennent en partie de 'https://freeicons.io/' et d'autre conçues par Freepik from www.flaticon.com et d'autre par : https://fr.pngtree.com/ </p>
@@ -33,7 +33,7 @@ if (!isConnect()) {
     <div class="form-group" style="">
         <label class="col-sm-4 control-label">{{Veuillez choisir la méthode de communication}}</label>
         <div class="col-sm-6">
-            <div class="input-group">
+            <div class="input-group ">
                 <input class="configKey form-control paramAttr" data-l1key="messagerie" />
                 <span class="input-group-btn">
                     <a class="btn btn-default listCmdAction roundedRight"><i class="fas fa-list-alt"></i></a>
@@ -68,8 +68,16 @@ if (!isConnect()) {
         <div class="col-sm-6">
             <label class="checkbox-inline"><input type="checkbox" class="configKey" data-l1key="notif_peremption" />{{Activer}}</label>
         </div>
-
     </div>
+    
+    <div class="form-group" style="">
+      <label class="col-sm-4 control-label">{{Activer les notifications d'arrosage}}</label>
+         <div class="col-sm-6">
+           <label class="checkbox-inline">
+              <input type="checkbox" class="configKey" data-l1key="notif_arrosage" />{{Activer}}
+          </label>
+        </div>
+       </div>
 
 
 <legend style="display:none"><i class="fas fa-exclamation-triangle" ></i> {{Actions spécifiques}}</legend>
@@ -138,7 +146,7 @@ if (!isConnect()) {
         });
     });
 
-    $(".parametre_app_potager").off('click','.listCmdAction').on('click','.listCmdAction', function () {
+    $("body").off('click','.listCmdAction').on('click','.listCmdAction', function () {
     var el = $(this).closest('.form-group').find('.paramAttr');
     jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
         if (el.attr('data-concat') == 1) {
