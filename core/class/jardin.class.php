@@ -31,7 +31,7 @@ class jardin extends eqLogic {
       if($this->getIsEnable() == 0){
 			return false;
 		}
-
+      
    }
 
    public function debug(){
@@ -91,11 +91,29 @@ class jardin extends eqLogic {
       return $result;
   }
 
+private function sendNotifArrosage($nom, $etat) {
+    if (config::byKey('notif_arrosage', 'jardin', 0) == 1) {
+        $cmdNotif = config::byKey('messagerie', 'jardin', '');
+        if ($cmdNotif != '') {
+            $message = "L'arrosage « " . $nom . " » a été " . $etat . ".";
+            $options = array('message' => $message, 'title' => 'Arrosage');
+            scenarioExpression::createAndExec('action', $cmdNotif, $options);
+            log::add('jardin', 'info', 'Notification envoyée : ' . $message);
+        } else {
+            log::add('jardin', 'warning', 'Aucune commande de notification définie.');
+        }
+    } else {
+        log::add('jardin', 'info', 'Notification désactivée pour l’arrosage.');
+    }
+}
+  
 //parcours les declencheurs et s'assure que 1 est bien validé
 public function check_start_arrosage(){
    if($this->getIsEnable() == 0){
       return;
    }
+   jardin::notifications();
+
    log::add('jardin', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . '');
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
    if($liste_arrosage == ''){
@@ -179,6 +197,7 @@ public function start_arrosage($un_arrosage,$key,$mode_force=false, $timer_manua
 
    log::add('jardin', 'debug', '> check_start_arrosage : ' . $this->getHumanName() . ' ' . $un_arrosage['nom'] . ' - Set etat arrosage ON - '  .$un_arrosage['id']);
    $this->set_etat_arrosage($un_arrosage['id'], $timer_manual === false ? 'on' : 'manual',$un_arrosage['conso_arrosage'] );
+   $this->sendNotifArrosage($un_arrosage['nom'], 'démarré');
 
 
    //s'il y a un timer, on le lance
@@ -538,6 +557,7 @@ public function stop_arrosage($un_arrosage,$key){ //force utiliser pour forcer l
    $this->save();
 
    $this->set_etat_arrosage($un_arrosage['id'],'off');
+   $this->sendNotifArrosage($un_arrosage['nom'], 'arrêté');
 }
 
 public function stop_timer_arrosage($un_arrosage){
@@ -1327,7 +1347,7 @@ public function get_info(){
          return $this->notifications_ns();
       }
 
-      public function notifications_ns($force_mode=false){
+      public function notifications_ns($force_mode=true){
          $eqLogic=$this;
          $result=array("notif_semis"=>"","notif_met"=>"","notif_recolte"=>"","notif_peremption"=>"","notif_tache"=>"");
          
@@ -1500,7 +1520,19 @@ public function get_info(){
          log::add('jardin', 'debug', '=============FIN CRON Notifications NS=================');
          return $result;
       }
+      
+      public static function sendNotificationArrosage($arrosageName, $etat, $message = '') {
+         $texte = "[Arrosage]" . $arrosageName . " est maintenant " . $etat;
+    if ($message != '') {
+        $texte .= " : " . $message;
+    }
 
+    // Envoi de la notification via Jeedom
+    jardin::send_notifications($texte);
+
+    // Optionnel : log dans debug
+    log::add('jardin', 'info', "Notification arrosage : " . $texte);
+}
       public static function notifications(){
          log::add('jardin', 'debug', '=============CRON Notifications=================');
 
@@ -1527,7 +1559,7 @@ public function get_info(){
             }
 
             $type=$eqLogic->getConfiguration('type');
-            if($type == 'potager'){
+            if($type != 'potager'){
                continue;
             }
             if($type == 'lune'){
@@ -1566,7 +1598,7 @@ public function get_info(){
 
             if( config::byKey('notif_semis', __CLASS__) == 1 && $date_semis='' && $eqLogic->getConfiguration('semis_' . ($mois -2)) == 0 && $eqLogic->getConfiguration('semis_' . ($mois -1)) == 1 && $jour==1){
                log::add('jardin', 'debug', '   > Notif Semis');
-               //potager::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de semis');
+               jardin::send_notifications('[potager] &#x1F343 ' . $nom . ' ' . $detail . ' entre en période de semis');
                if($notif_semis != ''){
                   $notif_semis=$notif_semis.',&#x0A;';
                }
