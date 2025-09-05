@@ -150,7 +150,30 @@ try {
     }
 
 
-    
+    if (init('action') == 'sendNotificationArrosage') {
+    if (config::byKey('notif_arrosage', 'jardin', 0) == 1) {
+                $cmdNotif = config::byKey('messagerie', 'jardin', '');
+                if ($cmdNotif != '') {
+                    $etat = init('etat', 'démarré'); // valeur envoyée par l’AJAX
+                    $nom = init('arrosageName', 'Arrosage');
+                    $message = "L'arrosage « " . $nom . " » a été " . $etat . ".";
+                    $options = array('message' => $message, 'title' => 'Arrosage');
+
+                    // Envoi via la commande choisie dans la config
+                    scenarioExpression::createAndExec('action', $cmdNotif, $options);
+
+                    log::add('jardin', 'info', 'Notification envoyée : ' . $message);
+                    ajax::success("Notification envoyée : " . $message);
+                  return;
+                } else {
+                    ajax::error("Aucune commande de notification définie dans la config.");
+                }
+            } else {
+                log::add('jardin', 'info', 'Notification d’arrosage désactivée.');
+                ajax::success("Notification désactivée pour l'arrosage.");
+            }
+    }
+  
     if (init('action') == 'get_elements_plan') {
       $object = jardin::byId(init('object_id'));
 
@@ -494,4 +517,3 @@ try {
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
-
