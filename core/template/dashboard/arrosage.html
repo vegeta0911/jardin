@@ -52,7 +52,6 @@
         </div>
     </div>
 </div>
-</div>
 
     <script>
 
@@ -140,25 +139,45 @@
         
         function action_arrosage#idArrosage#(id_arrosage, action, timer = false) {
             $.ajax({
-                type: 'POST',
-                url: 'plugins/jardin/core/ajax/jardin.ajax.php',
+        type: 'POST',
+        url: 'plugins/jardin/core/ajax/jardin.ajax.php',
+        data: {
+            action: 'action_arrosage',
+            id: init(#id#),
+            action_arrosage: init(action),
+            id_arrosage: init(id_arrosage),
+            timer_manual: init(timer)
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state != 'ok') {
+                $('#div_alert').showAlert({ message: data.result, level: 'danger' });
+                return;
+            }
+
+            // ENVOI NOTIFICATION après succès
+            var nom = $('#img' + id_arrosage).closest('.eqLogic-widget').find('.widget-name .reportModeVisible').text().trim() || 'Arrosage';
+
+            $.ajax({
+                type: "POST",
+                url: "plugins/jardin/core/ajax/jardin.ajax.php",
                 data: {
-                    action: 'action_arrosage',
-                    id: init(#id#),
-                    action_arrosage: init(action),
-                    id_arrosage: init(id_arrosage),
-                    timer_manual: init(timer)
+                    action: "sendNotificationArrosage",
+                    arrosageName: nom,
+                    etat: (action === 'start') ? 'démarré' : 'arrêté'
                 },
                 dataType: 'json',
-                error: function (request, status, error) {
-                    handleAjaxError(request, status, error);
+                success: function (notif) {
+                    console.log("✅ Notification envoyée :", notif.result);
                 },
-                success: function (data) {
-                    if (data.state != 'ok') {
-                        $('#div_alert').showAlert({ message: data.result, level: 'danger' });
-                        return;
-                    }
+                error: function (request, status, error) {
+                    console.warn("⚠️ Notification non envoyée :", error);
                 }
-            })
+            });
+        }
+    });
         }
 </script>
