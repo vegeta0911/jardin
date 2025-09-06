@@ -1990,7 +1990,7 @@ if (!is_array($liste_arrosage)) {
          $this->refresh_all_listener_arrosage();
          $this->refresh_conf_arrosage();
          $this->save();
-         $this->stop_all_arrosage();
+         //$this->stop_all_arrosage();
       }else{
          log::add('jardin', 'debug', '   > need_refresh_cron_listener NON');
       }
