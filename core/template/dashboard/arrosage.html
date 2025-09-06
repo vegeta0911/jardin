@@ -1,4 +1,4 @@
-<div class="eqLogic eqLogic-widget allowResize " style="width: 450px;height: 120px;#style#"
+<div class="eqLogic eqLogic-widget allowResize " style="width: #width#;height: #height#;#style#"
     data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-eqType="#eqType#"
     data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#">
 
@@ -159,7 +159,7 @@
             }
 
             // ENVOI NOTIFICATION après succès
-            var nom = $('#img' + id_arrosage).closest('.eqLogic-widget').find('.widget-name .reportModeVisible').text().trim() || 'Arrosage';
+           /* var nom = $('#img' + id_arrosage).closest('.eqLogic-widget').find('.widget-name .reportModeVisible').text().trim() || 'Arrosage';
 
             $.ajax({
                 type: "POST",
@@ -171,12 +171,12 @@
                 },
                 dataType: 'json',
                 success: function (notif) {
-                    console.log("✅ Notification envoyée :", notif.result);
+                    console.log("Notification envoyée :", notif.result);
                 },
                 error: function (request, status, error) {
-                    console.warn("⚠️ Notification non envoyée :", error);
+                    console.warn("Notification non envoyée :", error);
                 }
-            });
+            });*/
         }
     });
         }
