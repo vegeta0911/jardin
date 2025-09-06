@@ -25,7 +25,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
   function jardin_update() {
-    $eqLogics = eqLogic::byType('potager');
+    $eqLogics = eqLogic::byType('jardin');
     foreach ($eqLogics as $eqLogic) {
       $eqLogic->migration_data();
     }
@@ -33,7 +33,12 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après la suppression du plugin
   function jardin_remove() {
-
+    $cron = cron::byClassAndFunction('jardin');
+    if (is_array($cron)) {
+        foreach ($cron as $c) {
+            $c->remove();
+        }
+    }
   }
 
 ?>

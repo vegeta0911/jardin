@@ -1191,7 +1191,7 @@ usort($eqLogics, array('jardin','cmp'));
 			<!-- Onglet arrosage de l'équipement -->
 			<div role="tabpanel" class="tab-pane" id="arrosagetab" >
 				<p style="padding:10px">Vous pouvez controller vos arrosages ici ! Pensez à SAUVEGARDER !</p>
-				<a id="b_add_arrosage" class="btn btn-default btn-sm pull-right cmdAction" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Créer un arrosage}}</a>
+				<!--a id="b_add_arrosage" class="btn btn-default btn-sm pull-right cmdAction" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Créer un arrosage}}</a-->
 				<br/><br/>
 				<div id="l_arrosage">
 					
