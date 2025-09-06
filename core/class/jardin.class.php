@@ -492,7 +492,7 @@ public function refresh_all_cron_start_all_arrosage(){
 public function stop_all_arrosage(){
    $liste_arrosage=$this->getConfiguration('liste_arrosage');
    foreach($liste_arrosage as $key => $un_arrosage){
-      $this->stop_arrosage($un_arrosage,$key);
+      $this->stop_arrosage($un_arrosage,$key,true);
    }
 }
 public function start_all_arrosage(){
@@ -531,7 +531,7 @@ public function execute_comande($action){
    scenarioExpression::createAndExec('action', $action['cmd'], $options);
 }
 
-public function stop_arrosage($un_arrosage,$key){ //force utiliser pour forcer l'arrosage ou commande via timer atteint
+public function stop_arrosage($un_arrosage,$key,$silent = false){ //force utiliser pour forcer l'arrosage ou commande via timer atteint
    if($this->getIsEnable() == 0){
       return;
    }
@@ -557,7 +557,10 @@ public function stop_arrosage($un_arrosage,$key){ //force utiliser pour forcer l
    $this->save();
 
    $this->set_etat_arrosage($un_arrosage['id'],'off');
-   $this->sendNotifArrosage($un_arrosage['nom'], 'arrêté');
+   if (!$silent && empty($this->silent_mode)) {
+    $this->sendNotifArrosage($un_arrosage['nom'], 'arrêté');
+  }
+   
 }
 
 public function stop_timer_arrosage($un_arrosage){
