@@ -1,4 +1,3 @@
-
 function addArrosage(un_arrosage){
     if (init(un_arrosage) == '') {
       return;
