@@ -33,12 +33,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après la suppression du plugin
   function jardin_remove() {
-    $cron = cron::byClassAndFunction('jardin');
-    if (is_array($cron)) {
-        foreach ($cron as $c) {
-            $c->remove();
-        }
-    }
+    while(is_object($cron=cron::byClassAndFunction('jardin', 'cron_start_arrosage'))) $cron->remove();
   }
 
 ?>
