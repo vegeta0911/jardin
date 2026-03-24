@@ -1,7 +1,11 @@
 <?php 
 require_once('../../desktop/php/configuration_potager.php');
 require_once __DIR__ . '/../../../../core/php/core.inc.php';
+include_file('core', 'authentification', 'php');
 
+if (!isConnect()) {
+    throw new Exception('401 - Accès non autorisé');
+}
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
