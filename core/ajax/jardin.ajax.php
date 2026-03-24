@@ -1,6 +1,6 @@
 <?php 
 require_once('../../desktop/php/configuration_potager.php');
-
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
 /* This file is part of Jeedom.
  *
