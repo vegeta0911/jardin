@@ -582,7 +582,8 @@ try {
         if($type==''){
           continue;
         }
-        $result[$type_s[$type]]=intval($result[$type_s[$type]])+1;
+        $type_label = $type_s[$type] ?? $type;
+        $result[$type_label] = intval($result[$type_label] ?? 0) + 1;
         
       }
       // $result['test 1']=1;
