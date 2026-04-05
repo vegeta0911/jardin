@@ -78,6 +78,25 @@ usort($eqLogics, array('jardin','cmp'));
              <span>{{Ajouter}}</span>
            </div>
         </div>
+
+        <div class="cursor eqLogicAction logoPrimary" id="bt_new_saison">
+            <i class="fas fa-leaf"></i>
+            <br>
+            <div class="hide_if_mobile">
+                <span>{{Nouvelle saison}}</span>
+            </div>
+        </div>
+
+        <div class="cursor eqLogicAction logoPrimary">
+            <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
+                <i class="fas fa-archive" style="font-size:250%;"></i>
+                <br>
+                <br>
+                <div class="hide_if_mobile">
+                    <span>{{Archives}}</span>
+                </div>
+            </a>
+        </div>
  
  
     <div class="cursor eqLogicAction">
@@ -121,6 +140,14 @@ usort($eqLogics, array('jardin','cmp'));
 <script>
 	$('#add_item').off('click').on('click', function () {
 		$("div[data-action='add']")[0].click();
+	});
+
+	$('#bt_new_saison').off('click').on('click', function () {
+		jeeDialog.dialog({
+			id: 'md_new_saison',
+			title: 'Nouvelle saison',
+			contentUrl: 'index.php?v=d&plugin=jardin&modal=newSaison'
+		});
 	});
 </script>
 
