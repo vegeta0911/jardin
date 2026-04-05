@@ -83,7 +83,7 @@ usort($eqLogics, array('jardin','cmp'));
             <i class="fas fa-leaf"></i>
             <br>
             <div class="hide_if_mobile">
-                <span>{{Nouvelle saison}}</span>
+                <span>{{Archiver la saison}}</span>
             </div>
         </div>
 
@@ -145,7 +145,7 @@ usort($eqLogics, array('jardin','cmp'));
 	$('#bt_new_saison').off('click').on('click', function () {
 		jeeDialog.dialog({
 			id: 'md_new_saison',
-			title: 'Nouvelle saison',
+			title: 'Archiver la saison',
 			contentUrl: 'index.php?v=d&plugin=jardin&modal=newSaison'
 		});
 	});
