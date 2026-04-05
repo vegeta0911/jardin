@@ -36,6 +36,17 @@ sendVarToJs('id_plugin', $plugin->getId());
 <style>
 .jardin-archives-page {
     padding-top: 6px;
+    --jardin-card-bg: rgb(var(--defaultBkg-color));
+    --jardin-card-border: rgba(var(--contrast-color), 0.12);
+    --jardin-card-shadow: rgba(var(--contrast-color), 0.12);
+    --jardin-header-start: rgba(var(--panel-bg-color), 0.95);
+    --jardin-header-end: rgba(var(--bg-color), 0.95);
+    --jardin-title-color: var(--link-color);
+    --jardin-muted-color: var(--txt-color);
+    --jardin-stat-bg: rgba(var(--panel-bg-color), 0.8);
+    --jardin-empty-bg: rgba(var(--panel-bg-color), 0.45);
+    --jardin-plan-border: var(--btn-default-color);
+    --jardin-plan-bg: rgb(var(--cat-other-color));
 }
 
 .jardin-archives-menu {
@@ -59,10 +70,10 @@ sendVarToJs('id_plugin', $plugin->getId());
 }
 
 .jardin-archive-card {
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--jardin-card-bg);
+    border: 1px solid var(--jardin-card-border);
     border-radius: 14px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 24px var(--jardin-card-shadow);
     overflow: hidden;
 }
 
@@ -72,19 +83,19 @@ sendVarToJs('id_plugin', $plugin->getId());
     align-items: center;
     gap: 12px;
     padding: 16px 18px;
-    background: linear-gradient(135deg, #eef6df 0%, #f8efe0 100%);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: linear-gradient(135deg, var(--jardin-header-start) 0%, var(--jardin-header-end) 100%);
+    border-bottom: 1px solid var(--jardin-card-border);
 }
 
 .jardin-archive-title {
     font-size: 19px;
     font-weight: 700;
-    color: #3d5427;
+    color: var(--jardin-title-color);
 }
 
 .jardin-archive-date {
     font-size: 12px;
-    color: #6d6d6d;
+    color: var(--jardin-muted-color);
 }
 
 .jardin-archive-header-actions {
@@ -107,7 +118,7 @@ sendVarToJs('id_plugin', $plugin->getId());
 }
 
 .jardin-archive-stat {
-    background: #f8f8f8;
+    background: var(--jardin-stat-bg);
     border-radius: 12px;
     padding: 12px;
     text-align: center;
@@ -117,13 +128,13 @@ sendVarToJs('id_plugin', $plugin->getId());
     display: block;
     font-size: 20px;
     font-weight: 700;
-    color: #405d2b;
+    color: var(--jardin-title-color);
 }
 
 .jardin-archive-stat-label {
     display: block;
     font-size: 12px;
-    color: #767676;
+    color: var(--jardin-muted-color);
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
@@ -136,7 +147,7 @@ sendVarToJs('id_plugin', $plugin->getId());
     margin: 0 0 10px 0;
     font-size: 15px;
     font-weight: 700;
-    color: #4a4a4a;
+    color: var(--jardin-title-color);
 }
 
 .jardin-archive-preview-cell {
@@ -144,11 +155,11 @@ sendVarToJs('id_plugin', $plugin->getId());
 }
 
 .jardin-archive-empty {
-    background: #fafafa;
-    border: 1px dashed rgba(0, 0, 0, 0.12);
+    background: var(--jardin-empty-bg);
+    border: 1px dashed var(--jardin-card-border);
     border-radius: 10px;
     padding: 12px;
-    color: #727272;
+    color: var(--jardin-muted-color);
 }
 
 .jardin-plan-preview-wrap {
@@ -158,10 +169,10 @@ sendVarToJs('id_plugin', $plugin->getId());
 
 .jardin-plan-preview {
     position: relative;
-    border: 4px solid #d9c7a1;
+    border: 4px solid var(--jardin-plan-border);
     border-radius: 8px;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
-    background: #6f8f4e;
+    background: var(--jardin-plan-bg);
     background-image:
         linear-gradient(45deg, rgba(255,255,255,0.08) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.08) 75%, transparent 75%, transparent),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.04));
