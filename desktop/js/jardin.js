@@ -460,7 +460,7 @@ function printdiv(divName) {
   
 function recap_semence(){
   $.ajax({
-    type: 'GET',
+    type: 'POST',
     url: base_url + '/plugins/jardin/core/ajax/jardin.ajax.php',
     data: {
         action: 'get_recap_semence',
