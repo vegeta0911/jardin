@@ -12,7 +12,7 @@ if (!isConnect('admin')) {
     </div>
 
     <div class="form-group">
-        <label>Nouvelle saison</label>
+        <label>Archiver la saison actuelle</label>
         <input type="number" id="input_saison" class="form-control"
                value="<?php echo date('Y') + 1; ?>">
     </div>
