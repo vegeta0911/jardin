@@ -6,15 +6,23 @@ if (!isConnect('admin')) {
 
 <div style="padding:15px;">
 
+    <?php
+    $currentSaison = config::byKey('saison_active', 'jardin', '');
+    if ($currentSaison === '' || !is_numeric($currentSaison) || intval($currentSaison) >= date('Y')) {
+        $currentSaison = date('Y') - 1;
+    }
+    $currentSaison = intval($currentSaison);
+    ?>
+
     <div class="alert alert-info">
         <b>Saison actuelle :</b>
-        <?php echo config::byKey('saison_active', 'jardin', date('Y')); ?>
+        <?php echo $currentSaison; ?>
     </div>
 
     <div class="form-group">
-        <label>Archiver la saison actuelle</label>
+        <label>Saison suivante</label>
         <input type="number" id="input_saison" class="form-control"
-               value="<?php echo date('Y') + 1; ?>">
+               value="<?php echo $currentSaison + 1; ?>">
     </div>
 
     <div class="alert alert-warning">
