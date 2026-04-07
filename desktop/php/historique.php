@@ -1,6 +1,7 @@
 <?php
 require_once('configuration_potager.php');
-echo '<link rel="stylesheet" href="' . $conf_add_url_root . 'plugins/jardin/desktop/css/menu_top.css">';
+include_file('desktop', 'menu_top', 'css', 'jardin');
+include_file('desktop', 'plan_potager', 'css', 'jardin');
 
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
@@ -267,109 +268,9 @@ sendVarToJs('id_plugin', $plugin->getId());
 
 <div id="div_historique"></div>
 </div>
+<?php include_file('desktop', 'plan_potager_shared', 'js', 'jardin'); ?>
 
 <script>
-function jardinEscapeHtml(value) {
-    return String(value || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function jardinPlanElementStyle(type) {
-    if (type === 'semence') {
-        return 'background:rgba(88, 145, 58, 0.75);border:1px solid #426b2a;color:#fff;';
-    }
-    if (type === 'equipement') {
-        return 'background:rgba(66, 139, 202, 0.75);border:1px solid #245580;color:#fff;';
-    }
-    if (type === 'cmd_action_info') {
-        return 'background:rgba(240, 173, 78, 0.8);border:1px solid #c77c11;color:#fff;';
-    }
-    return 'background:rgba(120, 120, 120, 0.75);border:1px solid #555;color:#fff;';
-}
-
-function jardinFindPlanLabel(element, plantes) {
-    if (element.type === 'semence') {
-        const plante = (plantes || []).find(function(item) {
-            return String(item.id) === String(element.id_bdd);
-        });
-        if (plante && plante.nom) {
-            return plante.nom;
-        }
-    }
-    if (element.type === 'equipement') {
-        return 'Equipement';
-    }
-    if (element.type === 'cmd_action_info') {
-        return 'Commande';
-    }
-    return element.type || 'Element';
-}
-
-function jardinRenderPlan(plan, plantes) {
-    const planWidth = parseInt(plan.width || 0, 10) || 300;
-    const planHeight = parseInt(plan.height || 0, 10) || 300;
-    const scale = Math.min(1, 850 / Math.max(planWidth, 1));
-    const renderWidth = Math.max(220, Math.round(planWidth * scale));
-    const renderHeight = Math.max(180, Math.round(planHeight * scale));
-    let html = '';
-
-    html += `<div class="jardin-plan-preview-wrap">`;
-    html += `<div class="jardin-plan-preview" style="width:${renderWidth}px;height:${renderHeight}px;">`;
-
-    (plan.elements || []).forEach(function(rawElement) {
-        const parts = String(rawElement || '').split('|');
-        const element = {
-            type: parts[0] || 'objet',
-            l: parseFloat(parts[1] || 0),
-            t: parseFloat(parts[2] || 0),
-            w: parseFloat(parts[3] || 30),
-            h: parseFloat(parts[4] || 30),
-            id_spec: parts[5] || '',
-            id_bdd: parts[6] || '',
-            angle: parseFloat(parts[7] || 0)
-        };
-
-        const label = jardinFindPlanLabel(element, plantes);
-        const left = Math.round(element.l * scale);
-        const top = Math.round(element.t * scale);
-        const width = Math.max(18, Math.round(element.w * scale));
-        const height = Math.max(18, Math.round(element.h * scale));
-
-        html += `<div class="jardin-plan-preview-item" title="${jardinEscapeHtml(label)}" style="left:${left}px;top:${top}px;width:${width}px;height:${height}px;transform:rotate(${element.angle}deg);transform-origin:center center;${jardinPlanElementStyle(element.type)}">`;
-        html += `${jardinEscapeHtml(label)}`;
-        html += `</div>`;
-    });
-
-    html += `</div>`;
-    html += `</div>`;
-    return html;
-}
-
-function jardinRenderSemisDetails(plante) {
-    const semis = plante.liste_semis || [];
-    if (semis.length === 0) {
-        return '<div class="alert alert-warning" style="margin:10px 0 0 0;">Aucun semis archivé pour cette plante.</div>';
-    }
-
-    let html = '<table class="table table-condensed" style="margin:10px 0 0 0;">';
-    html += '<tr><th>Nom</th><th>Semis</th><th>Germination</th><th>Plantation</th><th>Récolte</th><th>Commentaire</th></tr>';
-    semis.forEach(function(unSemis) {
-        html += '<tr>';
-        html += `<td>${jardinEscapeHtml(unSemis.nom || '')}</td>`;
-        html += `<td>${jardinEscapeHtml(unSemis.d_semis || '')}</td>`;
-        html += `<td>${jardinEscapeHtml(unSemis.d_germination || '')}</td>`;
-        html += `<td>${jardinEscapeHtml(unSemis.d_plantation || '')}</td>`;
-        html += `<td>${jardinEscapeHtml(unSemis.d_recolte || '')}</td>`;
-        html += `<td>${jardinEscapeHtml(unSemis.commentaire || '')}</td>`;
-        html += '</tr>';
-    });
-    html += '</table>';
-    return html;
-}
 
 $.ajax({
     type: "POST",
