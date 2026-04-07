@@ -67,6 +67,18 @@ function jardin_get_plan_elements_archive($eqLogic) {
 }
 
 function jardin_build_semence_snapshot($eqLogic) {
+  $image = $eqLogic->getConfiguration('url_img_ia');
+  if ($image) {
+    if (strpos($image, '/') === false) {
+      $image = 'plugins/jardin/data/img/semences/' . $image;
+    } elseif (strpos($image, 'http://') === 0 || strpos($image, 'https://') === 0 || strpos($image, '//') === 0) {
+      // leave absolute URLs as-is
+    } elseif (strpos($image, 'plugins/jardin/data/img/semences/') === false && strpos($image, '/plugins/jardin/data/img/semences/') === false && strpos($image, 'plugins/jardin/data/img/') === false) {
+      $image = 'plugins/jardin/data/img/semences/' . basename($image);
+    }
+  } else {
+    $image = 'plugins/jardin/data/img/semence.png';
+  }
   return array(
     'id' => $eqLogic->getId(),
     'nom' => $eqLogic->getName(),
@@ -75,6 +87,7 @@ function jardin_build_semence_snapshot($eqLogic) {
     'variete' => $eqLogic->getConfiguration('detail'),
     'liste_semis' => jardin_normalize_array_config($eqLogic->getConfiguration('liste_semis')),
     'rupture' => $eqLogic->getConfiguration('l_rupture'),
+    'image' => $image,
   );
 }
 
@@ -391,6 +404,18 @@ try {
 
     if (init('action') == 'getHistorique') {
       $archives = jardin_get_archives_saisons();
+      // Corriger les images des plantes dans les archives
+      foreach ($archives as $saison => &$archive) {
+        if (isset($archive['plantes']) && is_array($archive['plantes'])) {
+          foreach ($archive['plantes'] as &$plante) {
+            if (!isset($plante['image']) || empty($plante['image'])) {
+              $plante['image'] = 'plugins/jardin/data/img/semence.png';
+            }
+          }
+        }
+      }
+      // Sauvegarder les corrections
+      config::save('archives_saisons', $archives, 'jardin');
       krsort($archives);
       ajax::success($archives);
     }
@@ -703,26 +728,3 @@ try {
       $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
       foreach ($eqLogics as $eqLogic) {
-				if($eqLogic->getIsEnable()){
-          $eqLogic->init_semis();
-        }
-
-      }
-      ajax::success();
-    }
-
-    
-    
-  /* Fonction permettant l'envoi de l'entête 'Content-Type: application/json'
-    En V3 : indiquer l'argument 'true' pour contrôler le token d'accès Jeedom
-    En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
-  */  
-    
-
-
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
