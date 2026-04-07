@@ -115,10 +115,17 @@ try {
     
     if (init('action') == 'newSaison') {
       $newSaison = trim(init('saison'));
-      $oldSaison = config::byKey('saison_active', 'jardin', date('Y'));
+      $oldSaison = config::byKey('saison_active', 'jardin', '');
+      if ($oldSaison === '' || !preg_match('/^\d{4}$/', $oldSaison) || intval($oldSaison) >= date('Y')) {
+        $oldSaison = date('Y') - 1;
+      }
+      $oldSaison = intval($oldSaison);
 
       if ($newSaison === '' || !preg_match('/^\d{4}$/', $newSaison)) {
         throw new Exception('Saison invalide');
+      }
+      if (intval($newSaison) <= $oldSaison) {
+        throw new Exception('Saison suivante invalide');
       }
 
       $dateArchive = date('Y-m-d H:i:s');
