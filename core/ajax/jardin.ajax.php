@@ -724,7 +724,17 @@ try {
       ajax::success();
     }
 
-    if (init('action') == 'init_all_semis') {
+	if (init('action') == 'init_all_semis') {
       $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
       foreach ($eqLogics as $eqLogic) {
+				if($eqLogic->getIsEnable()){
+          $eqLogic->init_semis();
+        }
+
+      }
+      ajax::success();
+    }
+} catch (Exception $e) {
+    ajax::error(displayException($e), $e->getCode());
+}
