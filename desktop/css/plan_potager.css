@@ -562,7 +562,7 @@
     min-height: 25px;
     min-width: 25px;
     background: url('../../../../plugins/jardin/data/img/compost.png');
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-color: none;
 }
