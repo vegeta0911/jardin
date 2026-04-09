@@ -81,9 +81,12 @@ function jardinRenderPlan(plan, plantes) {
     const renderWidth = Math.max(220, Math.round(planWidth * scale));
     const renderHeight = Math.max(180, Math.round(planHeight * scale));
     let html = '';
+    
+    let bkClass = '';
 
     html += '<div class="jardin-plan-preview-wrap">';
-    html += '<div class="jardin-plan-preview" style="width:' + renderWidth + 'px;height:' + renderHeight + 'px;">';
+    html += '<div class="un_plan_potager un_plan_potager_bk_herbe" style="width:' + renderWidth + 'px;height:' + renderHeight + 'px;">';
+    
 
     (plan.elements || []).forEach(function(rawElement) {
         const parts = String(rawElement || '').split('|');
@@ -105,15 +108,14 @@ function jardinRenderPlan(plan, plantes) {
         const width = Math.max(18, Math.round(element.w * scale));
         const height = Math.max(18, Math.round(element.h * scale));
         const typeClass = element.type ? ' ' + element.type + '_img' : '';
-        const style = 'left:' + left + 'px;top:' + top + 'px;width:' + width + 'px;height:' + height + 'px;transform:rotate(' + element.angle + 'deg);transform-origin:center center;' + jardinPlanElementStyle(element.type, !!image) + (image ? '' : 'background-size:contain;background-position:center center;background-repeat:no-repeat;');
-
-        html += '<div class="jardin-plan-preview-item' + (image ? '' : typeClass) + '" title="' + jardinEscapeHtml(label) + '" style="' + style + '">';
+        const style = 'left:' + left + 'px;top:' + top + 'px;width:' + width + 'px;height:' + height + 'px;transform:rotate(' + element.angle + 'deg);transform-origin:center center;' + jardinPlanElementStyle(element.type, !!image) + (image ? '' : 'background-size:cover;background-position:center center;background-repeat:no-repeat;');
+        html += '<div class="un_objet_father">';
+        html += '<div class="un_objet" title="' + jardinEscapeHtml(label) +'" style="' + style + '" >';
+        html += '<div class="un_objet_true ' + (image ? '' : typeClass) + '">';
         if (image) {
             html += '<img src="' + jardinEscapeHtml(image) + '" style="width:100%;height:100%;object-fit:cover;" alt="' + jardinEscapeHtml(label) + '" />';
-        } else {
-            html += jardinEscapeHtml(label);
-        }
-        html += '</div>';
+        } 
+        html += '</div></div></div>';
     });
 
     html += '</div>';
