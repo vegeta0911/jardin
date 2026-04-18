@@ -123,6 +123,20 @@ function jardinRenderPlan(plan, plantes) {
     return html;
 }
 
+function jardinFormatDateFR(dateStr) {
+    if (!dateStr) return '';
+
+    const d = new Date(dateStr);
+
+    if (isNaN(d)) return dateStr; // fallback si déjà formatée
+
+    return d.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
 function jardinRenderSemisDetails(plante) {
     const semis = plante.liste_semis || [];
     if (semis.length === 0) {
@@ -134,10 +148,10 @@ function jardinRenderSemisDetails(plante) {
     semis.forEach(function(unSemis) {
         html += '<tr>';
         html += '<td>' + jardinEscapeHtml(unSemis.nom || '') + '</td>';
-        html += '<td>' + jardinEscapeHtml(unSemis.d_semis || '') + '</td>';
-        html += '<td>' + jardinEscapeHtml(unSemis.d_germination || '') + '</td>';
-        html += '<td>' + jardinEscapeHtml(unSemis.d_plantation || '') + '</td>';
-        html += '<td>' + jardinEscapeHtml(unSemis.d_recolte || '') + '</td>';
+        html += '<td>' + jardinFormatDateFR(unSemis.d_semis || '') + '</td>';
+        html += '<td>' + jardinFormatDateFR(unSemis.d_germination || '') + '</td>';
+        html += '<td>' + jardinFormatDateFR(unSemis.d_plantation || '') + '</td>';
+        html += '<td>' + jardinFormatDateFR(unSemis.d_recolte || '') + '</td>';
         html += '<td>' + jardinEscapeHtml(unSemis.commentaire || '') + '</td>';
         html += '</tr>';
     });
