@@ -144,14 +144,18 @@ function jardinRenderSemisDetails(plante) {
     }
 
     let html = '<table class="table table-condensed" style="margin:10px 0 0 0;">';
-    html += '<tr><th>Nom</th><th>Semis</th><th>Germination</th><th>Plantation</th><th>Récolte</th><th>Commentaire</th></tr>';
+    html += '<tr><th>Nom</th><th>Semis</th><th>QTE Semer</th><th>Germination</th><th>QTE Germer</th><th>Plantation</th><th>QTE Plante</th><th>Récolte</th><th>Poids Récolte</th><th>Commentaire</th></tr>';
     semis.forEach(function(unSemis) {
         html += '<tr>';
         html += '<td>' + jardinEscapeHtml(unSemis.nom || '') + '</td>';
         html += '<td>' + jardinFormatDateFR(unSemis.d_semis || '') + '</td>';
+        html += '<td style="text-align:center;">' + jardinEscapeHtml(unSemis.qte_seme || '') + '</td>';
         html += '<td>' + jardinFormatDateFR(unSemis.d_germination || '') + '</td>';
+        html += '<td style="text-align:center;">' + jardinEscapeHtml(unSemis.qte_germe || '') + '</td>';
         html += '<td>' + jardinFormatDateFR(unSemis.d_plantation || '') + '</td>';
+        html += '<td style="text-align:center;">' + jardinEscapeHtml(unSemis.qte_plante || '') + '</td>';
         html += '<td>' + jardinFormatDateFR(unSemis.d_recolte || '') + '</td>';
+        html += '<td style="text-align:center;">' + jardinEscapeHtml(unSemis.poid_recolte || '') + '</td>';
         html += '<td>' + jardinEscapeHtml(unSemis.commentaire || '') + '</td>';
         html += '</tr>';
     });
