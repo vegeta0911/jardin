@@ -304,11 +304,12 @@ $.ajax({
             html += `<section class="jardin-archive-card">`;
             html += `<div class="jardin-archive-header">`;
             html += `<div>`;
-            html += `<div class="jardin-archive-title">Saison ${jardinEscapeHtml(saison)}</div>`;
-            html += `<div class="jardin-archive-date">${archive.date_archive ? 'Archivée le ' + jardinEscapeHtml(archive.date_archive) : ''}</div>`;
+            //html += `<div class="jardin-archive-title">Saison ${jardinEscapeHtml(saison)}</div>`;
+            html += `<div class="jardin-archive-title">Rapport</div>`;
+            //html += `<div class="jardin-archive-date">${archive.date_archive ? 'Archivée le ' + jardinEscapeHtml(archive.date_archive) : ''}</div>`;
             html += `</div>`;
             html += `<div class="jardin-archive-header-actions">`;
-            html += `<div class="jardin-archive-date">${archive.source_saison_suivante ? 'Saison suivante : ' + jardinEscapeHtml(archive.source_saison_suivante) : ''}</div>`;
+            //html += `<div class="jardin-archive-date">${archive.source_saison_suivante ? 'Saison suivante : ' + jardinEscapeHtml(archive.source_saison_suivante) : ''}</div>`;
             html += `<button type="button" class="btn btn-xs btn-danger bt_delete_archive_saison" data-saison="${jardinEscapeHtml(saison)}">Supprimer</button>`;
             html += `</div>`;
             html += `</div>`;
