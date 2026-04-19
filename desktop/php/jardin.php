@@ -79,13 +79,13 @@ usort($eqLogics, array('jardin','cmp'));
            </div>
         </div>
 
-        <div class="cursor eqLogicAction logoPrimary" id="bt_new_saison">
+        <!--div class="cursor eqLogicAction logoPrimary" id="bt_new_saison">
             <i class="fas fa-leaf"></i>
             <br>
             <div class="hide_if_mobile">
                 <span>{{Archiver la saison}}</span>
             </div>
-        </div>
+		</div-->
 
         <div class="cursor eqLogicAction logoPrimary">
             <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
@@ -93,7 +93,7 @@ usort($eqLogics, array('jardin','cmp'));
                 <br>
                 <br>
                 <div class="hide_if_mobile">
-                    <span>{{Archives}}</span>
+                    <span>{{Rapport}}</span>
                 </div>
             </a>
         </div>
