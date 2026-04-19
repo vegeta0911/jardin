@@ -82,6 +82,16 @@ $eqLogics=array_filter($eqLogics, "filtre_potager");
         </div>
       </a>
     </div>
+	<div class="cursor eqLogicAction logoPrimary">
+        <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
+            <i class="fas fa-archive" style="font-size:250%;"></i>
+            <br>
+            <br>
+            <div class="hide_if_mobile">
+                <span>{{Rapport}}</span>
+            </div>
+        </a>
+    </div>
     <div class="cursor eqLogicAction">
 		<a class="info" href=<?php echo $base_url.'/index.php?v=d&m=jardin&p=planning';?>>
 		    <i class="icon kiko-calendar" style="font-size:265%;"></i>
