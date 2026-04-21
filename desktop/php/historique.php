@@ -220,7 +220,7 @@ sendVarToJs('id_plugin', $plugin->getId());
             </div>
         </div-->
 
-        <div class="cursor eqLogicAction logoPrimary">
+        <div class="cursor eqLogicAction logoPrimary" id="bt_takeSnapshot">
             <a class="info" href="#">
                 <i class="fas fa-archive" style="font-size:250%;"></i>
                 <br>
@@ -327,7 +327,7 @@ $.ajax({
                 html += `<table class="table table-condensed">`;
                 html += `<tr><th>Nom</th><th>Taille</th><th>Eléments</th><th>Aperçu</th></tr>`;
                 plans.forEach(function(plan, index){
-                    const previewId = `archive_plan_${saison}_${index}`;
+                    const previewId = `rapport_plan`;
                     html += `<tr>
                         <td>${jardinEscapeHtml(plan.nom || '')}</td>
                         <td>${plan.width || 0} x ${plan.height || 0}</td>
@@ -460,11 +460,34 @@ $('#add_item').off('click').on('click', function () {
     window.open(base_url + "/index.php?v=d&m=jardin&p=jardin", "_self");
 });
 
-$('#bt_new_saison').off('click').on('click', function () {
+/*$('#bt_new_saison').off('click').on('click', function () {
     jeeDialog.dialog({
         id: 'md_new_saison',
         title: 'Nouvelle saison',
         contentUrl: 'index.php?v=d&plugin=jardin&modal=newSaison'
     });
-});
+});*/
+$('#bt_takeSnapshot').on('click', function() {
+                $.ajax({
+                    type: "POST",
+                    url: "plugins/jardin/core/ajax/jardin.ajax.php",
+                    data: {
+                        action: "takeSnapshot"
+                    },
+                    dataType: 'json',
+                    error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                if (data.state != 'ok') {
+                    message: 'error' + data.result;
+                    return;
+                }
+                message: 'success' + "{{Le snapshot a été généré et les anciennes données ont été écrasées.}}";
+                setTimeout(function() {
+                location.reload();
+            }, 1000);            
+        }
+    });
+});   
 </script>
