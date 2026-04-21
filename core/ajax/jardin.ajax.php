@@ -126,123 +126,93 @@ try {
     
     ob_get_clean();
     
-    if (init('action') == 'newSaison') {
-      $newSaison = trim(init('saison'));
-      $oldSaison = config::byKey('saison_active', 'jardin', '');
-      if ($oldSaison === '' || !preg_match('/^\d{4}$/', $oldSaison) || intval($oldSaison) >= date('Y')) {
-        $oldSaison = date('Y') - 1;
-      }
-      $oldSaison = intval($oldSaison);
-
-      if ($newSaison === '' || !preg_match('/^\d{4}$/', $newSaison)) {
-        throw new Exception('Saison invalide');
-      }
-      if (intval($newSaison) <= $oldSaison) {
-        throw new Exception('Saison suivante invalide');
-      }
-
-      $dateArchive = date('Y-m-d H:i:s');
-      $archives = jardin_get_archives_saisons();
-      if (!isset($archives[$oldSaison]) || !is_array($archives[$oldSaison])) {
-        $archives[$oldSaison] = array();
-      }
-
-      $archives[$oldSaison]['date_archive'] = $dateArchive;
-      $archives[$oldSaison]['saison'] = $oldSaison;
-      $archives[$oldSaison]['source_saison_suivante'] = $newSaison;
-      $archives[$oldSaison]['plans'] = array();
-      $archives[$oldSaison]['plantes'] = array();
-      $archives[$oldSaison]['arrosages'] = array();
-
-      foreach (eqLogic::byType('jardin') as $eqLogic) {
-        $type = $eqLogic->getConfiguration('type', 'semence');
-        log::add('jardin', 'info', 'Archivage eqLogic: ' . $eqLogic->getName() . ' (ID: ' . $eqLogic->getId() . ', Type: ' . $type . ', Enabled: ' . ($eqLogic->getIsEnable() ? 'oui' : 'non') . ')');
-        log::add('jardin', 'info', 'Archivage eqLogic: ' . $eqLogic->getName() . ' (ID: ' . $eqLogic->getId() . ', Type: ' . $type . ', Enabled: ' . ($eqLogic->getIsEnable() ? 'oui' : 'non') . ')');
-
-        if ($type == 'potager') {
-          $archives[$oldSaison]['plans'][] = jardin_build_plan_snapshot($eqLogic);
-
-          $liste = jardin_normalize_array_config($eqLogic->getConfiguration('liste_arrosage'));
-          foreach ($liste as $key => &$arrosage) {
-            if (!isset($arrosage['saison']) || $arrosage['saison'] == '') {
-              $arrosage['saison'] = $oldSaison;
-            }
-
-            if ($arrosage['saison'] != $oldSaison) {
-              continue;
-            }
-
-            $archives[$oldSaison]['arrosages'][] = jardin_build_arrosage_snapshot($eqLogic, $arrosage, $oldSaison, $dateArchive);
-            log::add('jardin', 'info', 'Archivage arrosage : ' . $arrosage['nom']);
-
-            try {
-              $eqLogic->stop_arrosage($arrosage, $key, true);
-            } catch (Exception $e) {
-              log::add('jardin', 'error', 'Erreur stop arrosage : ' . $e->getMessage());
-            }
-
-            if (method_exists($eqLogic, 'stop_timer_arrosage')) {
-              try {
-                $eqLogic->stop_timer_arrosage($arrosage);
-              } catch (Exception $e) {
-                log::add('jardin', 'error', 'Erreur timer arrosage : ' . $e->getMessage());
-              }
-            }
-
-            $arrosage['conso_arrosage'] = 0;
-            $arrosage['duree'] = 0;
-            $arrosage['archive'] = 1;
-            $arrosage['date_archive'] = $dateArchive;
-            $arrosage['etat'] = 'off';
-
-            if (isset($arrosage['id']) && $arrosage['id'] != '') {
-              $eqLogic->set_etat_arrosage($arrosage['id'], 'off');
-            }
-          }
-          unset($arrosage);
-
-          $eqLogic->setConfiguration('liste_arrosage', $liste);
-          $eqLogic->save();
-        } else {
-          $archives[$oldSaison]['plantes'][] = jardin_build_semence_snapshot($eqLogic);
+    if (init('action') == 'takeSnapshot') {
+        $snapshotName = trim(init('name'));
+        if ($snapshotName === '') {
+            $snapshotName = 'Dernier Snapshot (' . date('d/m/Y H:i') . ')';
         }
-      }
 
-      $archives[$oldSaison]['stats'] = array(
-        'plans' => count($archives[$oldSaison]['plans']),
-        'plantes' => count($archives[$oldSaison]['plantes']),
-        'arrosages' => count($archives[$oldSaison]['arrosages']),
-        'conso_totale' => array_reduce($archives[$oldSaison]['arrosages'], function ($carry, $item) {
-          return $carry + floatval(isset($item['conso']) ? $item['conso'] : 0);
-        }, 0),
-      );
+        $dateArchive = date('Y-m-d H:i:s');
+        $snapshotId = 'latest_snapshot'; // ID fixe pour écraser systématiquement la clé précédente
+        
+        // On initialise un tableau vide au lieu de charger les archives existantes
+        // Cela supprime tous les anciens snapshots de la mémoire pour cette sauvegarde
+        $archives = array(); 
 
-      config::save('archives_saisons', $archives, 'jardin');
-      config::save('saison_active', $newSaison, 'jardin');
+        $archives[$snapshotId] = array(
+            'date_archive' => $dateArchive,
+            'nom' => $snapshotName,
+            'plans' => array(),
+            'plantes' => array(),
+            'arrosages' => array()
+        );
 
-      ajax::success(array(
-        'old' => $oldSaison,
-        'new' => $newSaison,
-        'stats' => $archives[$oldSaison]['stats'],
-      ));
+        // Parcours de tous les équipements du plugin Jardin
+        foreach (eqLogic::byType('jardin') as $eqLogic) {
+            $type = $eqLogic->getConfiguration('type', 'semence');
+            
+            if ($type == 'potager') {
+                // Capture de l'état du plan
+                $archives[$snapshotId]['plans'][] = jardin_build_plan_snapshot($eqLogic);
+
+                // Capture de l'historique des arrosages
+                $liste = jardin_normalize_array_config($eqLogic->getConfiguration('liste_arrosage'));
+                foreach ($liste as $arrosage) {
+                    $archives[$snapshotId]['arrosages'][] = jardin_build_arrosage_snapshot($eqLogic, $arrosage, $snapshotId, $dateArchive);
+                }
+            } else {
+                // Capture des plantes et semences
+                $archives[$snapshotId]['plantes'][] = jardin_build_semence_snapshot($eqLogic);
+            }
+        }
+
+        // Statistiques du snapshot unique
+        $archives[$snapshotId]['stats'] = array(
+            'plans' => count($archives[$snapshotId]['plans']),
+            'plantes' => count($archives[$snapshotId]['plantes']),
+            'arrosages' => count($archives[$snapshotId]['arrosages']),
+            'conso_totale' => array_reduce($archives[$snapshotId]['arrosages'], function ($carry, $item) {
+                return $carry + floatval(isset($item['conso']) ? $item['conso'] : 0);
+            }, 0),
+        );
+
+        // Sauvegarde dans la configuration : écrase l'ancienne valeur 'archives_saisons'
+        config::save('archives_saisons', $archives, 'jardin');
+
+        ajax::success(array(
+            'id' => $snapshotId,
+            'name' => $snapshotName,
+            'stats' => $archives[$snapshotId]['stats'],
+        ));
     }
-    //get_info_plan
+
+    /**
+     * Action : Récupérer les infos d'un plan
+     */
     if (init('action') == 'get_info_plan') {
-      $object = jardin::byId(init('object_id'));
-      ajax::success($object->get_info());
+        $object = jardin::byId(init('object_id'));
+        if (!is_object($object)) {
+            throw new Exception(__('Plan introuvable', __FILE__));
+        }
+        ajax::success($object->get_info());
     }
 
-    //ajax plan
+    /**
+     * Action : Sauvegarder la configuration d'un plan
+     */
     if (init('action') == 'save_plan') {
-      //$object = potager::byId(init('object_id'));
-      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax save_plan');
-      $object->setConfiguration('width',init('width'));
-      $object->setConfiguration('height',init('height'));
-      $object->setConfiguration('options',init('options'));
+        $object = jardin::get_potager_check_non_run(init('object_id'), true, 'ajax save_plan');
+        if (!is_object($object)) {
+            throw new Exception(__('Erreur de récupération de l\'objet potager', __FILE__));
+        }
+        
+        $object->setConfiguration('width', init('width'));
+        $object->setConfiguration('height', init('height'));
+        $object->setConfiguration('options', init('options'));
 
-      $object->save();
-      jardin::set_potager_non_run(init('object_id'));
-      ajax::success();
+        $object->save();
+        jardin::set_potager_non_run(init('object_id'));
+        ajax::success();
     }
 
 
