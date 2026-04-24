@@ -92,7 +92,7 @@ usort($eqLogics, array('jardin','cmp'));
             </div> 
         </a>
     </div>
-	<div class="cursor eqLogicAction logoPrimary">
+	<div class="cursor eqLogicAction logoPrimary" id="bt_takeSnapshot">
         <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
             <i class="fas fa-archive" style="font-size:250%;"></i>
             <br>
