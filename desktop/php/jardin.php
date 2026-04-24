@@ -87,18 +87,16 @@ usort($eqLogics, array('jardin','cmp'));
             </div>
 		</div-->
 
-        <div class="cursor eqLogicAction logoPrimary">
-            <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
-                <i class="fas fa-archive" style="font-size:250%;"></i>
-                <br>
-                <br>
-                <div class="hide_if_mobile">
-                    <span>{{Rapport}}</span>
-                </div>
-            </a>
-        </div>
- 
- 
+    <div class="cursor eqLogicAction logoPrimary" id="bt_takeSnapshot">
+        <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
+            <i class="fas fa-archive" style="font-size:250%;"></i>
+            <br>
+            <br>
+            <div class="hide_if_mobile">
+                <span>{{Rapport}}</span>
+            </div>
+        </a>
+    </div>
     <div class="cursor eqLogicAction">
         <a href="#" class="info">
            <i class="fas fa-tasks" style="font-size:270%;"></i>
