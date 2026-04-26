@@ -82,6 +82,16 @@ $eqLogics=array_filter($eqLogics, "filtre_potager");
         </div>
       </a>
     </div>
+	<div class="cursor eqLogicAction logoPrimary" id="bt_takeSnapshot">
+        <a class="info" href="<?php echo $base_url; ?>/index.php?v=d&m=jardin&p=historique">
+            <i class="fas fa-archive" style="font-size:250%;"></i>
+            <br>
+            <br>
+            <div class="hide_if_mobile">
+                <span>{{Rapport}}</span>
+            </div>
+        </a>
+    </div>
     <div class="cursor eqLogicAction">
 		<a class="info" href=<?php echo $base_url.'/index.php?v=d&m=jardin&p=planning';?>>
 		    <i class="icon kiko-calendar" style="font-size:265%;"></i>
@@ -111,6 +121,31 @@ $('#add_item').off('click').on('click', function () {
     window.open(base_url + "/index.php?v=d&m=jardin&p=jardin","_self")
 //    $('#md_modal').dialog({title: "{{Configuration Plugin Potager}}"});
 //    $('#md_modal').load('index.php?v=d&p=plugin&ajax=1&id=' + id_plugin).dialog('open');
+});
+$('#bt_takeSnapshot').on('click', function() {
+                $.ajax({
+                    type: "POST",
+                    url: "plugins/jardin/core/ajax/jardin.ajax.php",
+                    data: {
+                        action: "takeSnapshot"
+                    },
+                    dataType: 'json',
+                    error: function (request, status, error) {
+                        handleAjaxError(request, status, error);
+                    },
+                    success: function (data) {
+                        if (data.state != 'ok') {
+                            message: 'error' + data.result;
+                            return;
+                        }
+                        message: 'success' + "{{Le snapshot a été généré et les anciennes données ont été écrasées.}}";
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                        // On met à jour les informations sur la page
+                        //updateSnapshotUI(data.result);
+                    }
+                });
 });
 </script>
 

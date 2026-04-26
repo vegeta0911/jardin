@@ -1,6 +1,4 @@
 <?php 
-require_once('../../desktop/php/configuration_potager.php');
-
 
 /* This file is part of Jeedom.
  *
@@ -18,6 +16,18 @@ require_once('../../desktop/php/configuration_potager.php');
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+  require_once('../../desktop/php/configuration_potager.php');
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
+include_file('core', 'authentification', 'php');
+
+if (!isConnect()) {
+    throw new Exception('401 - Accès non autorisé');
+}
+
+ajax::init();
+
+
+
 function skip_accents( $str, $charset='utf-8' ) {
  
   $str = htmlentities( $str, ENT_NOQUOTES, $charset );
@@ -29,35 +39,180 @@ function skip_accents( $str, $charset='utf-8' ) {
   return $str;
 }
 
+function jardin_normalize_array_config($value) {
+  if (is_array($value)) {
+    return $value;
+  }
+
+  if (is_string($value) && $value !== '') {
+    $decoded = json_decode($value, true);
+    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+      return $decoded;
+    }
+  }
+
+  return array();
+}
+
+function jardin_get_plan_elements_archive($eqLogic) {
+  $elements = array();
+  $i = 0;
+
+  while ($eqLogic->getConfiguration('element_' . $i) != '') {
+    $elements[] = $eqLogic->getConfiguration('element_' . $i);
+    $i++;
+  }
+
+  return $elements;
+}
+
+function jardin_build_semence_snapshot($eqLogic) {
+  $image = $eqLogic->getConfiguration('url_img_ia');
+  if ($image) {
+    if (strpos($image, '/') === false) {
+      $image = 'plugins/jardin/data/img/semences/' . $image;
+    } elseif (strpos($image, 'http://') === 0 || strpos($image, 'https://') === 0 || strpos($image, '//') === 0) {
+      // leave absolute URLs as-is
+    } elseif (strpos($image, 'plugins/jardin/data/img/semences/') === false && strpos($image, '/plugins/jardin/data/img/semences/') === false && strpos($image, 'plugins/jardin/data/img/') === false) {
+      $image = 'plugins/jardin/data/img/semences/' . basename($image);
+    }
+  } else {
+    $image = 'plugins/jardin/data/img/semence.png';
+  }
+  return array(
+    'id' => $eqLogic->getId(),
+    'nom' => $eqLogic->getName(),
+    'type' => $eqLogic->getConfiguration('type', 'semence'),
+    'categorie' => $eqLogic->getConfiguration('l_type'),
+    'variete' => $eqLogic->getConfiguration('detail'),
+    'liste_semis' => jardin_normalize_array_config($eqLogic->getConfiguration('liste_semis')),
+    'rupture' => $eqLogic->getConfiguration('l_rupture'),
+    'image' => $image,
+  );
+}
+
+function jardin_build_plan_snapshot($eqLogic) {
+  return array(
+    'id' => $eqLogic->getId(),
+    'nom' => $eqLogic->getName(),
+    'width' => $eqLogic->getConfiguration('width'),
+    'height' => $eqLogic->getConfiguration('height'),
+    'options' => $eqLogic->getConfiguration('options'),
+    'elements' => jardin_get_plan_elements_archive($eqLogic),
+  );
+}
+
+function jardin_build_arrosage_snapshot($eqLogic, $arrosage, $saison, $dateArchive) {
+  return array(
+    'id' => isset($arrosage['id']) ? $arrosage['id'] : '',
+    'nom' => isset($arrosage['nom']) ? $arrosage['nom'] : '',
+    'potager_id' => $eqLogic->getId(),
+    'potager_nom' => $eqLogic->getName(),
+    'saison' => $saison,
+    'conso' => isset($arrosage['conso_arrosage']) ? $arrosage['conso_arrosage'] : 0,
+    'duree' => isset($arrosage['duree']) ? $arrosage['duree'] : 0,
+    'etat' => isset($arrosage['etat']) ? $arrosage['etat'] : '',
+    'date' => $dateArchive,
+    'date_archive' => $dateArchive,
+    'archive' => !empty($arrosage['archive']) ? 1 : 0,
+  );
+}
+
+function jardin_get_archives_saisons() {
+  return jardin_normalize_array_config(config::byKey('archives_saisons', 'jardin', array()));
+}
+
 try {
-    require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
-
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
-
-
-
+    
     ob_get_clean();
+    
+    if (init('action') == 'takeSnapshot') {
+        $snapshotName = trim(init('name'));
+        if ($snapshotName === '') {
+            $snapshotName = 'Dernier Snapshot (' . date('d/m/Y H:i') . ')';
+        }
 
-    //get_info_plan
-    if (init('action') == 'get_info_plan') {
-      $object = jardin::byId(init('object_id'));
-      ajax::success($object->get_info());
+        $dateArchive = date('Y-m-d H:i:s');
+        $snapshotId = 'latest_snapshot'; // ID fixe pour écraser systématiquement la clé précédente
+        
+        // On initialise un tableau vide au lieu de charger les archives existantes
+        // Cela supprime tous les anciens snapshots de la mémoire pour cette sauvegarde
+        $archives = array(); 
+
+        $archives[$snapshotId] = array(
+            'date_archive' => $dateArchive,
+            'nom' => $snapshotName,
+            'plans' => array(),
+            'plantes' => array(),
+            'arrosages' => array()
+        );
+
+        // Parcours de tous les équipements du plugin Jardin
+        foreach (eqLogic::byType('jardin') as $eqLogic) {
+            $type = $eqLogic->getConfiguration('type', 'semence');
+            
+            if ($type == 'potager') {
+                // Capture de l'état du plan
+                $archives[$snapshotId]['plans'][] = jardin_build_plan_snapshot($eqLogic);
+
+                // Capture de l'historique des arrosages
+                $liste = jardin_normalize_array_config($eqLogic->getConfiguration('liste_arrosage'));
+                foreach ($liste as $arrosage) {
+                    $archives[$snapshotId]['arrosages'][] = jardin_build_arrosage_snapshot($eqLogic, $arrosage, $snapshotId, $dateArchive);
+                }
+            } else {
+                // Capture des plantes et semences
+                $archives[$snapshotId]['plantes'][] = jardin_build_semence_snapshot($eqLogic);
+            }
+        }
+
+        // Statistiques du snapshot unique
+        $archives[$snapshotId]['stats'] = array(
+            'plans' => count($archives[$snapshotId]['plans']),
+            'plantes' => count($archives[$snapshotId]['plantes']),
+            'arrosages' => count($archives[$snapshotId]['arrosages']),
+            'conso_totale' => array_reduce($archives[$snapshotId]['arrosages'], function ($carry, $item) {
+                return $carry + floatval(isset($item['conso']) ? $item['conso'] : 0);
+            }, 0),
+        );
+
+        // Sauvegarde dans la configuration : écrase l'ancienne valeur 'archives_saisons'
+        config::save('archives_saisons', $archives, 'jardin');
+
+        ajax::success(array(
+            'id' => $snapshotId,
+            'name' => $snapshotName,
+            'stats' => $archives[$snapshotId]['stats'],
+        ));
     }
 
-    //ajax plan
-    if (init('action') == 'save_plan') {
-      //$object = potager::byId(init('object_id'));
-      $object=jardin::get_potager_check_non_run(init('object_id'),true,'ajax save_plan');
-      $object->setConfiguration('width',init('width'));
-      $object->setConfiguration('height',init('height'));
-      $object->setConfiguration('options',init('options'));
+    /**
+     * Action : Récupérer les infos d'un plan
+     */
+    if (init('action') == 'get_info_plan') {
+        $object = jardin::byId(init('object_id'));
+        if (!is_object($object)) {
+            throw new Exception(__('Plan introuvable', __FILE__));
+        }
+        ajax::success($object->get_info());
+    }
 
-      $object->save();
-      jardin::set_potager_non_run(init('object_id'));
-      ajax::success();
+    /**
+     * Action : Sauvegarder la configuration d'un plan
+     */
+    if (init('action') == 'save_plan') {
+        $object = jardin::get_potager_check_non_run(init('object_id'), true, 'ajax save_plan');
+        if (!is_object($object)) {
+            throw new Exception(__('Erreur de récupération de l\'objet potager', __FILE__));
+        }
+        
+        $object->setConfiguration('width', init('width'));
+        $object->setConfiguration('height', init('height'));
+        $object->setConfiguration('options', init('options'));
+
+        $object->save();
+        jardin::set_potager_non_run(init('object_id'));
+        ajax::success();
     }
 
 
@@ -215,6 +370,54 @@ try {
     if (init('action') == 'get_nbr_info_all') {
       $result = jardin::get_nbr_info_s(init('annee'));
       ajax::success($result);
+    }
+
+    if (init('action') == 'getHistorique') {
+      $archives = jardin_get_archives_saisons();
+      // Corriger les images des plantes dans les archives
+      foreach ($archives as $saison => &$archive) {
+        if (isset($archive['plantes']) && is_array($archive['plantes'])) {
+          foreach ($archive['plantes'] as &$plante) {
+            if (!isset($plante['image']) || empty($plante['image'])) {
+              $plante['image'] = 'plugins/jardin/data/img/semence.png';
+            }
+          }
+        }
+      }
+      // Sauvegarder les corrections
+      config::save('archives_saisons', $archives, 'jardin');
+      krsort($archives);
+      ajax::success($archives);
+    }
+
+    if (init('action') == 'debugEqLogic') {
+      $eqLogics = eqLogic::byType('jardin');
+      $result = array();
+      foreach ($eqLogics as $eqLogic) {
+        $result[] = array(
+          'id' => $eqLogic->getId(),
+          'name' => $eqLogic->getName(),
+          'type' => $eqLogic->getConfiguration('type', 'semence'),
+          'enabled' => $eqLogic->getIsEnable()
+        );
+      }
+      ajax::success($result);
+    }
+
+    if (init('action') == 'deleteArchiveSaison') {
+      $saison = trim(init('saison'));
+      if ($saison === '') {
+        throw new Exception('Saison invalide');
+      }
+
+      $archives = jardin_get_archives_saisons();
+      if (!isset($archives[$saison])) {
+        throw new Exception('Archive de saison introuvable');
+      }
+
+      unset($archives[$saison]);
+      config::save('archives_saisons', $archives, 'jardin');
+      ajax::success(array('deleted' => $saison));
     }
     
     if (init('action') == 'del_one_element_plan') {
@@ -381,7 +584,8 @@ try {
         if($type==''){
           continue;
         }
-        $result[$type_s[$type]]=intval($result[$type_s[$type]])+1;
+        $type_label = $type_s[$type] ?? $type;
+        $result[$type_label] = intval($result[$type_label] ?? 0) + 1;
         
       }
       // $result['test 1']=1;
@@ -490,7 +694,7 @@ try {
       ajax::success();
     }
 
-    if (init('action') == 'init_all_semis') {
+	if (init('action') == 'init_all_semis') {
       $plugin = plugin::byId('jardin');
       $eqLogics = eqLogic::byType($plugin->getId());
       foreach ($eqLogics as $eqLogic) {
@@ -501,19 +705,6 @@ try {
       }
       ajax::success();
     }
-
-    
-    
-  /* Fonction permettant l'envoi de l'entête 'Content-Type: application/json'
-    En V3 : indiquer l'argument 'true' pour contrôler le token d'accès Jeedom
-    En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
-  */  
-    ajax::init();
-
-
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
