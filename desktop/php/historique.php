@@ -327,7 +327,7 @@ $.ajax({
                 html += `<table class="table table-condensed">`;
                 html += `<tr><th>Nom</th><th>Taille</th><th>Eléments</th><th>Aperçu</th></tr>`;
                 plans.forEach(function(plan, index){
-                    const previewId = `rapport_plan`;
+                    const previewId = `rapport_plan_${saison}_${index}`;
                     html += `<tr>
                         <td>${jardinEscapeHtml(plan.nom || '')}</td>
                         <td>${plan.width || 0} x ${plan.height || 0}</td>
