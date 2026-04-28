@@ -310,7 +310,7 @@ $.ajax({
             html += `</div>`;
             html += `<div class="jardin-archive-header-actions">`;
             //html += `<div class="jardin-archive-date">${archive.source_saison_suivante ? 'Saison suivante : ' + jardinEscapeHtml(archive.source_saison_suivante) : ''}</div>`;
-            html += `<button type="button" class="btn btn-xs btn-danger bt_delete_archive_saison" data-saison="${jardinEscapeHtml(saison)}">Supprimer</button>`;
+            html += `<button type="button" class="btn btn-xs btn-danger bt_delete_archive_saison" data-saison="${jardinEscapeHtml(saison)}">Actualiser</button>`;
             html += `</div>`;
             html += `</div>`;
             html += `<div class="jardin-archive-body">`;
