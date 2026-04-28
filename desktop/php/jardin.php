@@ -136,6 +136,31 @@ usort($eqLogics, array('jardin','cmp'));
 </div>
           
 <script>
+
+	$('#bt_takeSnapshot').on('click', function() {
+                $.ajax({
+                    type: "POST",
+                    url: "plugins/jardin/core/ajax/jardin.ajax.php",
+                    data: {
+                        action: "takeSnapshot"
+                    },
+                    dataType: 'json',
+                    error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                if (data.state != 'ok') {
+                    message: 'error' + data.result;
+                    return;
+                }
+                message: 'success' + "{{Le snapshot a été généré et les anciennes données ont été écrasées.}}";
+                setTimeout(function() {
+                location.reload();
+            }, 500);            
+        }
+    });
+});   
+	
 	$('#add_item').off('click').on('click', function () {
 		$("div[data-action='add']")[0].click();
 	});
