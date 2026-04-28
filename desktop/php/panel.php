@@ -273,8 +273,9 @@ include_file('desktop', 'potager_class', 'js', 'jardin');
 include_file('desktop', 'association', 'js', 'jardin');
 include_file('desktop', 'equipement_class', 'js', 'jardin');
 include_file('desktop', 'cmd_class', 'js', 'jardin');
-include_file('desktop', 'plan_potager', 'js', 'jardin');
 include_file('desktop', 'cancel_plan_potager', 'js', 'jardin');
+include_file('desktop', 'plan_potager', 'js', 'jardin');
+
 
 ?>
 <div id="debug" style="display:none"></div>
