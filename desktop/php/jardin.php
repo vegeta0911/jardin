@@ -1302,7 +1302,6 @@ include_file('desktop', 'arrosage', 'js', 'jardin');
 include_file('desktop', 'achat', 'js', 'jardin');
 include_file('desktop', 'tache', 'js', 'jardin');
 include_file('core', 'plugin.template', 'js');
-include_file('desktop', 'cancel_plan_potager', 'js', 'jardin');
 ?>
 
 <script>
