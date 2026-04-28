@@ -451,5 +451,4 @@ include_file('desktop', 'potager_commun', 'js', 'jardin');
 include_file('desktop', 'potager_class', 'js', 'jardin');
 include_file('desktop', 'association', 'js', 'jardin');
 include_file('desktop', 'planning', 'js', 'jardin');
-include_file('desktop', 'cancel_plan_potager', 'js', 'jardin');
 ?>
