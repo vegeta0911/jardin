@@ -486,7 +486,7 @@ $('#bt_takeSnapshot').on('click', function() {
                 message: 'success' + "{{Le snapshot a été généré et les anciennes données ont été écrasées.}}";
                 setTimeout(function() {
                 location.reload();
-            }, 1000);            
+            }, 500);            
         }
     });
 });   
