@@ -1,6 +1,4 @@
 especes=`[
-
-
 		{
 			"espece" : "ail",
 			"synonymes" : [],
@@ -1258,11 +1256,41 @@ especes=`[
 			"associations" : [],
 			
 			"incompatibilites" : [],
-			"conseil" : "",
+			"conseil" : "<b>Récolte :</b> juin à août<br>",
 			"img":"groseille.png",
 			"arrosage":"Abondant",
 			"ensoleillement":"Soleil",
 			"distance_plantation":"1 m"
+		},
+		{
+		    "espece" :"myrtille",
+			"synonymes" : ["myrtillier"],
+			
+			"associations" : [],
+			
+			"incompatibilites" : [],
+			"conseil" : "<b>Récolte :</b> août, septembre, octobre<br><b>Hauteur :</b> 1m50 - 2m de haut<br>Sol léger, acide et bien drainé que le myrtillier doit être planté<br>L'emplacement se situe au soleil dans la partie Nord de la France, plutôt à mi-ombre dans le Sud<br>Ces arbustes à petits fruits se plantent de l’automne au mois de mars quand ils sont en racines nues.<br>",
+			"img":"myrtille.png",
+			"arrosage":"Moyen",
+			"ensoleillement":"Soleil / Mi-ombre",
+			"distance_plantation":"2m",
+			"mois_plantation":["10","11","12","1","2","3"],
+			"mois_recolte":["8","9","10"]
+		},
+		{
+		    "espece" :"cassis",
+			"synonymes" : ["cassissier"],
+			
+			"associations" : [],
+			
+			"incompatibilites" : [],
+			"conseil" : "<b>Récolte :</b> juillet, août<br><b>Hauteur :</b> 1m50 de haut<br>Planter le au soleil doux ou à mi-ombre, dans une terre profonde, fraîche, neutre à acide<br>Le Cassissier convient au massif gourmand, à la haie fruitière, au bac profond ou au petit jardin fruité<br>Sa rusticité proche de -28 °C le rend fiable en climat tempéré et montagnard ; les fleurs peuvent toutefois souffrir d’une gelée tardive.<br>",
+			"img":"cassis.png",
+			"arrosage":"Moyen",
+			"ensoleillement":"Soleil / Mi-ombre",
+			"distance_plantation":"1,20m",
+			"mois_plantation":["3","4","10","11"],
+			"mois_recolte":["7","8"]
 		},
 		{
 			"espece" :"abricot",
@@ -1379,11 +1407,4 @@ especes=`[
 			"conseil" : "",
 			"img":"osier.png"
 		}
-		
-		
-		
-	
-		
-
-
-	]`;
+]`;
