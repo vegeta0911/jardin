@@ -2292,6 +2292,7 @@ if (!is_array($liste_arrosage)) {
     $replace = $this->replace_f($replace,'Origine','origine');
     $replace = $this->replace_f($replace,'Ensoleillement','ensoleillement');
     $replace = $this->replace_f($replace,'Distance de plantation','distance_plantation');
+    $replace = $this->replace_f($replace,'T° de rusticité','t_rusticite');
     $replace = $this->replace_f($replace,'Hauteur de la plante','hauteur');
     $replace = $this->replace_f($replace,'Arrosage','arrosage');
     $replace = $this->replace_f($replace,'Lieu de culture habituel','lieu_culture');
