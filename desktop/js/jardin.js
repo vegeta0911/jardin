@@ -1,7 +1,6 @@
 
 var pays = JSON.parse(pays); 
 
-
 for (const u_pays in pays) {
   var un_pays=$('<option/>', {
     "value": u_pays,
@@ -121,8 +120,6 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-
-
 function refresh_delete_date(){
   $('.delete_date').off().on('click',function(e){
       var d_semis=$(this).prev().val('');
@@ -138,10 +135,6 @@ function printEqLogic(_eqLogic) {
   load_semis(_eqLogic)
   load_tache(_eqLogic)
   load_achat(_eqLogic)
-
-  
-
-  
 
   detect_semence();
   $('#page_edition').scrollTop(0);
@@ -187,7 +180,7 @@ function detect_semence(){
             $('.img_semence').hide();
           }
 
-          console.log(u_semence)
+          console.log("BDD",u_semence)
           $('#ia_text').empty();
           if(u_semence.match_bdd.associations.length > 0){
             $('#ia_text').html($('#ia_text').html() + '<br/><b><u>Associations</u></b><br/>');
@@ -203,6 +196,26 @@ function detect_semence(){
             })
           }
 
+          if(u_semence.match_bdd.sol.length > 0){
+            $('#ia_text').html($('#ia_text').html() + '<br/><b><u>Sol</u></b><br/>');
+            u_semence.match_bdd.sol.forEach(element => {
+              $('#ia_text').html($('#ia_text').html() + element + '<br/>');
+            })
+          }
+          
+          if(u_semence.match_bdd.maladies.length > 0){
+            $('#ia_text').html($('#ia_text').html() + '<br/><b><u>Maladies</u></b><br/>');
+            u_semence.match_bdd.maladies.forEach(element => {
+              $('#ia_text').html($('#ia_text').html() + element + '<br/>');
+            })
+          }
+
+          if(u_semence.match_bdd.nuisibles.length > 0){
+            $('#ia_text').html($('#ia_text').html() + '<br/><b><u>Nuisibles</u></b><br/>');
+            u_semence.match_bdd.nuisibles.forEach(element => {
+              $('#ia_text').html($('#ia_text').html() + element + '<br/>');
+            })
+          }
           if(u_semence.match_bdd.hasOwnProperty('conseil')){
             if(u_semence.match_bdd.conseil != ''){
               $('#ia_text').html($('#ia_text').html() + '<br/><br/><b><u>Conseils & Autres</u></b><br/>');
@@ -244,6 +257,8 @@ function detect_semence(){
               remplir_auto('arrosage');
               remplir_auto('ensoleillement');
               remplir_auto('distance_plantation');
+              remplir_auto('t_rusticite');
+              remplir_auto('hauteur');
             }
           }
 
@@ -252,7 +267,6 @@ function detect_semence(){
           icon_widget('distance_plantation',$( "input[data-l2key='distance_plantation']" ).first().val())
           
         }
-    
   }
 
   var scroll_e = $('#page_edition').scrollTop();
@@ -261,8 +275,6 @@ function detect_semence(){
   if(is_v==false && is_v_e){
     $('#page_edition').scrollTop(scroll_e + 138);
   }
-
-
 }
 
 $('#cb_ia').on('change',function(){
@@ -304,8 +316,6 @@ $( "input[data-l2key='distance_plantation']" ).on('change input',function(){
   // $('.img_ensoleillement').addClass('animate__heartBeat')
   icon_widget('distance_plantation',$( "input[data-l2key='distance_plantation']" ).first().val())
 })
-
-
 
 $('#nom_semence').off().on('input',function(){
   detect_semence();
@@ -381,7 +391,6 @@ function addCmdToTable(_cmd) {
      }
    });
  }
-
  
  if(getCookie('add_item')=='oui'){
   eraseCookie('add_item');
@@ -457,7 +466,6 @@ function printdiv(divName) {
   //return true;
 }
 
-  
 function recap_semence(){
   $.ajax({
     type: 'POST',
@@ -491,11 +499,5 @@ function recap_semence(){
         })
       }
     })
-
-    
-
-    
-
-    
 }
 recap_semence();
