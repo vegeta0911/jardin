@@ -2,14 +2,13 @@
 
 var especes_bdd = JSON.parse(especes); 
 
-
-
-
-
 var semence=class semence extends un_objet {
     match_bdd = null
     associations_ind=[]
     incompatibilites_ind=[]
+    sol=[]
+    maladies=[]
+    nuisibles=[]
     semis=[false,false,false,false,false,false,false,false,false,false,false,false];
     semis_terre=[false,false,false,false,false,false,false,false,false,false,false,false];
     recolte=[false,false,false,false,false,false,false,false,false,false,false,false];
@@ -42,7 +41,7 @@ var semence=class semence extends un_objet {
     type_semence='';
 
     t_min_supporte='';
-    t_rusticite='';
+    t_rusticite=''
     ia='';
     constructor() {
         super();
@@ -246,6 +245,7 @@ var semence=class semence extends un_objet {
         ajouter_detail_semence('Ensoleillement',this.ensoleillement)
         ajouter_detail_semence('Distance plantation',this.distance_plantation)
         ajouter_detail_semence('Arrosage',this.arrosage)
+        ajouter_detail_semence('T° rusticité',this.t_rusticite)
         // ajouter_detail_semence('Lieu de culture habituel',this.lieu_culture)
 
         // ajouter_detail_semence('Cycle de vie',this.cycle_vie,false,{'vivace':'Vivace (pluriannuelle)','annuelle':'Annuelle','bisannuelle':'Bisannuelle'})
