@@ -1263,32 +1263,146 @@ especes=`[
 			"distance_plantation":"1 m"
 		},
 		{
-		    "espece" :"myrtille",
-			"synonymes" : ["myrtillier"],
-			
-			"associations" : [],
-			
-			"incompatibilites" : [],
-			"conseil" : "<b>Récolte :</b> août, septembre, octobre<br><b>Hauteur :</b> 1m50 - 2m de haut<br>Sol léger, acide et bien drainé que le myrtillier doit être planté<br>L'emplacement se situe au soleil dans la partie Nord de la France, plutôt à mi-ombre dans le Sud<br>Ces arbustes à petits fruits se plantent de l’automne au mois de mars quand ils sont en racines nues.<br>",
-			"img":"myrtille.png",
-			"arrosage":"Moyen",
-			"ensoleillement":"Soleil / Mi-ombre",
-			"distance_plantation":"2m",
-			"mois_plantation":["10","11","12","1","2","3"],
-			"mois_recolte":["8","9","10"]
+    		"espece": "myrtille",
+    
+    		"synonymes": ["myrtillier","bleuet"],
+
+    		"associations": [
+        		"airelles",
+        		"rhododendrons",
+        		"azalées",
+        		"bruyères",
+        		"camélias",
+        		"fougères",
+        		"fraisiers"
+    		],
+
+    		"incompatibilites": [
+        		"lavande",
+        		"romarin",
+        		"thym",
+        		"sauge",
+        		"lilas",
+        		"troène",
+        		"olivier",
+        		"vigne"
+    		],
+            
+			"sol": [
+        		"acide",
+        		"humifère",
+        		"léger",
+        		"frais",
+        		"bien drainé",
+        		"terre de bruyère"
+    		],
+
+    		"maladies": [
+        		"oïdium",
+        		"pourriture grise",
+        		"anthracnose"
+    		],
+
+    		"nuisibles": [
+        		"pucerons",
+        		"chenilles",
+        		"drosophile",
+        		"oiseaux"
+    		],
+    "conseil": "<b>Plantation :</b> octobre à mars (hors gel)<br>\
+<b>Récolte :</b> juin à septembre selon les variétés<br>\
+<b>Hauteur :</b> 0,80 à 2 m<br>\
+Le myrtillier apprécie une terre très acide, légère, fraîche et riche en humus.<br>\
+Évitez absolument les sols calcaires.<br>\
+Installez-le au soleil doux ou à mi-ombre, dans un endroit frais et abrité.<br>\
+Arrosez régulièrement avec une eau non calcaire, surtout en été.<br>\
+Paillez généreusement avec des écorces de pin ou des aiguilles de pin afin de maintenir l’acidité du sol.<br>\
+La taille consiste à supprimer le vieux bois et les branches faibles en fin d’hiver.<br>\
+La culture en bac est possible dans un grand contenant rempli de terre de bruyère.<br>\
+Très rustique, le myrtillier supporte des températures jusqu’à environ -25 °C.<br>\
+Les fruits se consomment frais, en tartes, confitures, jus ou pâtisseries.<br>",
+
+    		"img": "myrtille.png",
+
+    		"arrosage": "Moyen",
+
+    		"ensoleillement": "Soleil / Mi-ombre",
+
+    		"distance_plantation": "1 à 1,50 m",
+
+    		"hauteur": "0,80 à 2 m",
+
+    		"t_rusticite": "-25",
+
+    		"mois_plantation": ["10", "11", "12", "1", "2", "3"],
+
+    		"mois_recolte": ["7", "8", "9"]
 		},
 		{
-		    "espece" :"cassis",
-			"synonymes" : ["cassissier"],
-			
-			"associations" : [],
-			
-			"incompatibilites" : [],
-			"conseil" : "<b>Récolte :</b> juillet, août<br><b>Hauteur :</b> 1m50 de haut<br>Planter le au soleil doux ou à mi-ombre, dans une terre profonde, fraîche, neutre à acide<br>Le Cassissier convient au massif gourmand, à la haie fruitière, au bac profond ou au petit jardin fruité<br>Sa rusticité proche de -28 °C le rend fiable en climat tempéré et montagnard ; les fleurs peuvent toutefois souffrir d’une gelée tardive.<br>",
-			"img":"cassis.png",
-			"arrosage":"Moyen",
-			"ensoleillement":"Soleil / Mi-ombre",
-			"distance_plantation":"1,20m",
+		    "espece": "cassis",
+    		"synonymes": ["cassissier"],
+
+    		"associations": [
+        		"groseilliers",
+        		"framboisiers",
+        		"aromatiques",
+        		"fleurs",
+        		"épinards",
+        		"laitues"
+    		],
+
+    		"incompatibilites": [
+        		"pommes de terre",
+        		"tomates",
+        		"aubergines",
+        		"poivrons",
+        		"choux",
+        		"courgettes",
+        		"concombres",
+        		"melons",
+        		"pastèques"
+    		],
+             
+			"sol": [
+        		"riche",
+        		"frais",
+        		"profond",
+        		"bien drainé",
+        		"humifère",
+        		"légèrement calcaire"
+    		],
+            "maladies": [
+        		"anthracnose",
+        		"oïdium",
+        		"pourriture grise"
+    		],
+
+    		"nuisibles": [
+        		"pucerons",
+        		"acariens",
+        		"chenilles",
+        		"oiseaux"
+    		],
+    		"conseil": "<b>Plantation :</b> octobre à mars (hors gel)<br>\
+<b>Récolte :</b> juillet à août<br>\
+<b>Hauteur :</b> 1 à 1,5 m<br>\
+Le cassissier apprécie une terre riche, fraîche, profonde et bien drainée, même légèrement calcaire.<br>\
+Installez-le au soleil doux ou à mi-ombre, à l’abri des vents froids.<br>\
+Espacez les plants de 1,20 à 1,50 m.<br>\
+Paillez le pied pour conserver l’humidité et limiter les mauvaises herbes.<br>\
+Arrosez régulièrement la première année puis modérément ensuite.<br>\
+Taillez après la récolte en supprimant le vieux bois et les branches mortes.<br>\
+Apportez du compost ou un engrais organique au printemps.<br>\
+Rustique jusqu’à environ -28 °C, il convient bien aux climats tempérés et montagnards.<br>\
+Attention aux gelées tardives pendant la floraison.<br>\
+Les fruits sont parfaits en confitures, gelées, sirops, liqueurs et desserts.<br>",
+
+    		"img": "cassis.png",
+    		"arrosage": "Moyen",
+    		"ensoleillement": "Soleil / Mi-ombre",
+    		"distance_plantation": "1,20 à 1,50 m",
+    		"hauteur": "1 à 1,5 m",
+    		"t_rusticite":"-28",
 			"mois_plantation":["3","4","10","11"],
 			"mois_recolte":["7","8"]
 		},
@@ -1407,4 +1521,4 @@ especes=`[
 			"conseil" : "",
 			"img":"osier.png"
 		}
-]`;
+	]`;
