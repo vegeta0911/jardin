@@ -2295,8 +2295,8 @@ if (!is_array($liste_arrosage)) {
     $replace['#detail#'] = $this->getConfiguration('detail');
     $replace['#type#'] = '/plugins/jardin/data/img/' . $this->getConfiguration('l_type') . '.png';
 
-    $cmd = $this->getCmd(null,'etat');
-    $replace['#etat#'] = $cmd->execCmd();
+    $cmd = $this->getCmd(null, 'moon:name');
+    $replace['#etat#'] = is_object($cmd) ? $cmd->execCmd() : '';
     $replace['#img#'] = $this->getPathImgIcon();
 
     $qte = $this->getConfiguration('quantite') ?: '-';
