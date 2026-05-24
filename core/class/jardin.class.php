@@ -40,51 +40,56 @@ class jardin extends eqLogic {
    }
 
    // Moon
-   public static function whatMoon(): array
-   {
-    $moon = new \Solaris\MoonPhase();
+   public static function whatMoon() {
+      $moon = new Solaris\MoonPhase3();
+      $age = round($moon->age(),1); // age de la lune en jour
+      $phase = round($moon->phase(),2); //0 et 1 nouvelle lune, 0,5 pleine lune
+      $illumination = round($moon->illumination(),2);
+      $distance = round($moon->distance(),2);
 
-    $phaseValue = $moon->phase();
 
-    $result = [
-        'phase_value' => round($phaseValue, 4),
-        'phase' => $phaseValue >= 0.5
-            ? 'Décroissante'
-            : 'Croissante',
+      $etat = $moon->phase_name();
+      
+      log::add('jardin', 'debug', '----whatMoon----');
+      log::add('jardin', 'debug', 'Phase Lune ' . $phase);
+      log::add('jardin', 'debug', 'Age Lune ' . $age);
+      log::add('jardin', 'debug', 'illumination ' . $illumination);
+      log::add('jardin', 'debug', 'distance ' . $distance);
+      log::add('jardin', 'debug', 'name ' . $etat);
 
-        'age' => round($moon->age(), 1),
-        'illumination' => round($moon->illumination() * 100, 1),
-        'distance' => round($moon->distance(), 0),
+      $imgL=1;
+      if($phase>=0.25 & $phase<0.4){
+         $imgL=2;
+      }
+      if($phase>=0.4 & $phase<0.5){
+         $imgL=3;
+      }
+      if($phase==0.5){
+         $imgL=4;
+      }
+      if($phase>0.5 & $phase<0.6){
+         $imgL=5;
+      }
+      if($phase>=0.6 & $phase<0.75){
+         $imgL=6;
+      }
+      if($phase>=0.75){
+         $imgL=7;
+      }
 
-        'etat' => $moon->phaseName(),
-
-        'imgL' => self::getMoonImage($phaseValue),
-    ];
-
-    log::add('jardin', 'debug', '---- whatMoon ----');
-    log::add('jardin', 'debug', json_encode(
-        $result,
-        JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
-    ));
-
-    return $result;
-   }
-
-/**
- * Retourne l’image correspondant à la phase lunaire
- */
-private static function getMoonImage(float $phase): string
-{
-    return match (true) {
-        $phase < 0.25 => 'lune1.png',
-        $phase < 0.40 => 'lune2.png',
-        $phase < 0.50 => 'lune3.png',
-        $phase == 0.50 => 'lune4.png',
-        $phase < 0.60 => 'lune5.png',
-        $phase < 0.75 => 'lune6.png',
-        default => 'lune7.png',
-    };
-}
+      if($phase>=0.5){
+         $phase="Décroissante";
+      }else{
+         $phase="Croissante";
+      }
+      // $this->checkAndUpdateCmd('moon:phase', $phase);
+      // $this->checkAndUpdateCmd('moon:age', $age);
+      // $this->checkAndUpdateCmd('moon:illumination', $illumination);
+      // $this->checkAndUpdateCmd('moon:distance', $distance);
+      // $this->checkAndUpdateCmd('moon:name', $name);
+      $result=array("phase"=>$phase , "age"=>$age, "illumination"=>$illumination, "distance"=>$distance, "etat"=>$etat,"imgL"=>"lune" . $imgL . ".png");
+      return $result;
+  }
 
 private function sendNotifArrosage($nom, $etat) {
     if (config::byKey('notif_arrosage', 'jardin', 0) == 1) {
@@ -2287,7 +2292,6 @@ if (!is_array($liste_arrosage)) {
     $replace = $this->replace_f($replace,'Origine','origine');
     $replace = $this->replace_f($replace,'Ensoleillement','ensoleillement');
     $replace = $this->replace_f($replace,'Distance de plantation','distance_plantation');
-    $replace = $this->replace_f($replace,'T° de rusticité','t_rusticite');
     $replace = $this->replace_f($replace,'Hauteur de la plante','hauteur');
     $replace = $this->replace_f($replace,'Arrosage','arrosage');
     $replace = $this->replace_f($replace,'Lieu de culture habituel','lieu_culture');
@@ -2295,8 +2299,8 @@ if (!is_array($liste_arrosage)) {
     $replace['#detail#'] = $this->getConfiguration('detail');
     $replace['#type#'] = '/plugins/jardin/data/img/' . $this->getConfiguration('l_type') . '.png';
 
-    $cmd = $this->getCmd(null, 'moon:name');
-    $replace['#etat#'] = is_object($cmd) ? $cmd->execCmd() : '';
+    $cmd = $this->getCmd(null,'etat');
+    $replace['#etat#'] = $cmd->execCmd();
     $replace['#img#'] = $this->getPathImgIcon();
 
     $qte = $this->getConfiguration('quantite') ?: '-';
