@@ -810,7 +810,7 @@ usort($eqLogics, array('jardin','cmp'));
 									</div>
 									<label class="col-sm-5 control-label">{{T° de rusticité}}</label>
 									<div class="col-sm-2" style="display:flex;align-items:center">
-										<input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="t_rusticite" placeholder="{{}}"/><div style="margin-left :5px">°c</div>
+										<input type="text" list="t_rusticite" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="t_rusticite" placeholder="{{}}"/><div style="margin-left :5px">°c</div>
 									</div>
 								</div>
 
