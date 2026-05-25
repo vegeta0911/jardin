@@ -1517,19 +1517,76 @@ especes=`[
 		},
 		{
 			"espece" :"groseille",
-			"synonymes" : ["groseillier"],
+
+			"synonymes": [
+        		"groseillier",
+        		"groseillier rouge"
+    		],
 			
-			"associations" : [],
+			"associations": [
+        		"cassissiers",
+        		"framboisiers",
+        		"myrtilliers",
+        		"fraisiers",
+        		"laitues",
+        		"épinards",
+        		"aromatiques"
+    		],
 			
-			"incompatibilites" : [],
-			"sol": [],
-			"maladies": [],
-            "nuisibles": [],
-			"conseil" : "<b>Récolte :</b> juin à août<br>",
+			"incompatibilites": [
+        		"pommes de terre",
+        		"tomates",
+        		"aubergines",
+        		"poivrons",
+        		"courgettes",
+        		"melons",
+        		"pastèques"
+    		],
+
+			"sol": [
+        		"riche",
+        		"frais",
+        		"humifère",
+        		"bien drainé",
+        		"neutre à légèrement acide"
+    		],
+
+    		"maladies": [
+        		"oïdium",
+        		"anthracnose",
+       			"rouille",
+        		"pourriture grise"
+    		],
+
+    		"nuisibles": [
+        		"pucerons",
+        		"chenilles",
+        		"acariens",
+        		"oiseaux"
+    		],
+
+			"conseil": "<b>Plantation :</b> octobre à mars (hors gel)<br>\
+<b>Récolte :</b> juin à août selon les variétés<br>\
+<b>Hauteur :</b> 1 à 1,5 m<br>\
+Le groseillier apprécie une terre riche, fraîche, humifère et bien drainée.<br>\
+Il supporte légèrement le calcaire mais préfère un sol neutre à légèrement acide.<br>\
+Installez-le au soleil doux ou à mi-ombre, surtout dans les régions chaudes.<br>\
+Espacez les plants de 1 à 1,50 m pour assurer une bonne circulation de l’air.<br>\
+Arrosez régulièrement durant les périodes sèches, surtout les premières années.<br>\
+Paillez le pied pour conserver l’humidité et limiter les mauvaises herbes.<br>\
+Taillez en hiver ou après la récolte en supprimant le vieux bois peu productif.<br>\
+Apportez du compost au printemps pour stimuler la fructification.<br>\
+Très rustique, le groseillier résiste jusqu’à environ -25 °C.<br>\
+Les fruits se dégustent frais, en gelées, confitures, coulis, sirops ou pâtisseries.<br>",
+
 			"img":"groseille.png",
-			"arrosage":"Abondant",
-			"ensoleillement":"Soleil",
-			"distance_plantation":"1 m"
+			"arrosage":"Moyen",
+			"hauteur": "1 à 1,5 m",
+			"t_rusticite": "-25",
+			"ensoleillement":"Soleil / Mi-ombre",
+			"distance_plantation":"1 à 1,50 m",
+			"mois_plantation": ["10", "11", "12", "1", "2", "3"],
+			"mois_recolte": ["6", "7", "8"]
 		},
 		{
     		"espece": "myrtille",
