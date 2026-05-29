@@ -1257,6 +1257,7 @@ public function get_info(){
 
    public function set_etat(){ 
       $type=$this->getConfiguration('type');
+
       if($type == 'potager'){
          return false;
       }
@@ -1264,39 +1265,40 @@ public function get_info(){
          return false;
       }
       $etat='Non planté';
+
       $liste_semis=$this->getConfiguration('liste_semis');
+      
       if($liste_semis == ''){
          log::add('jardin', 'debug', '   > liste_semis vide');
          $this->checkAndUpdateCmd('etat',$etat);
          $this->save();
          return false;
       }
-
-      $last_semis=$liste_semis[count($liste_semis)-1];
-
-      $date_jour = new DateTime("now");
-
-      if($last_semis['d_semis'] != ''){
-         if(strtotime($last_semis['d_semis']) >= $date_jour){
-            $etat='Semé';
-         }
+      
+      //log::add('jardin', 'debug', '   > liste_semis : ' . json_encode($liste_semis));
+      //$last_semis=$liste_semis[count($liste_semis)-1];
+      $last_semis = end($liste_semis);
+      
+      if ($last_semis === false || !is_array($last_semis)) {
+         return false;
       }
 
-      if($last_semis['d_plantation'] != ''){
-         if(strtotime($last_semis['d_plantation']) >= $date_jour)  {
-            $etat='Planté';
-         }
-      }
+      $date_jour = new DateTime();
 
-      if($last_semis['d_eclaircissage'] != ''){
-         if(strtotime($last_semis['d_eclaircissage']) >= $date_jour) {
-            $etat='Eclairci';
-         }
-      }
+      foreach ([
+         'd_semis' => 'Semé',
+         'd_plantation' => 'Planté',
+         'd_eclaircissage' => 'Éclairci',
+         'd_recolte' => 'Récolté'
+      ] as $key => $label) {
 
-      if($last_semis['d_recolte'] != ''){
-         if(strtotime($last_semis['d_recolte']) >= $date_jour) {
-            $etat='Récolté';
+         if (!empty($last_semis[$key])) {
+
+            $date = DateTime::createFromFormat('Y-m-d', $last_semis[$key]);
+
+            if ($date && $date <= $date_jour) {
+               $etat = $label;
+            }
          }
       }
 
